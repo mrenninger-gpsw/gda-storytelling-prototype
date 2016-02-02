@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prototype>
+	<author>mrenninger@gopro.com</author>
+	<title>GDA Storytelling Prototype</title>
+	<!-- console should be either enabled or disabled -->
+	<console>disabled</console>
+	
+	<appTokens>
+		<appToken id = 'flurry' value='JFCJTGCP3SFXPJK7P9Z2'/>
+	</appTokens>
+	
+	<chrome>none</chrome>	
+	
+	<about title='RELEASE NOTES'><![CDATA[RELEASE NOTES:
+		
+		
+	]]></about>
+	
+	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 0.00.007 - 02/01/2016
+	* StoryboardClips are now added to the end of the Storyboard
+	* Normalized the time of motion for AddClipToStoryboard animation
+	* Added yellow SourceClipHighlights to the SourceClips
+	* Creating a StoryboardClip creates a corresponding blue SourceClipHighlight 
+
+VERSION 0.00.006 - 01/29/2016
+	* Tightened up AddClipToStoryboard animation to improve immediacy
+	* Modified the transition animation between the Storyboard and MusicEditor views so the exiting view wipes completely before the next view appears 
+
+VERSION 0.00.005 - 01/27/2016
+	* Added music progress animation and related animations for highlight appearance 
+	* Tweaked timing of AddClipToStoryboard animation 
+
+VERSION 0.00.004 - 01/26/2016
+	* Updated animation for adding a clip to the stoyboard to clarify intent
+	* Slowed down EQ animation on MusicMenuItems
+
+VERSION 0.00.003 - 01/26/2016
+	* Tweaked transition animations between the music and storyboard views
+	* Added hover animations to MusicMenuItems
+	* Added marker animations in music editing mode
+	* Updated App Icons
+
+VERSION 0.00.002 - 01/22/2016
+	***	Added App Icon
+
+VERSION 0.00.001 - 01/20/2016
+	***	Initial Release Build
+	
+	
+
+	]]></about>
+	
+	<about title='LIBRARIES' method='getLibraryInfo'/>
+	
+	<!-- assetQue-->
+	
+	<!-- Framework automatically loads the assets from the resources/startup folder at runtime -->
+	
+	<applicationMenu>
+		<menu name='Project'>
+			<item name='About Project' key=''/>
+			<item name='_'/>
+			<item name='Preferences...' key=';'/>
+			<item name='_'/>
+			<item name='Hide Project' key='h'/>
+			<item name='Hide Others' key='H'/>
+			<item name='Quit' key='q'/>
+		</menu>
+		
+		<menu name='File'>
+			<item name='New' key='n'/>
+			<item name='Open File' key='o'/>
+			<item name='_'/>
+			<item name='Close' key='w'/>
+			<item name='Save' key='s'/>
+			<item name='Save As...' key='S'/>
+			<item name='_'/>
+			<item name='Import...' key='i'/>
+			<item name='_'/>
+			<item name='Print' key='p'/>
+			<item name='Adding an ALT identifier' key='p' modifiers='alt, control'/>
+		</menu>
+		
+		
+		<menu name='Edit'>
+			<item name='Undo' key='z'/>
+			<item name='Redo' key='Z'/>
+			<item name='_'/>
+			<item name='Copy' key='c'/>
+			<item name='Cut' key='x'/>
+			<item name='Paste' key='v'/>
+			<item name='Select All' key='a'/>
+		</menu>
+		<!-- it is a requirement of the framework to have
+		a menu for Debug.  DO NOT REMOVE. instead set
+		<console>disabled</console-->
+		<menu name='Debug'>
+			<item name='Console' key='d'/>
+		</menu>
+		
+		<menu name='Help'/>
+	
+	</applicationMenu>
+	
+	
+	<legal><![CDATA[© Copyright 2016 GoPro]]></legal>
+	
+	<content>
+	
+		<music initSongNum='0'>
+			<nav>
+				<item>ALL TRACKS</item>
+				<item>RECENTLY ADDED</item>				
+			</nav>
+			
+			<tracks>
+				<item title='The Night We Danced' genre='EDM' bpm='140' featured='false' locked='false' newSong='true'>
+					<tag>Upbeat</tag>
+					<tag>Fun</tag>
+					<tag>Confident</tag>
+					<markers>
+						<positions>-3,72,292,512,720</positions>
+						<positions>48,204,408,540,720</positions>
+					</markers>
+				</item>			
+				<item title='Ether' genre='Ambient' bpm='80' featured='false' locked='false' newSong='false'>
+					<tag>Chill</tag>
+					<tag>Reflective</tag>
+					<tag>Relaxing</tag>
+					<markers>
+						<positions>-3,96,304,524,720</positions>
+						<positions>84,228,372,552,672</positions>
+					</markers>
+				</item>			
+				<item title='Bite Me' genre='Rock' bpm='120' featured='true' locked='false' newSong='true'>
+					<tag>Aggressive</tag>
+					<tag>Determined</tag>
+					<tag>Hard</tag>
+					<markers>
+						<positions>-3,72,304,500,696</positions>
+						<positions>72,252,408,540,684</positions>
+					</markers>
+				</item>			
+				<item title='Screen Door Slammed' genre='Pop' bpm='100' featured='false' locked='false' newSong='false'>
+					<tag>Fun</tag>
+					<tag>Happy</tag>
+					<tag>Upbeat</tag>
+					<markers>
+						<positions>-3,84,268,488,560</positions>
+						<positions>84,204,372,540,684</positions>
+					</markers>
+				</item>			
+				<item title='Come Through' genre='Rock' bpm='100' featured='false' locked='false' newSong='true'>
+					<tag>Confident</tag>
+					<tag>Warm</tag>
+					<tag>Sexy</tag>
+					<markers>
+						<positions>-3,48,304,488,696</positions>
+						<positions>96,216,384,564,672</positions>
+					</markers>
+				</item>			
+				<item title='Blinded By The Sun' genre='Ambient' bpm='60' featured='true' locked='false' newSong='false'>
+					<tag>Upbeat</tag>
+					<tag>Fun</tag>
+					<tag>Confident</tag>
+					<markers>
+						<positions>-3,120,304,560,672</positions>
+						<positions>60,228,408,552,684</positions>
+					</markers>
+				</item>			
+				<item title='Heavy Weather' genre='Rock' bpm='140' featured='true' locked='true' newSong='false'>
+					<tag>Upbeat</tag>
+					<tag>Fun</tag>
+					<tag>Confident</tag>
+					<markers>
+						<positions>-3,48,256,536,672</positions>
+						<positions>72,216,384,528,684</positions>
+					</markers>
+				</item>			
+				<item title='Song #8 Title' genre='Rock' bpm='110' featured='false' locked='true' newSong='false'>
+					<tag>Upbeat</tag>
+					<tag>Fun</tag>
+					<tag>Confident</tag>
+					<markers>
+						<positions>-3,60,268,476,696</positions>
+						<positions>48,204,384,540,696</positions>
+					</markers>
+				</item>			
+				<item title='Song #9 Title' genre='Rock' bpm='90' featured='true' locked='true' newSong='true'>
+					<tag>Upbeat</tag>
+					<tag>Fun</tag>
+					<tag>Confident</tag>
+					<markers>
+						<positions>-3,84,292,512,708</positions>
+						<positions>72,204,384,540,708</positions>
+					</markers>
+				</item>			
+			</tracks>
+		</music>
+		
+		<editor>			
+			<sourceClips>
+				<item title='GOPR0002' length='34' filename='vid1' highlights='3,12,26,30' storyboard='20'/>
+				<item title='GOPR0008' length='100' filename='vid2' highlights='10,35,60,85' storyboard='20'/>
+				<item title='GOPR0035' length='87' filename='vid3' highlights='9,39,69,78' storyboard=''/>
+				<item title='GOPR0062' length='29' filename='vid4' highlights='3,11,19,27' storyboard=''/>
+				<item title='GOPR0065' length='17' filename='vid5' highlights='2,8,11,14' storyboard='10'/>
+				<item title='GOPR0070' length='47' filename='vid6' highlights='5,16,27,42' storyboard='37.5'/>
+			</sourceClips>
+		
+			<storyboard>
+				<!-- location[i].@position is the center-justified x-position of the sourceClips -->
+				<!-- location[i].mask.@left is the left position of the mask (from center) -->
+				<clip src='storyboardClip_image1'>
+					<location id='4' position='150'>
+						<mask left='-150' width='300'/>
+					</location>
+					<location id='5' position='189'>
+						<mask left='-189' width='327'/>
+					</location>
+				</clip>
+				<clip src='storyboardClip_image2'>
+					<location id='4' position='462'>
+						<mask left='-149' width='300'/>
+					</location>
+					<location id='5' position='425'>
+						<mask left='-88' width='174'/>
+					</location>
+				</clip>
+				<clip src='storyboardClip_image4'>
+					<location id='4' position='777'>
+						<mask left='-150' width='300'/>
+					</location>
+					<location id='5' position='577'>
+						<mask left='-57' width='114'/>
+					</location>
+				</clip>
+				<clip src='storyboardClip_image5'>
+					<location id='4' position='1089'>
+						<mask left='-150' width='300'/>
+					</location>
+					<location id='5' position='806'>
+						<mask left='-163' width='325'/>
+					</location>
+				</clip>
+				
+				<!-- this is the info for the clip you add/delete -->
+				<clip>
+					<location id='4' position=''>
+						<mask left='' width=''/>
+					</location>
+					<location id='5' position='1105'>
+						<mask left='-128' width='261'/>
+					</location>
+				</clip>
+			</storyboard>
+		</editor>
+		
+		
+	</content>
+
+	
+	
+</prototype>

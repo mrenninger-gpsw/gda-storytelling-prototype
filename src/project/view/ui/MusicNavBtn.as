@@ -1,0 +1,44 @@
+package project.view.ui {
+	
+	import components.controls.Label;
+	
+	import display.Sprite;
+	
+	
+	
+	public class MusicNavBtn extends Sprite {
+		
+		private var _w:Number;
+		private var _text:String;
+		private var _label:Label;
+		public function get label():Label { return _label; }
+		
+		
+		
+		public function MusicNavBtn($text:String, $width:Number) {
+			super();
+			
+			_w = $width;
+			_text = $text;
+			
+			_init();
+		}		
+
+		private function _init():void {
+			this.graphics.beginFill(0x000000, 0);
+			this.graphics.drawRect(0, 0, _w, 51);
+			this.graphics.endFill();
+			
+			_label = new Label();
+			_label.mouseEnabled = false;
+			_label.mouseChildren = false;
+			_label.text = _text;
+			_label.autoSize = 'left';
+			_label.textFormatName = 'music-nav';
+			_label.x = (this.width - _label.width) * 0.5;
+			_label.y = (this.height - _label.height) * 0.5;
+			
+			this.addChild(_label);
+		}
+	}
+}

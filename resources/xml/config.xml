@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- GLOBAL PARAMETERS -->
+	<params lang='en'
+			console='true'
+	/>
+	
+	
+	<!-- ADDITIONAL LIBRARIES -->
+	<!--<lib 
+		id='gestouch'
+	/>-->
+	
+	
+	<!-- API KEYS -->
+	<keys>
+		<key id='DISTRIQT' value='7feb47748262ffbb5f31ef405d4a12e056d8b5baCbwkX+qQworgp6da0aqmoSfJMFEXKvgwMMRbGBFnCDdidRUEDCOUmPp/23QFaFISisSLAGnq/nSETOdPnhdtPw=='/>
+	</keys>
+	
+	
+	
+	<!-- TEXT FORMATS -->
+	<textFormat
+			id='ui_debug'
+			size='13'
+			color='#424242'
+			bold='true'
+			font='Helvetica Neue'
+			align='left'
+		/>	
+	
+		
+		<!-- COMPONENTS -->
+		<textFormat
+			id='label'
+			size='13'
+			color='#656565'
+			bold='true'
+			font='Helvetica Neue'
+			align='center'
+			/>
+			
+		<textFormat
+			id='title'
+			size='36'
+			color='#007aff'
+			bold='false'
+			font='Helvetica Neue UltraLight'
+			align='left'
+		/>	
+			
+		<!-- SPLASH SCREEN -->
+		<textFormat
+			id='splashTitle'
+			size='18'
+			color='#17A7C0'
+			font='Helvetica Neue Light'
+			align='left'
+			
+		/>
+	
+		<textFormat
+			id='splashStatus'
+			size='11'
+			color='#656565'
+			font='Helvetica Neue'
+			align='center'
+		/>
+	
+	
+		<!-- ABOUT -->
+		<textFormat
+			id='about'
+			size='13'
+			color='#656565'
+			font='Helvetica Neue'
+			align='left'
+		/>
+		
+		<textFormat
+			id='aboutMenu'
+			size='11'
+			color='#656565'
+			bold='true'
+			font='Helvetica Neue'
+			align='left'
+		/>
+		
+		<textFormat
+			id='aboutVersion'
+			size='9'
+			color='#17A7C0'
+			bold='true'
+			font='Helvetica Neue'
+			align='left'
+			
+		/>
+		
+			
+	
+		<!-- CONSOLE -->
+		<!--  note this is not a starling text format
+		but instead a flash text format. This is due
+		to using Feather.scrollText for the splash version  -->
+		
+		<textFormat
+			id='consoleTitle'
+			size='28'
+			color='#007aff'
+			font='Helvetica Neue UltraLight'
+			align='left'
+		/>
+		
+		<textFormat
+			id='consoleContent'
+			size='12'
+			color='#656565'
+			font='Helvetica Neue'
+			align='left'
+			leading='10'
+		/>
+		
+		<textFormat
+			id='consoleFilter'
+			size='14'
+			color='#FF0000'
+			font='Helvetica Neue'
+			align='left'
+			leading='10'
+		/>
+	
+		<textFormat
+			id='email'
+			size='14'
+			color='#FFFFFF'
+			bold='true'
+			font='Helvetica Neue'
+			align='left'
+		/>
+		
+		<!-- ANE EXAMPLES -->
+		<textFormat
+			id='examplesDescription'
+			size='14'
+			color='#000000'
+			bold='false'
+			font='Helvetica Neue'
+			align='left'
+		/>
+		
+		<textFormat
+			id='examplesOutput'
+			size='12'
+			color='#000000'
+			bold='false'
+			font='Helvetica Neue'
+			align='left'
+			leftMargin='30'
+			rightMargin='20'
+		/>	
+		
+			<!-- Settings Overlay -->
+		<textFormat
+			id='settings-closeIcon'
+			size='16'
+			color='#000000'
+			font='Gill Sans MT Pro Bold'
+			align='left'
+		/>
+
+		<textFormat
+			id='settings-title'
+			size='21'
+			color='#000000'
+			font='Gill Sans MT Pro Medium'
+			align='left'
+		/>
+
+		<textFormat
+			id='settings-text'
+			size='16'
+			color='#000000'
+			font='Gill Sans MT Pro Book'
+			align='left'
+		/>
+
+		<textFormat
+			id='settings-save'
+			size='16'
+			color='#FFFFFF'
+			font='Gill Sans MT Pro Book'
+			align='left'
+		/>
+		
+		
+		
+		<!--  source clips -->
+		<textFormat
+			id='sourceclip-name'
+			size='12'
+			color='#a4a4a4'
+			font='Proxima Nova Semibold'
+			align='left'
+		/>
+		
+		<textFormat
+			id='sourceclip-length'
+			size='14'
+			color='#a4a4a4'
+			font='Proxima Nova Semibold'
+			align='left'
+		/>
+		
+
+		<!--  music nav -->
+		<textFormat
+			id='music-nav'
+			size='16'
+			color='#666666'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+		
+		<textFormat
+			id='music-item-icon'
+			size='9'
+			color='#666666'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+		
+		<textFormat
+			id='music-item-title'
+			size='16'
+			color='#FAFAFA'
+			font='Proxima Nova Bold'
+			align='left'
+		/>
+		
+		<textFormat
+			id='music-item-tags'
+			size='14'
+			color='#A5A5A5'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+		
+		<textFormat
+			id='music-item-bpm'
+			size='12'
+			color='#666666'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+		
+		<textFormat
+			id='music-preview-title'
+			size='16'
+			color='#FFFFFF'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+		
+		<textFormat
+			id='music-preview-featured-text'
+			size='14'
+			color='#FFFFFF'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+		
+		
+		<!--  footer -->
+		<textFormat
+			id='footer-song-title'
+			size='16'
+			color='#F4F4F4'
+			font='Proxima Nova Regular'
+			align='left'
+		/>
+</config>
