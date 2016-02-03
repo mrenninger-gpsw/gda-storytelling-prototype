@@ -1,53 +1,55 @@
 package project.view {
 	
-	// Greensock
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Back;
-	import com.greensock.easing.Cubic;
-	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Back;
+	import com.greensock.easing.Cubic;
+	
+	// CandyLizard Framework
 	import components.controls.Label;
-	
 	import display.Sprite;
-	
-	import project.events.PreviewEvent;
-	import project.managers.StoryboardManager;
-	import project.view.ui.SourceClipHighlight;
-	
 	import utils.Register;
+	
+	// Project
+	import project.events.PreviewEvent;
+	import project.view.ui.SourceClipHighlight;
 	
 	
 		
 	public class SourceClip extends Sprite {
 		
-		// vars
+		/******************* PRIVATE VARS *********************/
 		private var _num:uint;
+		private var _curFrameNum:Number;
 		private var _filename:String;
 		private var _title:String;
 		private var _length:String;
+		private var _curFileName:String;
+		private var _labels:Array;
 		private var _xml:XML;
 		private var _holder:Sprite;
-		private var _nameTF:Label;
-		private var _lengthTF:Label;
-		private var _labels:Array;
 		private var _scrubber:Sprite;
 		private var _preview:Sprite;
-		private var _curFileName:String;
-		private var _curFrameNum:Number;
 		private var _highlightsV:Vector.<SourceClipHighlight>
+		private var _nameTF:Label;
+		private var _lengthTF:Label;
+		private var _canAddToStoryboard:Boolean = true
 		
 		
 		
-		// Getters & Setters
+		/***************** GETTERS & SETTERS ******************/		
 		public function get curFileName():String { return _curFileName; }
+		public function set canAddToStoryboard($value):void { _canAddToStoryboard = $value; }
 
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function SourceClip($num:uint) {
 			super();
 			
@@ -71,14 +73,14 @@ package project.view {
 		
 		
 		
-		// Public API
+		/******************** PUBLIC API *********************/
 		public function enable():void {
 			_addListeners();
 		}
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			//log('_init');						
 			_createTimelineThumbs();	
@@ -265,9 +267,8 @@ package project.view {
 		}
 		
 			
-		
-		
-		// Event Handlers
+				
+		/****************** EVENT HANDLERS *******************/
 		protected function _handleMouseEvent($e:MouseEvent):void {
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:
@@ -304,38 +305,34 @@ package project.view {
 					break;
 				
 				case MouseEvent.MOUSE_DOWN:
-					TweenMax.to(_preview, 0.2, {scaleX:1, scaleY:1, ease:Cubic.easeOut});
+					if (_canAddToStoryboard) TweenMax.to(_preview, 0.2, {scaleX:1, scaleY:1, ease:Cubic.easeOut});
 					break;
 				
 				case MouseEvent.MOUSE_UP:
 					//log('mouseup');
 					// duplicate the preview frame and add it to Register.APP at the relative coordinates
-					var p:Point = new Point(_preview.x, _preview.y);
 					
-					//log('loc p: '+p);
-					//log('l2g p: '+localToGlobal(p)); 
-					
-					var hilight:SourceClipHighlight = _createSourceClipHighlightAt(_scrubber.x,'blue',true);
-					
-					var sbClip:CustomStoryboardClip = new CustomStoryboardClip(_num, _curFrameNum, hilight);
-					sbClip.width = 128;
-					sbClip.height = 72;
-					sbClip.x = localToGlobal(p).x;
-					sbClip.y = localToGlobal(p).y;
-					Register.PROJECT.addCustomClip(sbClip);
-					
-					
-					//(Register.PROJECT.storyboard as StoryboardManager).addMarker()
-					
-					/*TweenMax.to(sbClip, 0.2, {scaleX:sbClip.scaleX * 2, scaleY:sbClip.scaleY * 2, ease:Cubic.easeIn});
-					TweenMax.to(sbClip, 0.3, {width:160, height:90, x:210, y: 590, ease:Cubic.easeOut, delay:0.2});
-					TweenMax.to(sbClip, 0.2, {width:176, height:99, ease:Cubic.easeOut, delay:0.4, onComplete:_onClipMoveComplete, onCompleteParams:[sbClip]});*/
-										
-					TweenMax.to(_scrubber, 0, {alpha:0});
-					TweenMax.to(_preview, 0, {alpha:0});
-					_removeListeners();
-					
-					TweenMax.delayedCall(0.6, _addListeners);
+					if (_canAddToStoryboard) {
+						var p:Point = new Point(_preview.x, _preview.y);
+						
+						//log('loc p: '+p);
+						//log('l2g p: '+localToGlobal(p)); 
+						
+						var hilight:SourceClipHighlight = _createSourceClipHighlightAt(_scrubber.x,'blue',true);
+						
+						var sbClip:CustomStoryboardClip = new CustomStoryboardClip(_num, _curFrameNum, hilight);
+						sbClip.width = 128;
+						sbClip.height = 72;
+						sbClip.x = localToGlobal(p).x;
+						sbClip.y = localToGlobal(p).y;
+						Register.PROJECT.addCustomClip(sbClip);
+						
+						TweenMax.to(_scrubber, 0, {alpha:0});
+						TweenMax.to(_preview, 0, {alpha:0});
+						_removeListeners();
+						
+						TweenMax.delayedCall(0.6, _addListeners);
+					}
 					break;
 			}
 		}

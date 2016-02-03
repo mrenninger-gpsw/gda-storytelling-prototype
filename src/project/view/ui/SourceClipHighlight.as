@@ -1,22 +1,35 @@
 package project.view.ui {
+	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
-	
+		
 	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 
+	// CandyLizard Framework
 	import display.Sprite;
 	import utils.Register;
+	
+	
 
 	public class SourceClipHighlight extends Sprite {
 		
+		/********************* CONSTANTS **********************/
 		public static const YELLOW:uint = 0xF5A700;
 		public static const BLUE:uint = 0x00A3DA;
+
+		
+		
+		/******************** PRIVATE VARS ********************/
 		private var _color:uint;
 		private var _showing:Boolean = false;
 		private var _cover:Shape;
 		
+		
+		
+		/******************** CONSTRUCTOR *********************/
 		public function SourceClipHighlight($color:String = 'yellow') {
 			super();
 			verbose = true;
@@ -24,6 +37,9 @@ package project.view.ui {
 			_init();
 		}
 		
+		
+		
+		/********************* PUBLIC API *********************/
 		public function show():void {
 			if (!_showing) {
 				_showing = true;
@@ -40,6 +56,9 @@ package project.view.ui {
 			}
 		}
 		
+		
+	
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			var circle:Shape = new Shape();
 			circle.graphics.beginFill(0x000000, 0.3);

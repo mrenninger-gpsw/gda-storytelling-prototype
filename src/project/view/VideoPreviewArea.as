@@ -8,6 +8,7 @@ package project.view {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
+	// CandyLizard Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -15,14 +16,14 @@ package project.view {
 	
 	public class VideoPreviewArea extends Sprite {
 		
-		// vars
+		/******************* PRIVATE VARS *********************/
 		private var _holder:Sprite;
 		private var _bgShape:Shape;
 		private var _ds:Bitmap;
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/		
 		public function VideoPreviewArea() {
 			super();
 			_init();
@@ -30,7 +31,7 @@ package project.view {
 		
 		
 		
-		// Public API
+		/******************** PUBLIC API *********************/
 		public function update($filename:String):void {
 			clear();
 			_holder.addChild(Register.ASSETS.getBitmap($filename));
@@ -44,18 +45,10 @@ package project.view {
 			log('_switchStates: '+$id);
 			switch ($id) {
 				case 'music':
-					//TweenMax.to(_holder, 0.3, {width:752, height:423, ease:Cubic.easeOut});
-					/*TweenMax.to(_bgShape, 0.3, {width:752, height:423, ease:Cubic.easeOut});
-					TweenMax.to(_ds, 0.3, {width:800, height:471, ease:Cubic.easeOut});
-					TweenMax.to(this, 0.3, {x:487, y:111, ease:Cubic.easeOut});*/
 					TweenMax.to(this, 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut});
 					break;
 				
 				case 'video':
-					//TweenMax.to(_holder, 0.3, {width:688, height:387, ease:Cubic.easeOut});
-					/*TweenMax.to(_bgShape, 0.3, {width:688, height:387, ease:Cubic.easeOut});
-					TweenMax.to(_ds, 0.3, {width:752, height:423, ease:Cubic.easeOut});
-					TweenMax.to(this, 0.3, {x:571, y:98, ease:Cubic.easeOut});*/
 					TweenMax.to(this, 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:1});
 					break;
 			}
@@ -63,7 +56,7 @@ package project.view {
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			
 			_ds = Register.ASSETS.getBitmap('preview_dropshadow');

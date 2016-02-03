@@ -1,21 +1,24 @@
 package project.managers {
 	
 	// Flash
+	import flash.display.Bitmap;
+	import flash.display.Shape;
+	import flash.events.Event;
+	
+	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.events.MouseEvent;
-	
+	// CandyLizard Framework
 	import display.Sprite;
+	import utils.Register;
 	
+	// Project
 	import project.events.PreviewEvent;
 	import project.events.SourceClipManagerEvent;
+	import project.events.StoryboardManagerEvent;
 	import project.view.SourceClip;
 	import project.view.VideoPreviewArea;
-	
-	import utils.Register;
 	
 	
 	
@@ -29,12 +32,12 @@ package project.managers {
 		private var _sourceClipsV:Vector.<SourceClip>;
 		private var _previewArea:VideoPreviewArea;
 		
-		// Getters & Setters
+		/***************** GETTERS & SETTERS ******************/		
 		public function set previewArea($value:VideoPreviewArea):void { _previewArea = $value; }
 
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function SourceClipManager() {
 			super();
 			
@@ -42,12 +45,14 @@ package project.managers {
 			
 			_sourceClipsV = new Vector.<SourceClip>();
 			
+			this.addEventListener(Event.ADDED_TO_STAGE, _onAdded);
+			
 			_init();
 		}
 		
 		
 		
-		// Public API
+		/******************** PUBLIC API *********************/
 		public function show():void {
 			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
 				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _onShowComplete : null;
@@ -70,7 +75,7 @@ package project.managers {
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			// create the _bgShape
 			_bgShape = new Shape();
@@ -125,9 +130,21 @@ package project.managers {
 			dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.HIDE_COMPLETE));
 		}
 		
+		private function _enableSourceClips($b:Boolean = true):void {
+			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
+				_sourceClipsV[i].canAddToStoryboard = $b;
+			}
+		}
 		
 		
-		// Event Handlers
+		
+		/****************** EVENT HANDLERS *******************/
+		private function _onAdded($e:Event):void {
+			this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
+			this.stage.addEventListener(StoryboardManagerEvent.FIVE_CLIPS, _handleStoryboardManagerEvent);
+			this.stage.addEventListener(StoryboardManagerEvent.FOUR_CLIPS, _handleStoryboardManagerEvent);			
+		}
+		
 		private function _handlePreviewEvent($e:PreviewEvent):void {
 			switch ($e.type) {
 				case PreviewEvent.PREVIEW:
@@ -136,6 +153,18 @@ package project.managers {
 					break;
 				case PreviewEvent.CLEAR:
 					_previewArea.clear();
+					break;
+			}
+		}
+		
+		private function _handleStoryboardManagerEvent($e:StoryboardManagerEvent):void {
+			switch ($e.type) {
+				case StoryboardManagerEvent.FOUR_CLIPS:
+					_enableSourceClips();
+					break;
+				
+				case StoryboardManagerEvent.FIVE_CLIPS:
+					_enableSourceClips(false);
 					break;
 			}
 		}

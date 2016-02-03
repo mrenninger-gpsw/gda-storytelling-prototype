@@ -4,7 +4,7 @@ package project.view {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	
-	// CandyLizard
+	// CandyLizard Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -13,10 +13,9 @@ package project.view {
 	
 	
 	
-	
 	public class TempStoryboardClip extends Sprite {
 		
-		// vars
+		/******************** PRIVATE VARS ********************/	
 		private var _holder:Sprite;
 		private var _curImageName:String;
 		private var _markerIcon:Sprite;
@@ -28,13 +27,13 @@ package project.view {
 
 		
 		
-		// Getters & Setters
+		/***************** GETTERS & SETTERS ******************/			
 		public function get curFileName():String { return _curImageName; }		
 		public function get maskShape():Shape { return _mask; }
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function TempStoryboardClip($num:uint) {
 			super();
 			
@@ -60,7 +59,7 @@ package project.view {
 		
 
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			//log('_init');
 			

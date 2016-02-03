@@ -1,38 +1,50 @@
 package project.view.ui {
 	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	
+	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Expo;
 	
+	// CandyLizard Framework
 	import display.Sprite;
 	import utils.Register;
 	
+	// Project
 	import project.events.StoryboardManagerEvent;
 	
 	
 	
 	public class StoryboardClipMarker extends Sprite {
 		
+		/******************* PRIVATE VARS *********************/
 		private var _icon:Sprite;
 		private var _line:Shape;
 		
 		
 		
+		/******************** CONSTRUCTOR *********************/		
 		public function StoryboardClipMarker() {
 			super();
 			verbose = true;
 			_init();
 		}
 		
+		
+		
+		/******************** PUBLIC API *********************/
 		public function show($immediate:Boolean = false):void {
 			// show the marker
 			TweenMax.to(_icon, ($immediate) ? 0 : 0.4, {scaleX:1, scaleY:1, alpha:1, ease:Back.easeOut});
 			TweenMax.to(_line, ($immediate) ? 0 : 0.4, {alpha:1, height:115, ease:Expo.easeInOut, delay:($immediate) ? 0 : 0.3, onComplete:($immediate) ? null : _onShowMarkerComplete});
 		}
 		
+		
+		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			_line = new Shape();
 			_line.graphics.beginFill(0x00A3DA);

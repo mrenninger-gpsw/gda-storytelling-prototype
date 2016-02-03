@@ -8,7 +8,7 @@ package project.view {
 	// Greensock
 	import com.greensock.TweenMax;
 	
-	// CandyLizard
+	// CandyLizard Framework	
 	import display.Sprite;
 	import utils.Register;
 	
@@ -16,12 +16,12 @@ package project.view {
 	
 	public class Header extends Sprite {
 		
-		// Vars
+		/******************* PRIVATE VARS *********************/
 		private var _addMediaBtn:Bitmap;
 		
 		
 		
-		//  Contructor
+		/******************** CONSTRUCTOR *********************/		
 		public function Header() {
 			super();			
 			_init();	
@@ -29,7 +29,7 @@ package project.view {
 		
 		
 		
-		// Public API
+		/******************** PUBLIC API *********************/
 		public function switchStates($id:String):void {
 			log('_switchStates: '+$id);
 			switch ($id) {
@@ -41,12 +41,11 @@ package project.view {
 					TweenMax.to(_addMediaBtn, 0.3, {autoAlpha:1});
 					break;
 			}
-			
 		}
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			var bgShape:Shape = new Shape();
 			bgShape.graphics.beginFill(0x141414);
@@ -133,7 +132,7 @@ package project.view {
 		
 		
 		
-		// Event Handlers
+		/******************* EVENT HANDLERS *******************/
 		private function _dragWindow($e:MouseEvent):void {
 			log('MOUSE DOWN!!!');
 			stage.nativeWindow.startMove();

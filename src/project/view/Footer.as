@@ -8,7 +8,7 @@ package project.view {
 	// Greensock
 	import com.greensock.TweenMax;
 	
-	// CandyLizard
+	// CandyLizard Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -21,7 +21,7 @@ package project.view {
 	
 	public class Footer extends Sprite {
 		
-		// Vars
+		/********************* CONSTANTS **********************/	
 		private var _changeVideoBtn:UITransitionBtn;
 		private var _changeMusicBtn:UITransitionBtn;
 		private var _previewBtn:FooterBtn;
@@ -31,7 +31,7 @@ package project.view {
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function Footer() {
 			super();
 			verbose = true;
@@ -40,7 +40,7 @@ package project.view {
 		
 	
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			var bgShape:Shape = new Shape();
 			bgShape.graphics.beginFill(0x141414);
@@ -124,7 +124,8 @@ package project.view {
 
 		
 		
-		// Event Handlers
+		/******************* EVENT HANDLERS *******************/	
+		/*********************** HELPERS **********************/
 		private function _handleMouseEvents($e:MouseEvent):void {
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:

@@ -1,20 +1,30 @@
 package project.view.ui {
-	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
-	
+
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
+	// CandyLizard Framework
 	import display.Sprite;
+
+	
 	
 	public class FooterBtn extends Sprite {
 		
+		/******************** PRIVATE VARS ********************/	
 		private var _width:Number;
 		private var _height:Number;
 		private var _icon:Bitmap;
 		private var _bgShape:Shape;
 		
+
+		
+		/******************** CONSTRUCTOR *********************/
 		public function FooterBtn($w:Number, $h:Number, $icon:Bitmap) {
 			super();
 			
@@ -25,6 +35,9 @@ package project.view.ui {
 			_init();
 		}
 		
+
+		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			_bgShape = new Shape();
 			_bgShape.graphics.beginFill(0x222222);
@@ -41,6 +54,9 @@ package project.view.ui {
 			this.addEventListener(MouseEvent.CLICK, _handleMouseEvents);
 		}
 		
+
+		
+		/******************* EVENT HANDLERS *******************/	
 		protected function _handleMouseEvents($e:MouseEvent):void {
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:

@@ -10,7 +10,7 @@ package project.view.ui {
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard
+	// CandyLizard Framework
 	import components.controls.Label;
 	import display.Sprite;
 	import utils.Register;
@@ -19,7 +19,7 @@ package project.view.ui {
 	
 	public class MusicMenuItem extends Sprite {
 		
-		// Vars
+		/******************** PRIVATE VARS ********************/	
 		private var _bkgd:Shape;
 		private var _num:uint;
 		private var _xml:XML;
@@ -34,7 +34,7 @@ package project.view.ui {
 		private var _title:String;
 		private var _bpmMeter:BPMMeter;
 
-		// Getters & Setters
+		/***************** GETTERS & SETTERS ******************/			
 		public function get num():Number{ return _num; }
 		public function get label():Label { return _label; }
 		public function get locked():Boolean{ return _locked; }
@@ -44,7 +44,7 @@ package project.view.ui {
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function MusicMenuItem($num:uint) {
 			super();
 			verbose = true;
@@ -60,7 +60,7 @@ package project.view.ui {
 		
 		
 		
-		// Public API
+		/********************* PUBLIC API *********************/	
 		public function select($b:Boolean, $immediate:Boolean = false):void {
 			
 			if ($b && !_selected) {
@@ -87,7 +87,7 @@ package project.view.ui {
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			// Selected Shape
 			_bkgd = new Shape();
@@ -132,12 +132,6 @@ package project.view.ui {
 			tagLabel.x = 74;
 			tagLabel.y = 36;
 			this.addChild(tagLabel);
-			
-			// BPM Icon
-			/*var bpmIcon:Bitmap = Register.ASSETS.getBitmap('musicItem_bpmIcon');
-			bpmIcon.x = 330;
-			bpmIcon.y = (this.height - bpmIcon.height) * 0.5;
-			this.addChild(bpmIcon);*/
 			
 			/************************************/
 			/** parts for the moving bpm meter **/
@@ -204,7 +198,7 @@ package project.view.ui {
 		
 		
 		
-		// Event Handlers
+		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
 			_addListeners();			

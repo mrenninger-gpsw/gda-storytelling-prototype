@@ -1,26 +1,28 @@
 package project.view {
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import display.Sprite;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
 	
+	// CandyLizard Framework
+	import display.Sprite;
+	import utils.Register;
+	
+	// Project
 	import project.events.MusicMenuEvent;
 	import project.view.ui.MusicMenuItem;
 	import project.view.ui.MusicNavBtn;
-	
-	import utils.Register;
 	
 	
 	
 	public class MusicMenu extends Sprite {
 		
-		// Vars
+		/******************** PRIVATE VARS ********************/	
 		private var _musicXML:XMLList;
 		private var _navBkgd:Shape;
 		private var _menuBkgd:Shape;
@@ -35,12 +37,12 @@ package project.view {
 		
 		
 		
-		// Getters & Setters
+		/***************** GETTERS & SETTERS ******************/			
 		public function get curMenuItem():MusicMenuItem { return _curMenuItem; }
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function MusicMenu() {
 			super();
 			verbose = true;
@@ -53,7 +55,7 @@ package project.view {
 		
 		
 		
-		// Public API
+		/********************* PUBLIC API *********************/	
 		public function show():void {
 			log('show');
 			_select(_menuItemsV[0]);
@@ -75,7 +77,9 @@ package project.view {
 			TweenMax.to(_navHolder, 0.5, {y:-76, ease:Cubic.easeOut, delay:0.3, onComplete:_onHideComplete});
 		}
 		
-		// Private API
+		
+		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			log('_init');
 			TweenMax.to(this, 0, {autoAlpha:0});
@@ -253,7 +257,7 @@ package project.view {
 		
 		
 		
-		// Event Handlers 
+		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			log('_onAdded');
 			removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
@@ -314,15 +318,6 @@ package project.view {
 				case MouseEvent.CLICK:					
 					if (_curMenuItem != tItem && !tItem.locked) {
 						_select(tItem);
-						/*_curMenuItem.select(false);
-						_curMenuItem = tItem;
-						_curMenuItem.select(true);
-						
-						dispatchEvent(new MusicMenuEvent(MusicMenuEvent.CHANGE));*/
-						
-						// update the preview window somehow
-						
-
 					}
 					break;
 			}

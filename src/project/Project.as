@@ -1,10 +1,6 @@
 package project{
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Circ;
-	import com.greensock.easing.Cubic;
-	
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -15,11 +11,19 @@ package project{
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
 	
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Circ;
+	import com.greensock.easing.Cubic;
+	
+	// CandyLizard Framework
 	import air.desktop.ProjectRoot;
 	import air.desktop.stage.Window;
-	
 	import components.controls.TextArea;
+	import utils.GeomUtilities;
+	import utils.Register;
 	
+	// Project
 	import project.events.MusicMenuEvent;
 	import project.events.SourceClipManagerEvent;
 	import project.events.StoryboardManagerEvent;
@@ -34,9 +38,6 @@ package project{
 	import project.view.SettingsOverlay;
 	import project.view.VideoPreviewArea;
 	import project.view.ui.StoryboardClipMarker;
-	
-	import utils.GeomUtilities;
-	import utils.Register;
 	
 		
 	
@@ -252,7 +253,7 @@ package project{
 			// check to see if a 5th clip can be added
 			if (_storyboard.canAddClips) {
 				this.addChild($clip); 
-				// on add of this custom clip, stage dispatches a FIVE_CLIPS StoryboardManagerEvent which is listened for here and in the storyboard
+				// on add of this custom clip to the stage, stage dispatches a FIVE_CLIPS StoryboardManagerEvent which is listened for here and in the storyboard
 					// here, the caught event adds the clipMarker to the storyboard
 					// in storyboard, the caught event causes the existing soryboard clips to reposition
 				// immediately storyboard tells its clips to reposition and a tempClipMarker is added in place and told to show with a delay of 0.2

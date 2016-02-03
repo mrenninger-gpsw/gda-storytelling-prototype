@@ -1,5 +1,5 @@
 package project.view {
-	
+		
 	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
@@ -10,7 +10,7 @@ package project.view {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
 	
-	// CandyLizard
+	// CandyLizard Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -19,12 +19,11 @@ package project.view {
 	import project.view.ui.StoryboardClipMarker;
 	import project.view.ui.SourceClipHighlight;
 	
-	
 		
 	
 	public class CustomStoryboardClip extends Sprite {
 		
-		// Vars
+		/******************* PRIVATE VARS *********************/
 		private var _holder:Sprite;
 		private var _curImageName:String;
 		private var _prevImageName:String;
@@ -40,12 +39,12 @@ package project.view {
 
 		
 		
-		// Getters & Setters
+		/***************** GETTERS & SETTERS ******************/		
 		public function get curFileName():String { return _curImageName; }
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function CustomStoryboardClip($sourceClipNum:Number, $frameNum:Number, $hilite:SourceClipHighlight) {
 			super();
 			
@@ -88,7 +87,7 @@ package project.view {
 		
 		
 		
-		// Public API
+		/******************** PUBLIC API *********************/
 		public function enable():void {
 			_addListeners();
 		}
@@ -107,7 +106,7 @@ package project.view {
 		
 
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			log('_init');
 			
@@ -172,7 +171,7 @@ package project.view {
 		
 		
 		
-		// Event Listeners
+		/****************** EVENT HANDLERS *******************/
 		private function _onAdded($e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
 			this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS));
@@ -212,7 +211,7 @@ package project.view {
 		
 		
 		
-		// Helpers
+		/********************* HELPERS ***********************/
 		private function _addLeadingZeros($num:Number):String {
 			var str:String = ($num < 10) ?  '00' + $num.toString() : ($num < 100) ? '0' + $num.toString() : $num.toString();
 			return str;

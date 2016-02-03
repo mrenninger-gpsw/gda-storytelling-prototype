@@ -1,24 +1,35 @@
 package project.view.ui {
 	
+	// Flash
+	import flash.display.Shape;
+	
+	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	import flash.display.Shape;
-	
+	// CandyLizard Framework
 	import display.Sprite;
 	
+
+
 	public class DancingBars extends Sprite {
 		
+		/******************** PRIVATE VARS ********************/	
 		private var _barsV:Vector.<Sprite>;
 		private var _isActive:Boolean;
 		private var _initBarHeightsV:Vector.<Number>;
 		
 		
+
+		/******************** CONSTRUCTOR *********************/
 		public function DancingBars() {
 			super();
 			_init();
 		}
 		
+		
+		
+		/********************* PUBLIC API *********************/	
 		public function activate():void {
 			if (!_isActive){
 				_isActive = true;
@@ -32,7 +43,6 @@ package project.view.ui {
 		}
 		
 		public function deactivate():void {
-			
 			if (_isActive) {
 				_isActive = false;;
 				for (var i:uint = 0; i < _barsV.length; i++){
@@ -43,6 +53,7 @@ package project.view.ui {
 		
 		
 		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			_initBarHeightsV = new <Number>[8,14,10];
 			

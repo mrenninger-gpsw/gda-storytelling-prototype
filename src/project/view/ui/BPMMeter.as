@@ -1,16 +1,22 @@
 package project.view.ui {
-	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
 	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	
-	import display.Sprite;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
 	
+	// CandyLizard Framework
+	import display.Sprite;
 	import utils.Register;
+
+	
 	
 	public class BPMMeter extends Sprite {
 		
+		/******************** PRIVATE VARS ********************/	
 		private var _bpm:Number;
 		private var _isActive:Boolean;
 		private var _r:int;
@@ -20,6 +26,7 @@ package project.view.ui {
 		
 		
 		
+		/******************** CONSTRUCTOR *********************/
 		public function BPMMeter($bpm:Number) {
 			super();
 			//verbose = true;
@@ -27,6 +34,9 @@ package project.view.ui {
 			_init();
 		}
 		
+		
+		
+		/********************* PUBLIC API *********************/	
 		public function animate():void {
 			var prepTime:Number = ((_bpm - 60) / 80) * 0.3;
 			TweenMax.allTo([_arcMask,_needle], prepTime, {rotation:-100, ease:Cubic.easeOut});
@@ -49,6 +59,9 @@ package project.view.ui {
 			}
 		}
 		
+		
+		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			log('_init');
 			_arc = new Sprite();

@@ -11,7 +11,7 @@ package project.view {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard
+	// CandyLizard Framework
 	import display.Sprite;
 	import text.TextFormat;
 	import text.TextUtilities;
@@ -25,10 +25,6 @@ package project.view {
 	
 	public class SettingsOverlay extends Sprite {
 
-		/********************* CONSTANTS **********************/
-		
-		
-		
 		/******************* PRIVATE VARS *********************/
 		private var _bkgd:Sprite;
 		private var _panel:Sprite;
@@ -45,15 +41,6 @@ package project.view {
 		private var _curZoomTF:TextField;
 		
 		private var _view:Project;
-		
-
-		
-		
-		/******************* PUBLIC VARS **********************/
-		
-		
-		
-		/***************** GETTERS & SETTERS ******************/
 
 		
 		
@@ -269,10 +256,6 @@ package project.view {
 			log('ƒsave');
 			_hide();
 		}
-
-		
-		
-		/******************** PUBLIC API *********************/		
 		
 		
 

@@ -1,30 +1,31 @@
 package project.managers {
 	
 	// Flash
+	import flash.display.Bitmap;
+	import flash.display.Shape;
+	import flash.events.Event;
+		
+	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Circ;
 	import com.greensock.easing.Cubic;
 	
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.events.Event;
-	
+	// CandyLizard Framework
 	import components.controls.Label;
-	
 	import display.Sprite;
+	import utils.Register;
 	
+	// Project
 	import project.events.StoryboardManagerEvent;
 	import project.view.CustomStoryboardClip;
 	import project.view.TempStoryboardClip;
 	import project.view.ui.StoryboardClipMarker;
 	
-	import utils.Register;
-
 	
 	
 	public class StoryboardManager extends Sprite {
 		
-		// vars
+		/******************** PRIVATE VARS ********************/
 		private var _waveform:Bitmap;
 		private var _markerHolderMask:Bitmap;
 		private var _timeline:Bitmap;
@@ -37,11 +38,14 @@ package project.managers {
 		private var _musicXML:XMLList;
 		private var _tempMarker:StoryboardClipMarker;
 		
+		
+		
+		/***************** GETTERS & SETTERS ******************/		
 		public function get canAddClips():Boolean { return (_clipHolder.numChildren == 4); }
 		
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		public function StoryboardManager() {
 			super();
 			verbose = true;
@@ -56,7 +60,7 @@ package project.managers {
 		
 		
 		
-		// Public API
+		/********************* PUBLIC API *********************/
 		public function addClip($clip:CustomStoryboardClip):void {
 			$clip.x = Number(_clipsXML[4].location[1].@position);
 			$clip.y = 0;
@@ -66,7 +70,7 @@ package project.managers {
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			var musicIcon:Bitmap = Register.ASSETS.getBitmap('footer_musicIcon');
 			TweenMax.to(musicIcon, 0, {x:20, y:135, width:15, height:16, alpha:0.66});
@@ -174,7 +178,7 @@ package project.managers {
 		
 		
 		
-		// Event Handlers
+		/******************* EVENT HANDLERS *******************/
 		private function _onAdded($e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
 			_addListeners();

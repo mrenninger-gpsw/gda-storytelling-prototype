@@ -1,53 +1,46 @@
 package project.view.ui {
-	import com.greensock.TweenMax;
 	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.events.MouseEvent;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
 	
+	// CandyLizard Framework
 	import display.Sprite;
-	
 	import utils.Register;
-	
+		
+	// Project
 	import project.events.UITransitionEvent;
 	
 	
 	
 	public class ChangeMusicBtn extends Sprite {
+		
+		/******************** CONSTRUCTOR *********************/
 		public function ChangeMusicBtn() {
 			super();
 			_init();
 		}
 		
+		
+		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			this.alpha = 0.66;
 
 			var musicIcon:Bitmap = Register.ASSETS.getBitmap('footer_musicIcon');
 			this.addChild(musicIcon);
 			
-			/*var _songTitleTF:Label = new Label();
-			_songTitleTF.mouseEnabled = false;
-			_songTitleTF.mouseChildren = false;
-			_songTitleTF.id = 'footer-song-title';
-			_songTitleTF.text = Register.PROJECT_XML.content.initSongTitle;
-			_songTitleTF.autoSize = 'left';
-			_songTitleTF.textFormatName = 'footer-song-title';
-			_songTitleTF.x = 35;
-			_songTitleTF.y = 1;
-			this.addChild(_songTitleTF);
-			
-			var moreIcon:Bitmap = Register.ASSETS.getBitmap('footer_moreIcon');
-			moreIcon.x = _songTitleTF.x + _songTitleTF.width + 14;
-			moreIcon.y = 10;
-			this.addChild(moreIcon);*/
-			
 			this.addEventListener(MouseEvent.MOUSE_OVER, _handleMouseEvents);
 			this.addEventListener(MouseEvent.MOUSE_OUT, _handleMouseEvents)
-			this.addEventListener(MouseEvent.CLICK, _handleMouseEvents)
-				
+			this.addEventListener(MouseEvent.CLICK, _handleMouseEvents)				
 		}
 		
+		
+		
+		/******************* EVENT HANDLERS *******************/	
 		private function _handleMouseEvents($e:MouseEvent):void {
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:

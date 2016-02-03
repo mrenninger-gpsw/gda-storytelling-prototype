@@ -1,32 +1,33 @@
 package project.view {
 	
 	// Flash
+	import flash.display.Bitmap;
+	import flash.display.Shape;
+	import flash.events.Event;
+	
+	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Circ;
 	import com.greensock.easing.Cubic;
 	import com.greensock.easing.Linear;
 	
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.events.Event;
-	
+	// CandyLizard Framework
 	import components.controls.Label;
-	
 	import display.Sprite;
+	import utils.Register;
 	
+	// Project
 	import project.events.MusicMenuEvent;
 	import project.events.StoryboardManagerEvent;
 	import project.view.MusicMenu;
 	import project.view.ui.MusicMenuItem;
 	import project.view.ui.MusicPreviewHighlightIcon;
-	
-	import utils.Register;
 
 	
 	
 	public class MusicPreviewArea extends Sprite {
 		
-		// Vars
+		/******************** PRIVATE VARS ********************/	
 		private var _showComplete:Boolean;
 		private var _hideComplete:Boolean;
 		private var _numMarkers:int = 4;
@@ -46,7 +47,7 @@ package project.view {
 
 		
 		
-		// Constructor
+		/******************** CONSTRUCTOR *********************/
 		private var _progressBar:Shape;
 		public function MusicPreviewArea() {
 			super();
@@ -57,7 +58,7 @@ package project.view {
 		
 		
 		
-		// Public API
+		/********************* PUBLIC API *********************/	
 		public function show():void {
 			log('show');
 			_showComplete = false;
@@ -83,7 +84,7 @@ package project.view {
 		
 		
 		
-		// Private API
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			log('_init');
 			_ds = Register.ASSETS.getBitmap('preview_dropshadow');
@@ -264,7 +265,7 @@ package project.view {
 		
 						
 		
-		// Event Handlers 
+		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			log('_onAdded');
 			removeEventListener(Event.ADDED_TO_STAGE, _onAdded);

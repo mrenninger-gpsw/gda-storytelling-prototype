@@ -1,18 +1,23 @@
 package project.view.ui {
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	
+
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
+	
+	// CandyLizard Framework
 	import components.controls.Label;
-	
 	import display.Sprite;
-	
 	import utils.Register;
+	
+	
 	
 	public class MusicMenuItemIcon extends Sprite {
 		
+		/******************** PRIVATE VARS ********************/	
 		private var _bkgd:Shape;
 		private var _label:Label;
 		private var _text:String;
@@ -24,6 +29,7 @@ package project.view.ui {
 
 		
 		
+		/******************** CONSTRUCTOR *********************/
 		public function MusicMenuItemIcon($text:String, $locked:Boolean) {
 			super();
 			
@@ -33,6 +39,9 @@ package project.view.ui {
 			_init();
 		}
 		
+		
+		
+		/********************* PUBLIC API *********************/	
 		public function select($b:Boolean, $immediate:Boolean = false):void {
 			var time:Number = ($immediate) ? 0 : 0.3; 
 			if ($b) {
@@ -52,6 +61,9 @@ package project.view.ui {
 			}
 		}
 		
+
+		
+		/******************** PRIVATE API *********************/
 		private function _init():void {
 			_bkgd = new Shape();
 			_bkgd.graphics.beginFill(0x141414);
@@ -79,12 +91,6 @@ package project.view.ui {
 				_defaultIcon.x = (this.width - _defaultIcon.width) * 0.5;
 				_defaultIcon.y = _label.y - 3 - _defaultIcon.height;
 				this.addChild(_defaultIcon);
-				
-				/*_selectedIcon = Register.ASSETS.getBitmap('musicItem_volumeIcon');
-				_selectedIcon.x = (this.width - _selectedIcon.width) * 0.5;
-				_selectedIcon.y = _label.y - 3 - _selectedIcon.height;
-				_selectedIcon.alpha = 0;
-				this.addChild(_selectedIcon);*/
 				
 				_dancingBars = new DancingBars() 
 				_dancingBars.x = (this.width - _dancingBars.width) * 0.5;
