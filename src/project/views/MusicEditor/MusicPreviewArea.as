@@ -1,4 +1,4 @@
-package project.view {
+package project.views.MusicEditor {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -19,9 +19,9 @@ package project.view {
 	// Project
 	import project.events.MusicMenuEvent;
 	import project.events.StoryboardManagerEvent;
-	import project.view.MusicMenu;
-	import project.view.ui.MusicMenuItem;
-	import project.view.ui.MusicPreviewHighlightIcon;
+	import project.views.MusicEditor.MusicMenu;
+	import project.views.MusicEditor.ui.MusicMenuItem;
+	import project.views.MusicEditor.ui.MusicPreviewHighlightIcon;
 
 	
 	

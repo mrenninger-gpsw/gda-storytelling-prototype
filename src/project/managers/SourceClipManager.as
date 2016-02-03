@@ -17,8 +17,8 @@ package project.managers {
 	import project.events.PreviewEvent;
 	import project.events.SourceClipManagerEvent;
 	import project.events.StoryboardManagerEvent;
-	import project.view.SourceClip;
-	import project.view.VideoPreviewArea;
+	import project.views.Storytelling.SourceClip;
+	import project.views.Storytelling.VideoPreviewArea;
 	
 	
 	

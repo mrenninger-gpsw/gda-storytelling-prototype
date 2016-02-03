@@ -1,4 +1,4 @@
-package project.view.ui {
+package project.views.MusicEditor.ui {
 	
 	// CandyLizard Framework
 	import components.controls.Label;

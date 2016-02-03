@@ -1,4 +1,4 @@
-package project.view {
+package project.views.SettingsOverlay {
 	
 	// Flash
 	import flash.display.Shape;
@@ -18,8 +18,8 @@ package project.view {
 	
 	// Project
 	import project.Project;
-	import project.view.ui.LabelledCheckbox;
-	import project.view.ui.NumericStepper;
+	import project.views.SettingsOverlay.ui.LabelledCheckbox;
+	import project.views.SettingsOverlay.ui.NumericStepper;
 	
 	
 	

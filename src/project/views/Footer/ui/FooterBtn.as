@@ -1,4 +1,4 @@
-package project.view.ui {
+package project.views.Footer.ui {
 
 	// Flash
 	import flash.display.Bitmap;

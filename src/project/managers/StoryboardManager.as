@@ -17,9 +17,9 @@ package project.managers {
 	
 	// Project
 	import project.events.StoryboardManagerEvent;
-	import project.view.CustomStoryboardClip;
-	import project.view.TempStoryboardClip;
-	import project.view.ui.StoryboardClipMarker;
+	import project.views.Storytelling.CustomStoryboardClip;
+	import project.views.Storytelling.TempStoryboardClip;
+	import project.views.Storytelling.ui.StoryboardClipMarker;
 	
 	
 	

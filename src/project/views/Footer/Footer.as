@@ -1,4 +1,4 @@
-package project.view {
+package project.views.Footer {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -14,8 +14,8 @@ package project.view {
 	
 	// Project
 	import project.events.UITransitionEvent;
-	import project.view.ui.FooterBtn;
-	import project.view.ui.UITransitionBtn;
+	import project.views.Footer.ui.FooterBtn;
+	import project.views.Footer.ui.UITransitionBtn;
 	
 	
 	

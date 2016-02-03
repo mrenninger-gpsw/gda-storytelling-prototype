@@ -1,4 +1,4 @@
-package project.view {
+package project.views {
 	
 	// Flash
 	import flash.display.Bitmap;

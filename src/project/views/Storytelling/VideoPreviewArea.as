@@ -1,4 +1,4 @@
-package project.view {
+package project.views.Storytelling {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -49,7 +49,7 @@ package project.view {
 					break;
 				
 				case 'video':
-					TweenMax.to(this, 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:1});
+					TweenMax.to(this, 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:0.2});
 					break;
 			}
 		}
