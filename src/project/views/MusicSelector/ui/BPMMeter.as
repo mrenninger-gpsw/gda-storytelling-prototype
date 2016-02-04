@@ -1,4 +1,4 @@
-package project.views.MusicEditor.ui {
+package project.views.MusicSelector.ui {
 	
 	// Flash
 	import flash.display.Bitmap;

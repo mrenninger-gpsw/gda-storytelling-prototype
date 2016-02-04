@@ -8,21 +8,27 @@ package project.views {
 	
 	// Project
 	import project.events.MusicMenuEvent;
-	import project.views.MusicEditor.MusicMenu;
-	import project.views.MusicEditor.MusicPreviewArea;
+	import project.views.MusicSelector.MusicMenu;
+	import project.views.MusicSelector.MusicPreviewArea;
 	
 	
 	
-	public class MusicEditor extends Sprite {
+	public class MusicSelector extends Sprite {
 		
 		/******************** PRIVATE VARS ********************/	
 		private var _musicPreview:MusicPreviewArea;
 		private var _musicMenu:MusicMenu;
+		private var _isActive:Boolean = false;
+		
+
+		
+		/***************** GETTERS & SETTERS ******************/			
+		public function get isActive():Boolean { return _isActive; }
 		
 		
 		
 		/******************** CONSTRUCTOR *********************/
-		public function MusicEditor() {
+		public function MusicSelector() {
 			super();
 			verbose = true;
 			this.addEventListener(Event.ADDED_TO_STAGE, _onAdded);
@@ -33,11 +39,13 @@ package project.views {
 		
 		/********************* PUBLIC API *********************/	
 		public function show():void {
+			_isActive = true;
 			_musicPreview.show(); // starts immediately, multi-part, 0.8s to complete
 			_musicMenu.show(); // starts immediately, multi-part, 0.6s to complete
 		}
 		
 		public function hide():void {
+			_isActive = false;
 			_musicPreview.hide(); // starts immediately, multi-part, takes 0.8s to complete
 			_musicMenu.hide();  // starts immediately, multi-part, takes 0.8s to complete
 		}

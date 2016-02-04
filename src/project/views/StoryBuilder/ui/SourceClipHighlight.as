@@ -1,4 +1,4 @@
-package project.views.Storytelling.ui {
+package project.views.StoryBuilder.ui {
 	
 	// Flash
 	import flash.display.Bitmap;

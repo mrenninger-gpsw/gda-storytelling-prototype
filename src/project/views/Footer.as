@@ -1,4 +1,4 @@
-package project.views.Footer {
+package project.views {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -7,6 +7,7 @@ package project.views.Footer {
 	
 	// Greensock
 	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
 	
 	// CandyLizard Framework
 	import display.Sprite;
@@ -28,6 +29,12 @@ package project.views.Footer {
 		private var _saveBtn:FooterBtn;
 		private var _subscriptionBtn:FooterBtn;
 		private var _menu:Bitmap;
+		private var _curState:String = 'video';
+		
+		
+		
+		/***************** GETTERS & SETTERS ******************/
+		public function set curState($value:String):void { _switchStates($value); }
 		
 		
 		
@@ -36,6 +43,14 @@ package project.views.Footer {
 			super();
 			verbose = true;
 			_init();	
+		}
+		
+		public function show():void {
+			TweenMax.to(this, 0.3, {y:Register.APP.HEIGHT - this.height, ease:Cubic.easeOut, onComplete:_onShowComplete});
+		}
+		
+		public function hide():void {
+			TweenMax.to(this, 0.3, {y:Register.APP.HEIGHT, ease:Cubic.easeOut, onComplete:_onHideComplete});
 		}
 		
 	
@@ -84,6 +99,14 @@ package project.views.Footer {
 			addChild(_subscriptionBtn);
 		}
 		
+		private function _onShowComplete():void {
+			
+		}
+		
+		private function _onHideComplete():void {
+			_switchStates('video');
+		}
+		
 		private function _enableBtn($btn:UITransitionBtn):void {
 			//log('enabling: '+$btn.id)
 			TweenMax.to($btn, 0.3, {alpha:0.66});
@@ -104,8 +127,11 @@ package project.views.Footer {
 		
 		private function _switchStates($id:String):void {
 			log('_switchStates: '+$id);
+			_curState = $id;
 			switch ($id) {
 				case 'music':
+					_enableBtn(_changeVideoBtn);
+					_disableBtn(_changeMusicBtn);
 					TweenMax.to(_menu, 0.3, {autoAlpha:0});
 					TweenMax.to(_previewBtn, 0.3, {autoAlpha:0, delay:0.05});
 					TweenMax.to(_saveBtn, 0.3, {autoAlpha:0, delay:0.1});
@@ -113,6 +139,8 @@ package project.views.Footer {
 					break;
 				
 				case 'video':
+					_enableBtn(_changeMusicBtn);
+					_disableBtn(_changeVideoBtn);
 					TweenMax.to(_subscriptionBtn, 0.3, {autoAlpha:0});
 					TweenMax.to(_menu, 0.3, {autoAlpha:1, delay:0.05});
 					TweenMax.to(_previewBtn, 0.3, {autoAlpha:1, delay:0.1});
@@ -125,7 +153,6 @@ package project.views.Footer {
 		
 		
 		/******************* EVENT HANDLERS *******************/	
-		/*********************** HELPERS **********************/
 		private function _handleMouseEvents($e:MouseEvent):void {
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:
@@ -142,11 +169,9 @@ package project.views.Footer {
 					if ($e.target == _changeMusicBtn) {
 						dispatchEvent(new UITransitionEvent(UITransitionEvent.MUSIC, true));
 						_switchStates('music');
-						_enableBtn(_changeVideoBtn);
 					} else {
 						dispatchEvent(new UITransitionEvent(UITransitionEvent.VIDEO, true));
 						_switchStates('video');
-						_enableBtn(_changeMusicBtn);
 					}
 					break;				
 			}

@@ -7,7 +7,8 @@ package project.views {
 	
 	// Greensock
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
+	import com.greensock.easing.Circ;
+	import com.greensock.easing.Cubic;
 	
 	// CandyLizard Framework
 	import display.Sprite;
@@ -19,13 +20,13 @@ package project.views {
 	import project.events.StoryboardManagerEvent;
 	import project.managers.SourceClipManager;
 	import project.managers.StoryboardManager;
-	import project.views.Storytelling.ui.StoryboardClipMarker;
-	import project.views.Storytelling.CustomStoryboardClip;
-	import project.views.Storytelling.VideoPreviewArea;
+	import project.views.StoryBuilder.CustomStoryboardClip;
+	import project.views.StoryBuilder.VideoPreviewArea;
+	import project.views.StoryBuilder.ui.StoryboardClipMarker;	
 
 	
 	
-	public class Storytelling extends Sprite {
+	public class StoryBuilder extends Sprite {
 
 		/******************** PRIVATE VARS ********************/	
 		private var _sourceClipMgr:SourceClipManager;
@@ -34,16 +35,19 @@ package project.views {
 		private var _sourceClipMgrTransitionStart:Number;
 		private var _time:Number;
 		private var _tempClipMarker:StoryboardClipMarker;
-		
+		private var _isActive:Boolean = false;
+			
 
 		
 		/***************** GETTERS & SETTERS ******************/			
 		public function get storyboard():StoryboardManager { return _storyboard; }
-		
+
+		public function get isActive():Boolean { return _isActive; }
+
 		
 		
 		/******************** CONSTRUCTOR *********************/
-		public function Storytelling() {
+		public function StoryBuilder() {
 			super();
 			verbose = true;
 			this.addEventListener(Event.ADDED_TO_STAGE, _onAdded);
@@ -66,17 +70,19 @@ package project.views {
 		}
 		
 		public function show():void {
+			_isActive = true;
 			_sourceClipMgr.show(); // 0.55s to complete
 			TweenMax.to(_storyboard, 0.5, {y:520, ease:Circ.easeInOut}); // 0.5s to complete
-			_previewArea.switchStates('video'); // 0.2s delay, 0.5s to complete
+			_previewArea.show(); // 0.2s delay, 0.5s to complete
 		}
 		
-		public function hide():void {
+		public function hide($immediate:Boolean = false):void {
+			_isActive = false;
 			_sourceClipMgrTransitionStart = new Date().getTime();
 			
-			_sourceClipMgr.hide(); // starts immediately, multi-part, takes .55s to complete
-			TweenMax.to(_storyboard, 0.7, {y:Register.APP.HEIGHT, ease:Circ.easeInOut}); // starts immediately, takes 0.7s to complete
-			_previewArea.switchStates('music'); // starts immediately, takes 0.3s to complete
+			_sourceClipMgr.hide($immediate); // starts immediately, multi-part, takes .55s to complete
+			TweenMax.to(_storyboard, ($immediate) ? 0 : 0.7, {y:Register.APP.HEIGHT, ease:Circ.easeInOut}); // starts immediately, takes 0.7s to complete
+			_previewArea.hide($immediate); // starts immediately, takes 0.3s to complete
 		}
 		
 		
@@ -121,6 +127,7 @@ package project.views {
 			// ************************************************
 			// ************************************************	
 			
+			hide(true);
 		}
 		
 		private function _onShowComplete():void {

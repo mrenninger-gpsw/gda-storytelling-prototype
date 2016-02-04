@@ -12,12 +12,16 @@ package project.views {
 	import display.Sprite;
 	import utils.Register;
 	
+	// Project
+	import project.views.Header.HeaderNav;
+	
 		
 	
 	public class Header extends Sprite {
 		
 		/******************* PRIVATE VARS *********************/
 		private var _addMediaBtn:Bitmap;
+		private var _headerNav:HeaderNav;
 		
 		
 		
@@ -103,31 +107,10 @@ package project.views {
 			loggedInWithAvatar.y = (bgShape.height - loggedInWithAvatar.height) * 0.5;
 			addChild(loggedInWithAvatar);
 			
-			// nav
-			var navBkgd:Bitmap = Register.ASSETS.getBitmap('header_nav_bkgd');
-			navBkgd.x = 507;
-			navBkgd.y = (bgShape.height - navBkgd.height) * 0.5;
-			addChild(navBkgd);
-			
-			var activeShape:Shape = new Shape();
-			activeShape.graphics.beginFill(0x353535);
-			activeShape.graphics.drawRect(0,0,133,36);
-			activeShape.graphics.endFill();
-			activeShape.x = 640;
-			activeShape.y = navBkgd.y;
-			addChild(activeShape);
-			
-			var manageText:Bitmap = Register.ASSETS.getBitmap('manageText');
-			manageText.x = 545;
-			manageText.y = (bgShape.height - manageText.height) * 0.5;
-			addChild(manageText);
-			
-			var editText:Bitmap = Register.ASSETS.getBitmap('editText');
-			editText.x = 693;
-			editText.y = (bgShape.height - editText.height) * 0.5;
-			TweenMax.to(editText,0,{tint:0xFFFFFF});
-			addChild(editText);
-
+			_headerNav = new HeaderNav();
+			_headerNav.x = (bgShape.width - _headerNav.width) * 0.5;
+			_headerNav.y = (bgShape.height - _headerNav.height) * 0.5;
+			this.addChild(_headerNav);
 		}
 		
 		
@@ -154,7 +137,6 @@ package project.views {
 				
 			}
 		}
-		
 		
 	}
 }

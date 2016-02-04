@@ -1,4 +1,4 @@
-package project.views.Storytelling {
+package project.views.StoryBuilder {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -41,17 +41,25 @@ package project.views.Storytelling {
 			_holder.removeChildren()
 		}
 		
-		public function switchStates($id:String):void {
+		public function switchStates($id:String,$immediate:Boolean = false):void {
 			log('_switchStates: '+$id);
 			switch ($id) {
 				case 'music':
-					TweenMax.to(this, 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut});
+					TweenMax.to(this, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut});
 					break;
 				
 				case 'video':
-					TweenMax.to(this, 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:0.2});
+					TweenMax.to(this, ($immediate) ? 0 : 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.2});
 					break;
 			}
+		}
+		
+		public function show($immediate:Boolean = false):void {
+			TweenMax.to(this, ($immediate) ? 0 : 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.2});		
+		}
+		
+		public function hide($immediate:Boolean = false):void {
+			TweenMax.to(this, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut});
 		}
 		
 		
@@ -72,6 +80,9 @@ package project.views.Storytelling {
 			
 			_holder = new Sprite();
 			this.addChild(_holder);
+			
+			TweenMax.to(this, 0, {autoAlpha:0, y:'-20'});
+
 		}
 	}
 }

@@ -17,8 +17,8 @@ package project.managers {
 	import project.events.PreviewEvent;
 	import project.events.SourceClipManagerEvent;
 	import project.events.StoryboardManagerEvent;
-	import project.views.Storytelling.SourceClip;
-	import project.views.Storytelling.VideoPreviewArea;
+	import project.views.StoryBuilder.SourceClip;
+	import project.views.StoryBuilder.VideoPreviewArea;
 	
 	
 	
@@ -63,14 +63,14 @@ package project.managers {
 			TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
 		}
 		
-		public function hide():void {
+		public function hide($immediate:Boolean = false):void {
 			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
 				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _onHideComplete : null;				
-				TweenMax.to(_sourceClipsV[i], 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:i * 0.05, onComplete:onComplete});
+				TweenMax.to(_sourceClipsV[i], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : (i * 0.05), onComplete:onComplete});
 			}			
-			TweenMax.to(_scrollbar, 0.3, {autoAlpha:0, ease:Cubic.easeOut});		
-			TweenMax.to(_bgShape, 0.4, {autoAlpha:0, ease:Cubic.easeOut});			
-			TweenMax.to(_shadow, 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.25});			
+			TweenMax.to(_scrollbar, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});		
+			TweenMax.to(_bgShape, ($immediate) ? 0 : 0.4, {autoAlpha:0, ease:Cubic.easeOut});			
+			TweenMax.to(_shadow, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.25});			
 		}
 		
 		
@@ -119,14 +119,16 @@ package project.managers {
 			_shadow.alpha = 0;
 			this.addChild(_shadow);
 			
-			show();
+			//show();
 		}
 		
 		private function _onShowComplete():void {
+			log('_onHideComplete');
 			dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.SHOW_COMPLETE));
 		}
 		
 		private function _onHideComplete():void {
+			log('_onHideComplete');
 			dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.HIDE_COMPLETE));
 		}
 		

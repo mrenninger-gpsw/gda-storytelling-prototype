@@ -1,4 +1,4 @@
-package project.views.Storytelling {
+package project.views.StoryBuilder {
 		
 	// Flash
 	import flash.display.Bitmap;
@@ -16,8 +16,8 @@ package project.views.Storytelling {
 	
 	// Project
 	import project.events.StoryboardManagerEvent;
-	import project.views.Storytelling.ui.StoryboardClipMarker;
-	import project.views.Storytelling.ui.SourceClipHighlight;
+	import project.views.StoryBuilder.ui.StoryboardClipMarker;
+	import project.views.StoryBuilder.ui.SourceClipHighlight;
 	
 		
 	

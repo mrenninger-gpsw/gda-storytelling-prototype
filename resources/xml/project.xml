@@ -107,6 +107,13 @@ VERSION 0.00.001 - 01/20/2016
 	<legal><![CDATA[© Copyright 2016 GoPro]]></legal>
 	
 	<content>
+		
+		<header>
+			<nav>
+				<item>Media</item>
+				<item>Editor</item>
+			</nav>
+		</header>
 	
 		<music initSongNum='0'>
 			<nav>

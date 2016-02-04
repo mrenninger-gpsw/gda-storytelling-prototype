@@ -1,4 +1,4 @@
-package project.views.MusicEditor {
+package project.views.MusicSelector {
 	
 	// Flash
 	import flash.display.Shape;
@@ -15,8 +15,8 @@ package project.views.MusicEditor {
 	
 	// Project
 	import project.events.MusicMenuEvent;
-	import project.views.MusicEditor.ui.MusicMenuItem;
-	import project.views.MusicEditor.ui.MusicNavBtn;
+	import project.views.MusicSelector.ui.MusicMenuItem;
+	import project.views.MusicSelector.ui.MusicNavBtn;
 	
 	
 	

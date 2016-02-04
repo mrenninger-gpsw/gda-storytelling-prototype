@@ -1,4 +1,4 @@
-package project.views.Storytelling {
+package project.views.StoryBuilder {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -18,8 +18,8 @@ package project.views.Storytelling {
 	
 	// Project
 	import project.events.PreviewEvent;
-	import project.views.Storytelling;
-	import project.views.Storytelling.ui.SourceClipHighlight;
+	import project.views.StoryBuilder;
+	import project.views.StoryBuilder.ui.SourceClipHighlight;
 	
 	
 		
@@ -326,7 +326,7 @@ package project.views.Storytelling {
 						sbClip.height = 72;
 						sbClip.x = localToGlobal(p).x;
 						sbClip.y = localToGlobal(p).y;
-						(this.parent.parent as Storytelling).addCustomClip(sbClip);
+						(this.parent.parent as StoryBuilder).addCustomClip(sbClip);
 						
 						TweenMax.to(_scrubber, 0, {alpha:0});
 						TweenMax.to(_preview, 0, {alpha:0});

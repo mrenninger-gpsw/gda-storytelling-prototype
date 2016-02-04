@@ -22,10 +22,12 @@ package project{
 	
 	// Project
 	import project.events.UITransitionEvent;
+	import project.events.ViewTransitionEvent;
 	import project.views.Header;
-	import project.views.MusicEditor;
-	import project.views.Storytelling;
-	import project.views.Footer.Footer;
+	import project.views.MediaLibrary;
+	import project.views.MusicSelector;
+	import project.views.StoryBuilder;
+	import project.views.Footer;
 	import project.views.SettingsOverlay.SettingsOverlay;	
 	
 		
@@ -44,8 +46,9 @@ package project{
 		private var _showing:Boolean = false;
 		private var _settingsShowing:Boolean = false;
 		private var _projectInitiated:Boolean = false;
-		private var _storytelling:Storytelling;		
-		private var _musicEditor:MusicEditor;		
+		private var _storyBuilder:StoryBuilder;		
+		private var _musicSelector:MusicSelector;		
+		private var _mediaLibrary:MediaLibrary;		
 		private var _footer:Footer;
 		private var _header:Header;
 		
@@ -123,15 +126,20 @@ package project{
 			this.addChild(s);
 			// ************************************************
 			// ************************************************-
-						
-			_storytelling = new Storytelling();
-			this.addChild(_storytelling);
+									
+			_mediaLibrary = new MediaLibrary();
+			this.addChild(_mediaLibrary);
+			
+			_storyBuilder = new StoryBuilder();
+			this.addChild(_storyBuilder);
 
-			_musicEditor = new MusicEditor();
-			this.addChild(_musicEditor);
+			_musicSelector = new MusicSelector();
+			this.addChild(_musicSelector);
 
 			_header = new Header();
 			this.addChild(_header);
+			this.stage.addEventListener(ViewTransitionEvent.EDITOR, _handleViewTransitionEvent);
+			this.stage.addEventListener(ViewTransitionEvent.MEDIA, _handleViewTransitionEvent);
 
 			_footer = new Footer();
 			_footer.y = Register.APP.HEIGHT - _footer.height;
@@ -148,7 +156,7 @@ package project{
 				_showing = true;
 				Register.APP.applicationMenu.enableAllMenus();
 				_addListeners();
-				TweenMax.to(this, 3, {autoAlpha:1, ease:Cubic.easeOut, onComplete:_onShowComplete});
+				TweenMax.to(this, 1, {autoAlpha:1, ease:Cubic.easeOut, onComplete:_onShowComplete});
 			}
 		}
 		
@@ -169,6 +177,7 @@ package project{
 		private function _onShowComplete():void {
 			log('ƒ _onShowComplete');
 			_projectInitiated = true;
+			_storyBuilder.show();
 		}
 		
 		
@@ -210,21 +219,57 @@ package project{
 				case UITransitionEvent.MUSIC:
 					log('UITransitionEvent - MUSIC');
 					
-					_storytelling.hide();
+					_storyBuilder.hide();
 					_header.switchStates('music'); // starts immediately, takes 0.3s to complete					
-					TweenMax.delayedCall(0.6, _musicEditor.show);
+					TweenMax.delayedCall(0.6, _musicSelector.show);
 					break;
 				
 				case UITransitionEvent.VIDEO:
 					log('UITransitionEvent - VIDEO');
 					
-					_musicEditor.hide();
+					_musicSelector.hide();
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
-					TweenMax.delayedCall(0.8, _storytelling.show)					
+					TweenMax.delayedCall(0.8, _storyBuilder.show)					
 
 					break;			
 				
 			}			
 		}
+		
+		protected function _handleViewTransitionEvent($e:ViewTransitionEvent):void {
+			switch ($e.type) {
+				case ViewTransitionEvent.EDITOR:
+					log('ViewTransitionEvent - EDITOR');
+					
+					/*_storyBuilder.hide();
+					_header.switchStates('music'); // starts immediately, takes 0.3s to complete					
+					TweenMax.delayedCall(0.6, _musicSelector.show);*/
+					
+					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
+					_mediaLibrary.hide();
+					TweenMax.delayedCall(0.8, _storyBuilder.show)
+					TweenMax.delayedCall(0.8, _footer.show);
+					break;
+				
+				case ViewTransitionEvent.MEDIA:
+					log('ViewTransitionEvent - MEDIA');
+					
+					// determine which of the editor views is active and hide it
+					_header.switchStates('video');
+					_footer.hide();
+					
+					if (_storyBuilder.isActive) _storyBuilder.hide();
+					if (_musicSelector.isActive) _musicSelector.hide();
+					TweenMax.delayedCall(0.8, _mediaLibrary.show);
+					
+					/*_musicSelector.hide();
+					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
+					TweenMax.delayedCall(0.8, _storyBuilder.show)	*/				
+					
+					break;			
+				
+			}			
+		}
+		
 	}
 }

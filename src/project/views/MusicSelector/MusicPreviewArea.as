@@ -1,4 +1,4 @@
-package project.views.MusicEditor {
+package project.views.MusicSelector {
 	
 	// Flash
 	import flash.display.Bitmap;
@@ -19,9 +19,9 @@ package project.views.MusicEditor {
 	// Project
 	import project.events.MusicMenuEvent;
 	import project.events.StoryboardManagerEvent;
-	import project.views.MusicEditor.MusicMenu;
-	import project.views.MusicEditor.ui.MusicMenuItem;
-	import project.views.MusicEditor.ui.MusicPreviewHighlightIcon;
+	import project.views.MusicSelector.MusicMenu;
+	import project.views.MusicSelector.ui.MusicMenuItem;
+	import project.views.MusicSelector.ui.MusicPreviewHighlightIcon;
 
 	
 	
@@ -98,6 +98,8 @@ package project.views.MusicEditor {
 			_bgShape.graphics.drawRect(0,0,752,423);
 			_bgShape.graphics.endFill();
 			this.addChild(_bgShape);
+			
+			TweenMax.allTo([_ds, _bgShape], 0, {autoAlpha:0, y:'-20'});
 			
 			_musicXML = Register.PROJECT_XML.content.music;
 

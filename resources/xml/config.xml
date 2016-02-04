@@ -272,6 +272,15 @@
 		
 		<!--  footer -->
 		<textFormat
+			id='header-nav-item'
+			size='14'
+			color='#666666'
+			font='Proxima Nova Bold'
+			align='left'
+		/>
+		
+		<!--  footer -->
+		<textFormat
 			id='footer-song-title'
 			size='16'
 			color='#F4F4F4'
