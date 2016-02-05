@@ -159,7 +159,7 @@
 			rightMargin='20'
 		/>	
 		
-			<!-- Settings Overlay -->
+		<!-- Settings Overlay -->
 		<textFormat
 			id='settings-closeIcon'
 			size='16'
@@ -270,7 +270,7 @@
 		/>
 		
 		
-		<!--  footer -->
+		<!--  header -->
 		<textFormat
 			id='header-nav-item'
 			size='14'

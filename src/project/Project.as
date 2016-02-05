@@ -76,7 +76,25 @@ package project{
 			Register.PROJECT = this;
 			Multitouch.inputMode = MultitouchInputMode.GESTURE;			
 			
-			_xml = Register.PROJECT_XML;
+			_xml = Register.PROJECT_XML;0
+			
+			// Subarashii TextFormats
+			//log('TEXTFORMATS_XML\r'+Register.TEXTFORMATS_XML);
+			log('Register.TEXTFORMATS_XML.textFormat\r'+Register.TEXTFORMATS_XML.textFormat);
+			log('Register.TEXTFORMATS_XML.textFormat.length(): '+Register.TEXTFORMATS_XML.textFormat.length());
+			for (var i:uint = 0; i < Register.TEXTFORMATS_XML.textFormat.length(); i++) { trace('textFormat['+i+'].@id: '+Register.TEXTFORMATS_XML.textFormat[i].@id); }
+			log('Register.TEXTFORMATS_XML.textFormat[2]: '+Register.TEXTFORMATS_XML.textFormat[2].@id);
+			log('Register.TEXTFORMATS_XML.textFormat.(@id == splashTitle).@color: '+Register.TEXTFORMATS_XML.textFormat.(@id == 'splashTitle').@color);
+			log('Register.TEXTFORMATS_XML.textFormat.(@id == yourmom).@id == null: '+(Register.TEXTFORMATS_XML.textFormat.(@id == 'yourmom').@id == null));
+			log('Register.TEXTFORMATS_XML.textFormat.(@id == yourmom).@id == false: '+(Register.TEXTFORMATS_XML.textFormat.(@id == 'yourmom').@id == false));
+			
+			// CandyLizard TextFormats
+			//log('CONFIG_XML\r'+Register.CONFIG_XML);
+			/*log('Register.CONFIG_XML.textFormat\r'+Register.CONFIG_XML.textFormat);
+			log('Register.CONFIG_XML.textFormat.length(): '+Register.CONFIG_XML.textFormat.length());
+			for (var i:uint = 0; i < Register.CONFIG_XML.textFormat.length(); i++) { trace('textFormat['+i+'.@id: '+Register.CONFIG_XML.textFormat[i].@id); }
+			log('Register.CONFIG_XML.textFormat[3].@id: '+Register.CONFIG_XML.textFormat[3].@id);
+			log('Register.CONFIG_XML.textFormat.(@id == splashTitle).@color: '+Register.CONFIG_XML.textFormat.(@id == 'splashTitle').@color);*/
 			
 			addEventListener(Event.ADDED_TO_STAGE, _onAdded);
 		}
@@ -147,7 +165,7 @@ package project{
 			_footer.addEventListener(UITransitionEvent.MUSIC, _handleUITransitionEvent);
 			_footer.addEventListener(UITransitionEvent.VIDEO, _handleUITransitionEvent);
 			
-			TweenMax.to(this, 0, {autoAlpha:0});
+			TweenMax.to(this, 0, {autoAlpha:0});						
 		}
 		
 		public function show():void{

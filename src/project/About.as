@@ -218,7 +218,7 @@ package project{
 		//FETCHING LIBRARY INFO
 		private function getLibraryInfo():String{
 			var str:String = 'LIBRARIES:\n\n';
-			str+='\tCANDYLIZARD FRAMEWORK v'+Register.CANDYLIZARD_VERSION+'\n';
+			str+='\tCANDYLIZARD FRAMEWORK v'+Register.VERSION+'\n';
 			str+='\tGREENSOCK ANIMATION LIB v'+TweenMax.version+'\n';
 			
 			for(var i:uint = 0; i < Register.CONFIG_XML.lib.length() > 0; i++){

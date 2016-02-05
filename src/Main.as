@@ -35,6 +35,8 @@ package{
 		[Embed(source="../resources/xml/config.xml", mimeType = "application/octet-stream")]
 		protected 	const		CONFIG:Class;
 		
+		[Embed(source="../resources/xml/textFormats.xml", mimeType = "application/octet-stream")]
+		protected 	const 		TEXTFORMATS_XML:Class;
 		
 		//>>>>>>>>>			STEP ONE:       change the CONTENT string to the name of your project class
 		public 		const 		CONTENT:String	 = 	'Project';
@@ -64,12 +66,13 @@ package{
 			verbose = true;
 			Register.APP = this;	
 			Register.CONFIG_XML = XML(new CONFIG());
+			Register.TEXTFORMATS_XML = XML(new TEXTFORMATS_XML());
 			Register.PROJECT_XML = XML(new PROJECT_XML());
 			Register.KEYS = Register.CONFIG_XML.keys.key;
 			Register.NATIVE_EXTENSION = new Object();
 			
 			_getSettings();
-			
+					
 			/*
 			FONTS ------>>> Fonts are instantiated here so you can have 
 			ultimate control over the fonts installed rather than
@@ -84,6 +87,25 @@ package{
 			applicationMenu = new ApplicationMenu(this.stage, _appMenuHandler);
 			applicationMenu.verbose = true;
 			
+		}
+		
+		override protected function _createProjectWindow():Window {
+			var projectWin:Window;
+			if (initialized) {
+				var projectClassRef:Class = projectClassReference;
+				Register.PROJECT = new projectClassRef();
+				projectWin = windowManager.createWindow(Register.PROJECT, 'project', false);
+				projectWin.verbose = true;
+				projectWin.title = Register.PROJECT.windowTitle;
+				projectWin.x = projectWin.y = 0;
+				Register.PROJECT.init();
+			} else {
+				projectWin = windowManager.createWindow(Register.PROJECT, 'project', false);
+				projectWin.verbose = true;
+				projectWin.title = Register.PROJECT.windowTitle;
+				projectWin.x = projectWin.y = 0;
+			}
+			return projectWin;
 		}
 		
 		override protected function _createAboutWindow():void{
