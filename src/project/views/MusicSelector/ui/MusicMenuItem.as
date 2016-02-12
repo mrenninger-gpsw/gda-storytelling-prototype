@@ -10,7 +10,7 @@ package project.views.MusicSelector.ui {
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import components.controls.Label;
 	import display.Sprite;
 	import utils.Register;
@@ -50,7 +50,7 @@ package project.views.MusicSelector.ui {
 			verbose = true;
 			
 			_num = $num;
-			_xml = Register.PROJECT_XML.content.music.tracks.item[_num];
+			_xml = Register.PROJECT_XML.content.editor.music.tracks.item[_num];
 			_locked = (_xml.@locked == 'true');	
 			_featured = (_xml.@featured == 'true');
 			_title = _xml.@title;

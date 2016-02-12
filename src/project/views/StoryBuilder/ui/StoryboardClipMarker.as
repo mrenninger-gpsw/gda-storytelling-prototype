@@ -9,7 +9,7 @@ package project.views.StoryBuilder.ui {
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Expo;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.Register;
 	

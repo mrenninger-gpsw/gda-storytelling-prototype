@@ -6,7 +6,7 @@ package project.views.Header.ui {
 	
 	// Greensock
 	
-	// CandyLizard Framework
+	// Framework
 	import components.controls.Label;
 	import display.Sprite;
 	
@@ -46,6 +46,16 @@ package project.views.Header.ui {
 			
 		}
 		
+		public function addMarker():void {
+			var s:Shape = new Shape();
+			s.graphics.beginFill(0x00A3DA);
+			s.graphics.drawCircle(0,0,4);
+			s.graphics.endFill();
+			s.x = _label.x - 12;
+			s.y = this.height * 0.5;
+			this.addChild(s);
+		}
+		
 		
 		
 		/******************** PRIVATE API *********************/
@@ -63,7 +73,7 @@ package project.views.Header.ui {
 			_label.autoSize = 'left';
 			_label.textFormatName = 'header-nav-item';
 			_label.x = (this.width - _label.width) * 0.5;
-			_label.y = (this.height - _label.height) * 0.5;
+			_label.y = (this.height - _label.height) * 0.5 + 1;
 			
 			this.addChild(_label);
 		}

@@ -3,7 +3,7 @@ package project.views {
 	// Flash
 	import flash.events.Event;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	
 	// Project

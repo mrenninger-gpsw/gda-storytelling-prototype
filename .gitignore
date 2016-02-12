@@ -2,3 +2,4 @@ org.eclipse.core.resources.prefs
 _assets
 bin-debug
 .project
+/bin-release-temp

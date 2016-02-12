@@ -11,7 +11,7 @@ package project.views.StoryBuilder {
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import components.controls.Label;
 	import display.Sprite;
 	import utils.Register;
@@ -51,14 +51,14 @@ package project.views.StoryBuilder {
 		
 		
 		/******************** CONSTRUCTOR *********************/
-		public function SourceClip($num:uint) {
+		public function SourceClip($num:uint, $xml:XML) {
 			super();
 			
 			verbose = true;
 			
 			_num = $num;
 			
-			_xml = Register.PROJECT_XML.content.editor.sourceClips.item[_num];
+			_xml = $xml;
 			_filename = _xml.@filename;
 			_title = _xml.@title;
 			_length = _xml.@length;			
@@ -178,8 +178,10 @@ package project.views.StoryBuilder {
 			var tHighlight:SourceClipHighlight;
 			var tHighlightX:Number; 
 			for (var i:uint = 0; i < highlights.length; i++) {
-				tHighlightX = Math.round((Number(highlights[i])/Number(_xml.@length)) * this.width);
-				_createSourceClipHighlightAt(tHighlightX);
+				if (Number(highlights[i]) !== 0) {
+					tHighlightX = Math.round((Number(highlights[i])/Number(_xml.@length)) * this.width);
+					_createSourceClipHighlightAt(tHighlightX);
+				}
 			}
 			
 			if (Number(_xml.@storyboard) !== 0) {

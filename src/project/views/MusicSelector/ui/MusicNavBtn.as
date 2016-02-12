@@ -1,6 +1,6 @@
 package project.views.MusicSelector.ui {
 	
-	// CandyLizard Framework
+	// Framework
 	import components.controls.Label;
 	import display.Sprite;	
 	

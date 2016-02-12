@@ -11,7 +11,7 @@ package project.views.MusicSelector {
 	import com.greensock.easing.Cubic;
 	import com.greensock.easing.Linear;
 	
-	// CandyLizard Framework
+	// Framework
 	import components.controls.Label;
 	import display.Sprite;
 	import utils.Register;
@@ -101,7 +101,7 @@ package project.views.MusicSelector {
 			
 			TweenMax.allTo([_ds, _bgShape], 0, {autoAlpha:0, y:'-20'});
 			
-			_musicXML = Register.PROJECT_XML.content.music;
+			_musicXML = Register.PROJECT_XML.content.editor.music;
 
 			_createPreview();
 		}

@@ -8,7 +8,7 @@ package project.views.StoryBuilder {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.Register;
 	

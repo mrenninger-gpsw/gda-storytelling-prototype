@@ -94,13 +94,13 @@ package{
 			if (initialized) {
 				var projectClassRef:Class = projectClassReference;
 				Register.PROJECT = new projectClassRef();
-				projectWin = windowManager.createWindow(Register.PROJECT, 'project', false);
+				projectWin = windowManager.createWindow(Register.PROJECT, 'project', (Register.CONFIG_XML.chrome == 'true'));
 				projectWin.verbose = true;
 				projectWin.title = Register.PROJECT.windowTitle;
 				projectWin.x = projectWin.y = 0;
 				Register.PROJECT.init();
 			} else {
-				projectWin = windowManager.createWindow(Register.PROJECT, 'project', false);
+				projectWin = windowManager.createWindow(Register.PROJECT, 'project', (Register.CONFIG_XML.chrome == 'true'));
 				projectWin.verbose = true;
 				projectWin.title = Register.PROJECT.windowTitle;
 				projectWin.x = projectWin.y = 0;
@@ -157,7 +157,7 @@ package{
 					//settings(new ContextMenuEvent(ContextMenuEvent.MENU_ITEM_SELECT));
 					break;
 				
-				case 'About Project':
+				case 'About':
 					windowManager.activateWindow('about');
 					
 					break;

@@ -3,7 +3,7 @@ package project.views.Footer.ui {
 	// Flash
 	import flash.display.Bitmap;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.Register;
 

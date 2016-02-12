@@ -9,7 +9,7 @@ package project.views.MusicSelector {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -47,7 +47,7 @@ package project.views.MusicSelector {
 			super();
 			verbose = true;
 			
-			_musicXML = Register.PROJECT_XML.content.music;
+			_musicXML = Register.PROJECT_XML.content.editor.music;
 			addEventListener(Event.ADDED_TO_STAGE, _onAdded);
 
 			_init();

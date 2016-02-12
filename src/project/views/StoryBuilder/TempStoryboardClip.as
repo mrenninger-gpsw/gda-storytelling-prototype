@@ -4,7 +4,7 @@ package project.views.StoryBuilder {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -39,7 +39,7 @@ package project.views.StoryBuilder {
 			
 			verbose = true;
 			
-			_xml = Register.PROJECT_XML.content.editor.storyboard.clip[$num];
+			_xml = Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[$num];
 			//log('_xml: '+_xml);
 			_curImageName = _xml.@src;
 			//log('_curImageName: '+_curImageName);

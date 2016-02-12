@@ -9,7 +9,7 @@ package project.managers {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Subarashii Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -31,9 +31,14 @@ package project.managers {
 		private var _shadow:Bitmap;
 		private var _sourceClipsV:Vector.<SourceClip>;
 		private var _previewArea:VideoPreviewArea;
+		private var _addFromLibrary:Boolean = false;
+
+		
 		
 		/***************** GETTERS & SETTERS ******************/		
 		public function set previewArea($value:VideoPreviewArea):void { _previewArea = $value; }
+		
+		public function set addFromLibrary($value:Boolean):void { _addFromLibrary = $value; }
 
 		
 		
@@ -41,7 +46,7 @@ package project.managers {
 		public function SourceClipManager() {
 			super();
 			
-			_xml = Register.PROJECT_XML.content.editor.sourceClips;
+			_xml = Register.PROJECT_XML.content.editor.storybuilder.sourceClips;
 			
 			_sourceClipsV = new Vector.<SourceClip>();
 			
@@ -54,17 +59,22 @@ package project.managers {
 		
 		/******************** PUBLIC API *********************/
 		public function show():void {
-			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
-				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _onShowComplete : null;
+			// position the source clips based on _addFromLibrary value and fade them up
+			var startIndex:uint = 2;//(_addFromLibrary) ? 0 : 2;
+			for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
+				_sourceClipsV[i].y = (i == startIndex) ? 16 : _sourceClipsV[i - 1].y + 80;
+				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _checkforLibraryAdd : null;
 				TweenMax.to(_sourceClipsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:i * 0.05, onComplete:onComplete});
 			}
-			TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+			
+			//TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
 			TweenMax.to(_bgShape, 0.4, {autoAlpha:1, ease:Cubic.easeOut});
-			TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
+			//TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
 		}
 		
 		public function hide($immediate:Boolean = false):void {
-			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
+			var startIndex:uint = 0;//(_addFromLibrary) ? 0 : 2;
+			for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
 				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _onHideComplete : null;				
 				TweenMax.to(_sourceClipsV[i], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : (i * 0.05), onComplete:onComplete});
 			}			
@@ -85,12 +95,34 @@ package project.managers {
 			_bgShape.alpha = 0;
 			this.addChild(_bgShape);
 			
-			// create the source clips
-			for (var i:uint = 0; i < _xml.item.length(); i++) {
-				var tSourceClip:SourceClip = new SourceClip(i);
+			var i:uint;
+			var tSourceClip:SourceClip; 
+			
+			// create the source clips from the media library
+			for (i = 0; i < _xml.library.item.length(); i++) {
+				tSourceClip = new SourceClip(i, _xml.library.item[i]);
 				
 				tSourceClip.x = 20;
-				tSourceClip.y = 16 + (i * 80);
+				tSourceClip.y = (i == 0) ? 16 : _sourceClipsV[_sourceClipsV.length - 1].y + 80;
+				tSourceClip.alpha = 0;
+				
+				//_addListeners(tSourceClip);
+				
+				tSourceClip.addEventListener(PreviewEvent.PREVIEW, _handlePreviewEvent);
+				tSourceClip.addEventListener(PreviewEvent.CLEAR, _handlePreviewEvent);
+				
+				_sourceClipsV.push(tSourceClip);
+				
+				this.addChild(tSourceClip);
+				
+			}
+			
+			// create the default editor source clips
+			for (i = 0; i < _xml.editor.item.length(); i++) {
+				tSourceClip = new SourceClip(i, _xml.editor.item[i]);
+				
+				tSourceClip.x = 20;
+				tSourceClip.y = _sourceClipsV[_sourceClipsV.length - 1].y + 80;
 				tSourceClip.alpha = 0;
 				
 				//_addListeners(tSourceClip);
@@ -122,8 +154,26 @@ package project.managers {
 			//show();
 		}
 		
+		private function _checkforLibraryAdd():void {
+			log('_checkforLibraryAdd: '+_addFromLibrary);
+			if (_addFromLibrary) {
+				var i:uint;
+				for (i = (_sourceClipsV.length - 1); i > 1; i--) {
+					TweenMax.to(_sourceClipsV[i], 0.3, {y:_sourceClipsV[i].y + 160, ease:Cubic.easeInOut, delay:((_sourceClipsV.length-1) - i) * 0.05});					
+				}
+				for (i = 0; i < 2; i++) {
+					var onComplete:Function = (i == 1) ? _onShowComplete : null;
+					TweenMax.to(_sourceClipsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.45 + (i * 0.05), onComplete:onComplete});
+				}
+				TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+			} else {
+				_onShowComplete();
+			}
+		}
+		
 		private function _onShowComplete():void {
-			log('_onHideComplete');
+			log('_onShowComplete');
 			dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.SHOW_COMPLETE));
 		}
 		
@@ -172,4 +222,4 @@ package project.managers {
 		}
 		
 	}
-}
+} 

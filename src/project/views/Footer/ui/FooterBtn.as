@@ -9,7 +9,7 @@ package project.views.Footer.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 
 	

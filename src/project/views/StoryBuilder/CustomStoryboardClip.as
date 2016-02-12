@@ -10,7 +10,7 @@ package project.views.StoryBuilder {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.Register;
 	
@@ -54,7 +54,7 @@ package project.views.StoryBuilder {
 			_sourceClipNum = $sourceClipNum;
 			_frameNum = $frameNum;
 			
-			var tXML:XML = Register.PROJECT_XML.content.editor.sourceClips.item[_sourceClipNum];
+			var tXML:XML = Register.PROJECT_XML.content.editor.storybuilder.sourceClips.item[_sourceClipNum];
 			
 			_curImageName = tXML.@title + '_' + _addLeadingZeros(_frameNum);
 			
@@ -78,7 +78,7 @@ package project.views.StoryBuilder {
 			addChild(_mask);
 			_holder.mask = _mask;
 			
-			_maskXML = Register.PROJECT_XML.content.editor.storyboard.clip[4].location[1].mask;
+			_maskXML = Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].mask;
 			
 			addEventListener(Event.ADDED_TO_STAGE, _onAdded);
 			

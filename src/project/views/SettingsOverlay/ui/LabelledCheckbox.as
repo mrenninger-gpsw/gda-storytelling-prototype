@@ -6,7 +6,7 @@ package project.views.SettingsOverlay.ui{
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	
-	// CandyLizard
+	// Framework
 	import display.Sprite;
 	import text.TextFormat;
 	import text.TextUtilities;

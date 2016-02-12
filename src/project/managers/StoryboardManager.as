@@ -10,7 +10,7 @@ package project.managers {
 	import com.greensock.easing.Circ;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Subarashii Framework
 	import components.controls.Label;
 	import display.Sprite;
 	import utils.Register;
@@ -50,8 +50,8 @@ package project.managers {
 			super();
 			verbose = true;
 			
-			_clipsXML = Register.PROJECT_XML.content.editor.storyboard.clip;
-			_musicXML = Register.PROJECT_XML.content.music;
+			_clipsXML = Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip;
+			_musicXML = Register.PROJECT_XML.content.editor.music;
 			
 			addEventListener(Event.ADDED_TO_STAGE, _onAdded);
 

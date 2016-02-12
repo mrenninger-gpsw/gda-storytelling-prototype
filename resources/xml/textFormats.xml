@@ -142,6 +142,7 @@
 	
 	
 	
+	
 	<!--  source clips -->
 	<textFormat
 		id='sourceclip-name'
@@ -159,6 +160,8 @@
 		align='left'
 	/>
 	
+
+
 
 	<!--  music nav -->
 	<textFormat
@@ -218,6 +221,96 @@
 	/>
 	
 	
+	
+	
+	<!--  media library -->
+	<textFormat
+		id='media-menu-title'
+		size='12'
+		color='#FFFFFF'
+		font='Proxima Nova ExtraBold'
+		align='left'
+	/>
+
+	<textFormat
+		id='media-menuitem-default'
+		size='15'
+		color='#A4A5A5'
+		font='Proxima Nova Regular'
+		align='left'
+	/>
+
+	<textFormat
+		id='media-menuitem-select'
+		size='15'
+		color='#FFFFFF'
+		font='Proxima Nova Bold'
+		align='left'
+	/>
+	
+	<textFormat
+		id='media-content-title'
+		size='24'
+		color='#FFFFFF'
+		font='Proxima Nova ExtraBold'
+		align='left'
+	/>
+	
+	<textFormat
+		id='media-event-group-title'
+		size='18'
+		color='#FFFFFF'
+		font='Proxima Nova SemiBold'
+		align='left'
+	/>
+		
+	<textFormat
+		id='media-event-title'
+		size='14'
+		color='#A4A5A5'
+		font='Proxima Nova Regular'
+		align='left'
+	/>
+	
+	<textFormat
+		id='media-event-clip-preview-amount'
+		size='12'
+		color='#FFFFFF'
+		font='Proxima Nova Regular'
+		align='left'
+	/>
+	
+	
+	
+	
+	<!--  Alert Drawer -->
+	<textFormat
+		id='alert-drawer-amount'
+		size='16'
+		color='#FFFFFF'
+		font='Proxima Nova Bold'
+		align='left'
+	/>
+	
+	
+	<!--  Selection Banner -->
+	<textFormat
+		id='selection-banner-num-selected'
+		size='24'
+		color='#FFFFFF'
+		font='Proxima Nova Bold'
+		align='left'
+	/>
+	
+	<textFormat
+		id='selection-banner-default'
+		size='24'
+		color='#FFFFFF'
+		font='Proxima Nova Regular'
+		align='left'
+	/>
+		
+		
 	<!--  header -->
 	<textFormat
 		id='header-nav-item'
@@ -227,6 +320,9 @@
 		align='left'
 	/>
 	
+	
+	
+	
 	<!--  footer -->
 	<textFormat
 		id='footer-song-title'
@@ -234,7 +330,7 @@
 		color='#F4F4F4'
 		font='Proxima Nova Regular'
 		align='left'
-	/>		
+	/>	
 		
 		
 	

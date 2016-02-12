@@ -1,27 +1,34 @@
-package project{
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	import com.greensock.easing.Quad;
+package project {
 	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.DropShadowFilter;
 	
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
+	import com.greensock.easing.Quad;
+	
+	// Framework
 	import components.controls.Label;
 	import components.controls.TextArea;
-	
 	import display.Sprite;
-	
 	import utils.Register;
+
+	
 	
 	public class About extends Sprite{
+
+		/********************* CONSTANTS **********************/
 		public static const TF_WIDTH:uint = 300;
 		public static const TF_HEIGHT:uint = 300;
 		
 		
 		
+		/******************* PRIVATE VARS *********************/
 		//display objects
 		private var _content:Sprite;
 		private var _titleTf:Label;
@@ -40,23 +47,36 @@ package project{
 		
 		private var _layout:Sprite;
 		
+		
+		
+		/******************** CONSTRUCTOR *********************/
 		public function About(){
 			super();
 			this.visible = false;
 			this.alpha = 0;
-			this.verbose = false;
+			this.verbose = true;
 			
 			_aboutList = Register.PROJECT_XML.about;
 			
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			
+			addEventListener(Event.ADDED_TO_STAGE, _onAddedToStage);
 		}
 		
 		
 		
-		/******************** PRIVATE API *********************/
+		/******************** PUBLIC API *********************/
+		public function show():void {
+			log('show');
+			stage.nativeWindow.visible = true;
+			TweenMax.to(this, .3, {autoAlpha:1, ease:Cubic.easeOut, delay:.5, onComplete:_onShowComplete});
+		}
 		
-		private function initialize():void{
+		//Do not remove.  Overriden when using a custom Splash
+		public function init():void { _initialize(); }
+		
+		
+		
+		/******************** PRIVATE API *********************/
+		private function _initialize():void {
 			log('initialize');
 			
 			_aboutBitmap = new Register.APP.ABOUT();
@@ -69,8 +89,6 @@ package project{
 			_layout.cacheAsBitmap = true;
 			addChild(_layout);
 			
-			
-			
 			_content = new Sprite();
 			_layout.addChild(_content);
 			
@@ -78,7 +96,6 @@ package project{
 			_layout.addChild(_nav);
 			
 			_items = new Vector.<Sprite>();
-			
 			
 			_titleTf = new Label();
 			_titleTf.id = 'aboutTitle';
@@ -90,7 +107,6 @@ package project{
 			_titleTf.filters = [ds];
 
 			_layout.addChild(_titleTf);
-			
 			
 			_versionTf = new Label();
 			_versionTf.id = 'versionTitle';
@@ -114,24 +130,23 @@ package project{
 			_textArea.mask = mask;
 			_content.addChild(mask);
 			
-		
-			createNavigation();
-			reset();
+			_createNavigation();
+			_reset();
 			_setUpComplete = true;
 			dispatchEvent(new Event('setUpComplete'));
 		}
 		
-		private function createNavigation():void{
-			for(var i:uint = 0; i < _aboutList.length(); i++){
+		private function _createNavigation():void {
+			for(var i:uint = 0; i < _aboutList.length(); i++) {
 				var item:Sprite = createNavItem(_aboutList[i]);
 				_nav.addChild(item);
-				if(i > 0){
+				if(i > 0) {
 					var prevItem:Sprite = _items[_items.length - 1];
 					item.x = (prevItem.x + prevItem.width + 32);
 				}
 				
-				if(i < _aboutList.length() - 1){
-					var divider:Shape = getDivider();
+				if(i < _aboutList.length() - 1) {
+					var divider:Shape = _getDivider();
 					divider.x = item.x + item.width +16;
 					divider.y = item.height * .5;
 					_nav.addChild(divider);
@@ -141,121 +156,47 @@ package project{
 				
 			}
 			
-			addEventListener(Event.SELECT, onSelection);
-			
+			addEventListener(Event.SELECT, _onSelection);
 		}
 		
-		private function getDivider():Shape{
-			var s:Shape = new Shape();
-			s.graphics.beginFill(0x656565);
-			s.graphics.drawCircle(0,0,2);
-			s.graphics.endFill();
-			return s;
+		private function _reset():void {
+			_textArea.text = Register.PROJECT_XML.about[0];
+			_activate(_items[0]);
 		}
 		
-		private function onSelection(e:Event):void{
-			var id:String = Label(Sprite(e.target).getChildAt(0)).id;
-			var xml:XML = _aboutList.(@title == id)[0];
-			log(xml.@method);
-			if(xml.@method.toString() == ''){
-				_textArea.update(_aboutList.(@title == id));
-			}else{
-				_textArea.update(this[xml.@method]());
-			}
-			
-			activate(Sprite(e.target));
-		}
-		
-		private function activate($item:Sprite):void{
+		private function _activate($item:Sprite):void {
 			_curItem = $item;
 			TweenMax.to($item, .2, {tint:0x17A7C0, ease:Cubic.easeOut});
-			for(var i:uint = 0; i < _items.length; i++){
-				if(_items[i] !== $item)
-					TweenMax.to(_items[i], .5, {removeTint:true, ease:Quad.easeInOut});
+			for(var i:uint = 0; i < _items.length; i++) {
+				if(_items[i] !== $item) TweenMax.to(_items[i], .5, {removeTint:true, ease:Quad.easeInOut});
 			}
 		}
 		
-		private function createNavItem($xml:XML):Sprite{
-			var s:Sprite = new Sprite();
-			s.mouseChildren = false;
-			s.buttonMode = true;
-			var label:Label = new Label();
-			label.text = label.id = $xml.@title;
-			label.autoSize = 'left';
-			label.textFormatName = 'aboutMenu';
-			s.addEventListener(MouseEvent.MOUSE_OVER, onNavItem);
-			s.addEventListener(MouseEvent.MOUSE_OUT, onNavItem);
-			s.addEventListener(MouseEvent.MOUSE_UP, onNavItem);
-			s.addChild(label);
-			
-			return s;
+		private function _onShowComplete():void {
+			stage.addEventListener(Event.MOUSE_LEAVE, _lostFocus);
 		}
 		
-		private function onNavItem(e:MouseEvent):void{
-			var s:Sprite = e.target as Sprite;
-			log(s.getChildAt(0));
-			var id:String = Label(s.getChildAt(0)).id;
-			if(_curItem !== s){
-				switch(e.type){
-					case MouseEvent.MOUSE_OVER:
-						TweenMax.to(s, 0,{tint:0xCCCCCC});
-						break;
-					
-					case MouseEvent.MOUSE_OUT:
-						TweenMax.to(s, 1,{removeTint:true, ease:Quad.easeInOut});
-						break;
-					
-					case MouseEvent.MOUSE_UP:
-						s.dispatchEvent(new Event(Event.SELECT, true));
-						break;
-			
-				}
-			}
-			
+		private function _hide():void {
+			TweenMax.to(this, .3, {autoAlpha:0, ease:Cubic.easeOut, onComplete:_onHideComplete});
 		}
 		
-		
-		//FETCHING LIBRARY INFO
-		private function getLibraryInfo():String{
-			var str:String = 'LIBRARIES:\n\n';
-			str+='\tCANDYLIZARD FRAMEWORK v'+Register.VERSION+'\n';
-			str+='\tGREENSOCK ANIMATION LIB v'+TweenMax.version+'\n';
-			
-			for(var i:uint = 0; i < Register.CONFIG_XML.lib.length() > 0; i++){
-				switch(String(Register.CONFIG_XML.lib[i].@id)){
-					case 'gestouch':
-						str+='\tGESTOUCH FRAMEWORK\n';
-						break;
-					
-					default:
-						
-						log('ƒ getLibraryInfo - CHECK FOR VERSIONS ON: '+Register.CONFIG_XML.lib[i].@id);
-				}
-			}
-			
-			
-			
-			return str;
+		private function _onHideComplete():void {
+			stage.nativeWindow.visible = false;
+			_reset();
 		}
+				
 		
-		private function lostFocus(e:Event):void{
-			hide();
-			
-		}
 		
-		private function reset():void{
-			_textArea.text = Register.PROJECT_XML.about[0];
-			activate(_items[0]);
-		}
-		
-		/******************** PUBLIC API *********************/
-		protected function onAddedToStage(event:Event):void{
-			draw();
+		/****************** EVENT HANDLERS *******************/
+		private function _onAddedToStage($e:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, _onAddedToStage);
+			_draw();
 		}		
 		
-		
-		public function draw(e:Event = null):void{
-			if(_setUpComplete){
+		private function _draw($e:Event = null):void {
+			if ($e) removeEventListener('setUpComplete', _draw);
+			
+			if(_setUpComplete) {
 				_layout.x = 37;
 				_layout.y = 21;
 				
@@ -267,50 +208,103 @@ package project{
 				_versionTf.x = _titleTf.x + _titleTf.width - _versionTf.width;
 				_versionTf.y = _titleTf.y + Number(_titleTf.textFormat.size);
 				
-				
 				_content.y = _titleTf.y + _titleTf.height + 20;
 				_content.x = (_layout.width - TF_WIDTH)*.5;
 				
 				_nav.x = (_layout.width - _nav.width)*.5;
 				_nav.y = _layout.height - _nav.height - 30;
 				
-			}else{
-				log('waiting _seUpComplete: '+_setUpComplete);
-				addEventListener('setUpComplete', draw);
-				
+			} else {
+				log('waiting _setUpComplete: '+_setUpComplete);
+				addEventListener('setUpComplete', _draw);
 			}
 		}
 		
-		
-		public function show():void{
-			log('show');
-			stage.nativeWindow.visible = true;
-			TweenMax.to(this, .3, {autoAlpha:1, ease:Cubic.easeOut, delay:.5, onComplete:onShowComplete});
+		private function _onSelection($e:Event):void {
+			var id:String = Label(Sprite($e.target).getChildAt(0)).id;
+			var xml:XML = _aboutList.(@title == id)[0];
+			log(xml.@method);
+			if(xml.@method.toString() == '') {
+				_textArea.update(_aboutList.(@title == id));
+			} else {
+				_textArea.update(this[xml.@method]());
+			}
+			
+			_activate(Sprite($e.target));
 		}
 		
-		public function onShowComplete():void{
-			stage.addEventListener(Event.MOUSE_LEAVE, lostFocus);
+		private function _onNavItem($e:MouseEvent):void {
+			var s:Sprite = $e.target as Sprite;
+			log(s.getChildAt(0));
+			var id:String = Label(s.getChildAt(0)).id;
+			if(_curItem !== s) {
+				switch($e.type){
+					case MouseEvent.MOUSE_OVER:
+						TweenMax.to(s, 0,{tint:0xCCCCCC});
+						break;
+					
+					case MouseEvent.MOUSE_OUT:
+						TweenMax.to(s, 1,{removeTint:true, ease:Quad.easeInOut});
+						break;
+					
+					case MouseEvent.MOUSE_UP:
+						s.dispatchEvent(new Event(Event.SELECT, true));
+						break;
+					
+				}
+			}
+		}
+		
+		private function _lostFocus($e:Event):void{
+			stage.removeEventListener(Event.MOUSE_LEAVE, _lostFocus);
+			_hide();
 		}
 		
 		
-		public function hide():void{
-			TweenMax.to(this, .3, {autoAlpha:0, ease:Cubic.easeOut, onComplete:onHideComplete});
+		
+		/*********************** HELPERS **********************/
+		private function createNavItem($xml:XML):Sprite {
+			var s:Sprite = new Sprite();
+			s.mouseChildren = false;
+			s.buttonMode = true;
+			var label:Label = new Label();
+			label.text = label.id = $xml.@title;
+			label.autoSize = 'left';
+			label.textFormatName = 'aboutMenu';
+			s.addEventListener(MouseEvent.MOUSE_OVER, _onNavItem);
+			s.addEventListener(MouseEvent.MOUSE_OUT, _onNavItem);
+			s.addEventListener(MouseEvent.MOUSE_UP, _onNavItem);
+			s.addChild(label);
+			
+			return s;
 		}
 		
-		public function onHideComplete():void{
-			stage.nativeWindow.visible = false;
-			reset();
+		private function _getDivider():Shape {
+			var s:Shape = new Shape();
+			s.graphics.beginFill(0x656565);
+			s.graphics.drawCircle(0,0,2);
+			s.graphics.endFill();
+			return s;
 		}
-		
-		
-		//Do not remove.  Overriden when using a custom Splash
-		public function init():void{
-			initialize();
+
+		//FETCHING LIBRARY INFO
+		private function getLibraryInfo():String {
+			var str:String = 'LIBRARIES:\n\n';
+			str+='\tSUBARASHII FRAMEWORK v'+Register.VERSION+'\n';
+			str+='\tGREENSOCK ANIMATION LIB v'+TweenMax.version+'\n';
+			
+			for(var i:uint = 0; i < Register.CONFIG_XML.lib.length() > 0; i++){
+				switch(String(Register.CONFIG_XML.lib[i].@id)){
+					case 'gestouch':
+						str+='\tGESTOUCH FRAMEWORK\n';
+						break;
+					
+					default:
+						log('ƒ getLibraryInfo - CHECK FOR VERSIONS ON: '+Register.CONFIG_XML.lib[i].@id);
+				}
+			}
+			return str;
 		}
-		
-		
-		
-		
 	}
 }
 

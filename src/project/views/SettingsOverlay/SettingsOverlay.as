@@ -11,7 +11,7 @@ package project.views.SettingsOverlay {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import text.TextFormat;
 	import text.TextUtilities;

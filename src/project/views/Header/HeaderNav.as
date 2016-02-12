@@ -16,7 +16,7 @@ package project.views.Header {
 	import utils.Register;
 	
 	
-		
+			
 	public class HeaderNav extends Sprite {
 
 		/********************* CONSTANTS **********************/	
@@ -87,6 +87,8 @@ package project.views.Header {
 				tNavBtn.addEventListener(MouseEvent.CLICK, _handleNav);
 				_navItemsV.push(tNavBtn);
 				this.addChild(tNavBtn);
+				
+				if (_xml.item[i].@marker == 'true') tNavBtn.addMarker()
 			}
 			_select(_navItemsV[1]);
 		}
@@ -100,10 +102,10 @@ package project.views.Header {
 		}
 		
 		private function _select($btn:HeaderNavBtn):void {
+			if (_curNavItem) TweenMax.to(_curNavItem.label, 0.3, {tint:null, ease:Cubic.easeOut});
 			_curNavItem = $btn;
 			TweenMax.to(_activeShape, 0.3, {x:_curNavItem.x, ease:Cubic.easeInOut});
 			TweenMax.to(_curNavItem.label, 0, {tint:0xFFFFFF});
-
 		}
 		
 		private function _deselect($btn:HeaderNavBtn):void {
@@ -115,6 +117,7 @@ package project.views.Header {
 		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
+			this.stage.addEventListener(ViewTransitionEvent.ADD_LIBRARY_CLIPS, _handleViewTransitionEvent);			
 		}
 		
 		private function _handleNav($e:MouseEvent):void {
@@ -134,12 +137,19 @@ package project.views.Header {
 				
 				case MouseEvent.CLICK:
 					if (_curNavItem != tNavItem) {
-						TweenMax.to(_curNavItem.label, 0.3, {tint:null, ease:Cubic.easeOut});
 						_select(tNavItem);
 						this.stage.dispatchEvent(new ViewTransitionEvent(tNavItem.label.text.toLowerCase()));
 					}
 					break;
 				
+			}
+		}
+		
+		private function _handleViewTransitionEvent($e:ViewTransitionEvent):void {
+			switch ($e.type) {
+				case ViewTransitionEvent.ADD_LIBRARY_CLIPS:
+					_select(_navItemsV[1]);
+					break;
 			}
 		}
 	}

@@ -10,7 +10,7 @@ package project.views {
 	import com.greensock.easing.Circ;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	import utils.GeomUtilities;
 	import utils.Register;
@@ -43,6 +43,8 @@ package project.views {
 		public function get storyboard():StoryboardManager { return _storyboard; }
 
 		public function get isActive():Boolean { return _isActive; }
+		
+		public function set addFromLibrary($value:Boolean):void { _sourceClipMgr.addFromLibrary = $value; }
 
 		
 		
@@ -140,7 +142,7 @@ package project.views {
 		
 		private function _moveCustomClipToStoryboard($clip:CustomStoryboardClip):void {
 			log('_moveCustomClipToStoryboard');
-			var newClipX:Number = (Register.PROJECT_XML.content.editor.storyboard.clip[4].location[1].@position);
+			var newClipX:Number = (Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
 			var totalTime:Number = 0.7;
 			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 590)); 
 			var distance:Number = GeomUtilities.getDistance(new Point($clip.x,$clip.y), new Point((newClipX + 21), 590));
@@ -189,7 +191,7 @@ package project.views {
 		private function _addClipMarker($e:StoryboardManagerEvent):void {
 			log('_addClipMarker');
 			_tempClipMarker = new StoryboardClipMarker();
-			_tempClipMarker.x = _storyboard.x + 20 + Number(Register.PROJECT_XML.content.editor.storyboard.clip[4].location[1].@position);
+			_tempClipMarker.x = _storyboard.x + 20 + Number(Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
 			_tempClipMarker.y = _storyboard.y + 70;
 			this.addChild(_tempClipMarker);
 			log('_tempMarker.stage: '+_tempClipMarker.stage);

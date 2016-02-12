@@ -14,7 +14,7 @@ package project{
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import air.desktop.ProjectRoot;
 	import air.desktop.stage.Window;
 	import components.controls.TextArea;
@@ -29,6 +29,7 @@ package project{
 	import project.views.StoryBuilder;
 	import project.views.Footer;
 	import project.views.SettingsOverlay.SettingsOverlay;	
+	import project.views.AddClipsPreloader;
 	
 		
 	
@@ -51,6 +52,7 @@ package project{
 		private var _mediaLibrary:MediaLibrary;		
 		private var _footer:Footer;
 		private var _header:Header;
+		private var _addClipsPreloader:AddClipsPreloader
 		
 		
 		
@@ -80,13 +82,11 @@ package project{
 			
 			// Subarashii TextFormats
 			//log('TEXTFORMATS_XML\r'+Register.TEXTFORMATS_XML);
-			log('Register.TEXTFORMATS_XML.textFormat\r'+Register.TEXTFORMATS_XML.textFormat);
+			/*log('Register.TEXTFORMATS_XML.textFormat\r'+Register.TEXTFORMATS_XML.textFormat);
 			log('Register.TEXTFORMATS_XML.textFormat.length(): '+Register.TEXTFORMATS_XML.textFormat.length());
 			for (var i:uint = 0; i < Register.TEXTFORMATS_XML.textFormat.length(); i++) { trace('textFormat['+i+'].@id: '+Register.TEXTFORMATS_XML.textFormat[i].@id); }
 			log('Register.TEXTFORMATS_XML.textFormat[2]: '+Register.TEXTFORMATS_XML.textFormat[2].@id);
-			log('Register.TEXTFORMATS_XML.textFormat.(@id == splashTitle).@color: '+Register.TEXTFORMATS_XML.textFormat.(@id == 'splashTitle').@color);
-			log('Register.TEXTFORMATS_XML.textFormat.(@id == yourmom).@id == null: '+(Register.TEXTFORMATS_XML.textFormat.(@id == 'yourmom').@id == null));
-			log('Register.TEXTFORMATS_XML.textFormat.(@id == yourmom).@id == false: '+(Register.TEXTFORMATS_XML.textFormat.(@id == 'yourmom').@id == false));
+			log('Register.TEXTFORMATS_XML.textFormat.(@id == splashTitle).@color: '+Register.TEXTFORMATS_XML.textFormat.(@id == 'splashTitle').@color);*/
 			
 			// CandyLizard TextFormats
 			//log('CONFIG_XML\r'+Register.CONFIG_XML);
@@ -154,16 +154,29 @@ package project{
 			_musicSelector = new MusicSelector();
 			this.addChild(_musicSelector);
 
-			_header = new Header();
-			this.addChild(_header);
-			this.stage.addEventListener(ViewTransitionEvent.EDITOR, _handleViewTransitionEvent);
-			this.stage.addEventListener(ViewTransitionEvent.MEDIA, _handleViewTransitionEvent);
-
 			_footer = new Footer();
 			_footer.y = Register.APP.HEIGHT - _footer.height;
 			this.addChild(_footer);
 			_footer.addEventListener(UITransitionEvent.MUSIC, _handleUITransitionEvent);
 			_footer.addEventListener(UITransitionEvent.VIDEO, _handleUITransitionEvent);
+			
+			_header = new Header();
+			this.addChild(_header);
+
+			// alert drawer
+			
+			// add media drawer
+			
+			// alert overlays
+			
+			// addClipsPreloader
+			_addClipsPreloader = new AddClipsPreloader();
+			this.addChild(_addClipsPreloader);
+			
+			this.stage.addEventListener(ViewTransitionEvent.EDITOR, _handleViewTransitionEvent);
+			this.stage.addEventListener(ViewTransitionEvent.MEDIA, _handleViewTransitionEvent);
+			this.stage.addEventListener(ViewTransitionEvent.ADD_LIBRARY_CLIPS, _handleViewTransitionEvent);
+			this.stage.addEventListener(ViewTransitionEvent.PREPARE_TO_ADD, _handleViewTransitionEvent);
 			
 			TweenMax.to(this, 0, {autoAlpha:0});						
 		}
@@ -218,6 +231,12 @@ package project{
 					_settings.addEventListener('Hidden', _onSettingsOverlayHidden);
 					addChild(_settings);
 					_settingsShowing = true;
+					break;
+				case Keyboard.NUMBER_1:
+					_header.showAlert();
+					break;
+				case Keyboard.NUMBER_2:
+					_header.showAlert(false);
 					break;
 			}
 		}
@@ -276,6 +295,7 @@ package project{
 					_header.switchStates('video');
 					_footer.hide();
 					
+					_storyBuilder.addFromLibrary = false;
 					if (_storyBuilder.isActive) _storyBuilder.hide();
 					if (_musicSelector.isActive) _musicSelector.hide();
 					TweenMax.delayedCall(0.8, _mediaLibrary.show);
@@ -284,7 +304,16 @@ package project{
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
 					TweenMax.delayedCall(0.8, _storyBuilder.show)	*/				
 					
-					break;			
+					break;
+				
+				case ViewTransitionEvent.PREPARE_TO_ADD:
+					_addClipsPreloader.show();
+					break;
+				
+				case ViewTransitionEvent.ADD_LIBRARY_CLIPS:
+					_storyBuilder.addFromLibrary = true;
+					this.stage.dispatchEvent(new ViewTransitionEvent(ViewTransitionEvent.EDITOR));
+					break;
 				
 			}			
 		}

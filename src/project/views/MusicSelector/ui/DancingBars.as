@@ -7,7 +7,7 @@ package project.views.MusicSelector.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard Framework
+	// Framework
 	import display.Sprite;
 	
 

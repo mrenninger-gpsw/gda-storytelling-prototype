@@ -14,13 +14,12 @@ package project.views.SettingsOverlay.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
-	// CandyLizard
+	// Framework
 	import display.Sprite;
 	
 	// Project
 	import project.Constants;
 	import project.Project;
-	import project.events.PanEvent;
 	import project.events.ScrollEvent;
 	
 	
