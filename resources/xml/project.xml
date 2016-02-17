@@ -17,7 +17,9 @@
 	- Click anywhere on the CustomStoryboardClip to delete before adding a new one
 
 • Music Selector:
-	
+	- Select a track to see it’s changes applied to the AudioTimeline
+	- Simulated preview includes when a Highlight is reached on the Audio Timeline
+		
 • Media Library:
 	- Change between All Media and Recently Added
 	- Click on "Recently Added", AlertBanner appears.  Click to add videos in current group to SourceClip bin in Editor
@@ -30,6 +32,12 @@
 	- Press 1 to simulate activation of alerts
 	- Press 2 to simulate deactivation of alerts
 	- Click icon to open drawer 
+			
+• Add Media Drawer:
+	- In Editor, click "Add Media" to open, click close button or outside drawer to close 
+	- On open, SourceClip bin reverts to 4 clips - Drawer reflects this. 
+	- Click "Add All"/"Remove All" on any of the event groups
+	- Clicking on "Add All" for the 1st group only adds those clips to the SourceClip bin
 			
 	]]></about>
 	
