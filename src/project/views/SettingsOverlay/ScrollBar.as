@@ -1,4 +1,4 @@
-package project.views.SettingsOverlay.ui {
+package project.views.SettingsOverlay {
 	
 	// Flash
 	import flash.display.Shape;

@@ -26,15 +26,7 @@ package project{
 	import project.events.UITransitionEvent;
 	import project.events.ViewTransitionEvent;
 	import project.events.AddMediaDrawerEvent;
-	import project.views.AddClipsPreloader;
-	import project.views.Footer;
-	import project.views.Header;
-	import project.views.MediaLibrary;
-	import project.views.MusicSelector;
-	import project.views.StoryBuilder;
-	import project.views.SettingsOverlay.SettingsOverlay;
-	import project.views.AddMediaDrawer;
-	
+	import project.views.*;
 	
 		
 	
