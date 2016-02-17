@@ -1,36 +1,36 @@
-package{
+package {
+	
+	// Flash
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
 	
+	// Framework
 	import air.desktop.Application;
 	import air.desktop.ApplicationMenu;
-	import air.desktop.stage.Window;
-	
+	import air.desktop.stage.Window;	
 	import data.Settings;
+	import utils.Register;
 	
+	// Project
 	import project.About;
 	import project.Project;
 	import project.ProjectFonts;
 	
-	import utils.Register;
-	
-	
-	
 	[SWF(frameRate = '60', width = '800', height = '600', backgroundColor = '0xCCCCCC')]
+
 	
 	
 	public class Main extends Application {
 		
 		
-		/******************** EMBEDS *********************/
+		/********************* CONSTANTS **********************/	
 		
 		[Embed(source="../resources/splash/splashBackground.png")]
 		public	 	const		SPLASH:Class;
 		
 		[Embed(source="../resources/splash/aboutBackground.png")]
 		public	 	const		ABOUT:Class;
-		
 		
 		[Embed(source="../resources/xml/config.xml", mimeType = "application/octet-stream")]
 		protected 	const		CONFIG:Class;
@@ -41,26 +41,22 @@ package{
 		//>>>>>>>>>			STEP ONE:       change the CONTENT string to the name of your project class
 		public 		const 		CONTENT:String	 = 	'Project';
 		
-		
 		//>>>>>>>>>			STEP TWO:       embed your project's xml
 		[Embed(source="../resources/xml/project.xml", mimeType = "application/octet-stream")]
 		protected 	const 		PROJECT_XML:Class;
 		
-		//settings
+		
+		
+		/******************** PRIVATE VARS ********************/	
 		private 	var			_settings:Settings;
-		
 		private 	var			_fonts:ProjectFonts;
-		
 		private		var			_project:Project;
 		
 		
 		
-		
-		
-		public function Main(){
+		/******************** CONSTRUCTOR *********************/
+		public function Main() {
 			super();
-			
-			
 			
 			//REGISTER
 			verbose = true;
@@ -85,10 +81,13 @@ package{
 			
 			//APPLICATION MENU
 			applicationMenu = new ApplicationMenu(this.stage, _appMenuHandler);
-			applicationMenu.verbose = true;
+			applicationMenu.verbose = false;
 			
 		}
 		
+		
+		
+		/******************** PRIVATE API *********************/
 		override protected function _createProjectWindow():Window {
 			var projectWin:Window;
 			if (initialized) {
@@ -108,18 +107,27 @@ package{
 			return projectWin;
 		}
 		
-		override protected function _createAboutWindow():void{
+		override protected function _createAboutWindow():void {
 			var about:About = new About();
 			about.init();
 			about.alpha = 0;
 			windowManager.createAboutWindow(about);
 		}
 		
+		private function _getSettings():void {
+			_settings = new Settings();
+			_settings.addEventListener(Settings.EXISTS, _settingsInit);
+			_settings.addEventListener(Settings.MISSING, _settingsInit);
+			_settings.init();
+		}
 		
-		private function _appMenuHandler($e:Event):void{
+				
+		
+		/******************* EVENT HANDLERS *******************/	
+		private function _appMenuHandler($e:Event):void {
 			log('ƒ appMenuHandler: '+$e.target.label);
 			log('curWindow: '+((windowManager.currentWindow) ? windowManager.currentWindow.id : windowManager.currentWindow));
-			switch($e.target.label){
+			switch($e.target.label) {
 				case 'Close':
 					windowManager.closeCurrentWindow();
 					log('############### Register.ASSETS: '+Register.ASSETS);
@@ -138,14 +146,11 @@ package{
 				
 				case 'Open File':
 					//if(Object(windowManager.currentWindow.view).open) Object(windowManager.currentWindow.view).open();
-					
 					break;
 				
 				case 'Import...':
 					//if(Object(windowManager.currentWindow.view).importData) Object(windowManager.currentWindow.view).importData();
-					
 					break;
-				
 				
 				case 'Quit':
 					log('quit');
@@ -159,49 +164,37 @@ package{
 				
 				case 'About':
 					windowManager.activateWindow('about');
-					
 					break;
 				
 				case 'Console':
 					windowManager.activateWindow('console');
-				
+					break;
 			}
 		}
 		
-		//SETTINGS
-		private function _getSettings():void{
-			_settings = new Settings();
-			_settings.addEventListener(Settings.EXISTS, _settingsInit);
-			_settings.addEventListener(Settings.MISSING, _settingsInit);
-			_settings.init();
-		}
-		
-		
-		private function _settingsInit(e:Event):void{
+		private function _settingsInit($e:Event):void {
 			log('ƒ settings init');
 			_settings.removeEventListener(Settings.EXISTS, _settingsInit);
 			_settings.removeEventListener(Settings.MISSING, _settingsInit);
-			switch(e.type){
+			switch($e.type) {
 				case Settings.EXISTS:
 					log('\tFOUND USER SETTINGS');
 					break;
 				
 				case Settings.MISSING:
-					try{	
+					try {	
 						_settings.addEventListener(Settings.LAST_MODIFIED, onSettingsCreation);
 						_settings.clone('templates/.settingsTemplate.xml');
-					}catch(e:Error){
-						log('#### ERROR: '+e.message);
+					} catch($e:Error) {
+						log('#### ERROR: '+$e.message);
 					}
 					break;
 			}
-		}
+		}		
 		
-		
-		
-		private function onSettingsCreation(e:Event):void{
+		private function onSettingsCreation($e:Event):void {
 			import flash.filesystem.File;
-			log('ƒ onSettingsCreation - path: '+File(Settings(e.target).file).nativePath);
+			log('ƒ onSettingsCreation - path: '+File(Settings($e.target).file).nativePath);
 		}
 			
 		

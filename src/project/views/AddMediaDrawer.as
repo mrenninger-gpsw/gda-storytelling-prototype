@@ -49,7 +49,7 @@ package project.views {
 			super();
 			verbose = true;
 			_xml = Register.PROJECT_XML.content.mediaLibrary.addMediaDrawer;
-			log('xml: '+_xml);
+			//log('xml: '+_xml);
 			this.addEventListener(Event.ADDED_TO_STAGE, _onAdded);
 			_init();
 		}

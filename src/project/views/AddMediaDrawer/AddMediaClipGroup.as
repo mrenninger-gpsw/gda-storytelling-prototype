@@ -181,7 +181,7 @@ package project.views.AddMediaDrawer {
 		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
-			_addListeners();
+			//_addListeners();
 		}
 		
 		private function _handleMouseMove($e:MouseEvent):void {			
