@@ -1,23 +1,26 @@
 package project.views.Header {
 	
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Back;
-	import com.greensock.easing.Cubic;
-	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Back;
+	import com.greensock.easing.Cubic;
 	
+	// Framework
+	import components.controls.Label;	
 	import display.Sprite;
-	
-	import project.views.Header.AlertDrawer.AlertDrawerItem;
-	
 	import utils.Register;
 	import utils.Utilities;
+	
+	// Project
+	import project.views.Header.AlertDrawer.AlertDrawerItem;
+	
 	
 
 	public class AlertDrawer extends Sprite {

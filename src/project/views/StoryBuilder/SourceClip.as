@@ -323,7 +323,7 @@ package project.views.StoryBuilder {
 						
 						var hilight:SourceClipHighlight = _createSourceClipHighlightAt(_scrubber.x,'blue',true);
 						
-						var sbClip:CustomStoryboardClip = new CustomStoryboardClip(_num, _curFrameNum, hilight);
+						var sbClip:CustomStoryboardClip = new CustomStoryboardClip(_xml, _curFrameNum, hilight);
 						sbClip.width = 128;
 						sbClip.height = 72;
 						sbClip.x = localToGlobal(p).x;

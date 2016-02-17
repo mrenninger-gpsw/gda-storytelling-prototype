@@ -1,6 +1,6 @@
 // Flash
 // Greensock
-// CandyLizard Framework
+// Framework
 // Project
 	/********************* CONSTANTS **********************/	
 	/******************** PRIVATE VARS ********************/	

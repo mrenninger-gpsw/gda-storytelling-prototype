@@ -3,10 +3,13 @@ package project.views {
 	// Flash
 	import flash.events.Event;
 	
+	// Greensock
 	import com.greensock.TweenMax;
 
+	// Framework
 	import display.Sprite;
 	
+	// Project
 	import project.events.MediaMenuEvent;
 	import project.views.MediaLibrary.MediaLibraryContentArea;
 	import project.views.MediaLibrary.MediaLibraryMenu;

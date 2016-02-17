@@ -1,19 +1,23 @@
 package project.views.Header.AlertDrawer {
 	
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	
+	// Flash
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
 	
+	// Framework
+	import components.controls.Label;	
 	import display.Sprite;
-	
-	import project.events.ViewTransitionEvent;
-	
 	import utils.Register;
+	
+	// Project
+	import project.events.ViewTransitionEvent;
+
+	
 	
 	public class AlertDrawerItem extends Sprite {
 		

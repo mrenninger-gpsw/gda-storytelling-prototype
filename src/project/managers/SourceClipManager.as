@@ -4,16 +4,20 @@ package project.managers {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	// Greensock
 	import com.greensock.TweenMax;
+	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
 	
-	// Subarashii Framework
+	// Framework
+	import components.controls.Label;	
 	import display.Sprite;
 	import utils.Register;
 	
 	// Project
+	import project.events.AddMediaDrawerEvent;
 	import project.events.PreviewEvent;
 	import project.events.SourceClipManagerEvent;
 	import project.events.StoryboardManagerEvent;
@@ -29,9 +33,12 @@ package project.managers {
 		private var _bgShape:Shape;
 		private var _scrollbar:Shape;
 		private var _shadow:Bitmap;
+		private var _addBtn:Sprite;
 		private var _sourceClipsV:Vector.<SourceClip>;
 		private var _previewArea:VideoPreviewArea;
 		private var _addFromLibrary:Boolean = false;
+		private var _showing:Boolean = false;
+		private var _titleLabel:Label;
 
 		
 		
@@ -46,6 +53,8 @@ package project.managers {
 		public function SourceClipManager() {
 			super();
 			
+			verbose = true;
+			
 			_xml = Register.PROJECT_XML.content.editor.storybuilder.sourceClips;
 			
 			_sourceClipsV = new Vector.<SourceClip>();
@@ -59,26 +68,33 @@ package project.managers {
 		
 		/******************** PUBLIC API *********************/
 		public function show():void {
-			// position the source clips based on _addFromLibrary value and fade them up
-			var startIndex:uint = 2;//(_addFromLibrary) ? 0 : 2;
-			for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
-				_sourceClipsV[i].y = (i == startIndex) ? 16 : _sourceClipsV[i - 1].y + 80;
-				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _checkforLibraryAdd : null;
-				TweenMax.to(_sourceClipsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:i * 0.05, onComplete:onComplete});
+			if (_showing){
+				log('showing... calling _checkforLibraryAdd');
+				_checkforLibraryAdd();
+			} else {
+				log('not showing... default show');
+				// position the source clips based on _addFromLibrary value and fade them up			
+				var startIndex:uint = 2;//(_addFromLibrary) ? 0 : 2;
+				for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
+					_sourceClipsV[i].y = (i == startIndex) ? (16 + 43) : _sourceClipsV[i - 1].y + 80;
+					var onComplete:Function = (i == _sourceClipsV.length - 1) ? _checkforLibraryAdd : null;
+					TweenMax.to(_sourceClipsV[i], 0.3, {x:20, autoAlpha:1, ease:Back.easeOut, delay:i * 0.05, onComplete:onComplete});
+				}
+				
+				//TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.to(_bgShape, 0.4, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.allTo([_titleLabel,_addBtn], 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+				//TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
 			}
-			
-			//TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
-			TweenMax.to(_bgShape, 0.4, {autoAlpha:1, ease:Cubic.easeOut});
-			//TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
 		}
 		
-		public function hide($immediate:Boolean = false):void {
+		public function hide($immediate:Boolean = false):void {			
 			var startIndex:uint = 0;//(_addFromLibrary) ? 0 : 2;
 			for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
 				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _onHideComplete : null;				
 				TweenMax.to(_sourceClipsV[i], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : (i * 0.05), onComplete:onComplete});
 			}			
-			TweenMax.to(_scrollbar, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});		
+			TweenMax.allTo([_titleLabel,_scrollbar,_addBtn], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});		
 			TweenMax.to(_bgShape, ($immediate) ? 0 : 0.4, {autoAlpha:0, ease:Cubic.easeOut});			
 			TweenMax.to(_shadow, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.25});			
 		}
@@ -95,15 +111,23 @@ package project.managers {
 			_bgShape.alpha = 0;
 			this.addChild(_bgShape);
 			
+			_titleLabel = new Label();
+			_titleLabel.text = _xml.@title;
+			_titleLabel.autoSize = 'left';
+			_titleLabel.textFormatName = 'sourceclip-title';
+			_titleLabel.x = 26;
+			_titleLabel.y = 20;
+			this.addChild(_titleLabel);
+			
 			var i:uint;
-			var tSourceClip:SourceClip; 
+			var tSourceClip:SourceClip;
 			
 			// create the source clips from the media library
 			for (i = 0; i < _xml.library.item.length(); i++) {
 				tSourceClip = new SourceClip(i, _xml.library.item[i]);
 				
 				tSourceClip.x = 20;
-				tSourceClip.y = (i == 0) ? 16 : _sourceClipsV[_sourceClipsV.length - 1].y + 80;
+				tSourceClip.y = (i == 0) ? (16 + 43) : _sourceClipsV[_sourceClipsV.length - 1].y + 80;
 				tSourceClip.alpha = 0;
 				
 				//_addListeners(tSourceClip);
@@ -141,7 +165,7 @@ package project.managers {
 			_scrollbar.graphics.drawRect(0,0,5,98);
 			_scrollbar.graphics.endFill();
 			_scrollbar.x = 547;
-			_scrollbar.y = 16;
+			_scrollbar.y = 16 + 43;
 			_scrollbar.alpha = 0;
 			this.addChild(_scrollbar);
 			
@@ -150,6 +174,15 @@ package project.managers {
 			_shadow.y = 440;
 			_shadow.alpha = 0;
 			this.addChild(_shadow);
+			
+			_addBtn = new Sprite();
+			_addBtn.addChild(Register.ASSETS.getBitmap('sourceClip_AddNew'));
+			_addBtn.x = _sourceClipsV[0].x + _sourceClipsV[0].width - _addBtn.width;
+			_addBtn.y = _titleLabel.y + _titleLabel.height - _addBtn.height;
+			_addBtn.addEventListener(MouseEvent.MOUSE_OVER, _onMouseEvent); 
+			_addBtn.addEventListener(MouseEvent.MOUSE_OUT, _onMouseEvent); 
+			_addBtn.addEventListener(MouseEvent.CLICK, _onMouseEvent); 
+			this.addChild(_addBtn);
 			
 			//show();
 		}
@@ -163,7 +196,7 @@ package project.managers {
 				}
 				for (i = 0; i < 2; i++) {
 					var onComplete:Function = (i == 1) ? _onShowComplete : null;
-					TweenMax.to(_sourceClipsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.45 + (i * 0.05), onComplete:onComplete});
+					TweenMax.to(_sourceClipsV[i], 0.3, {x:20, autoAlpha:1, ease:Back.easeOut, delay:0.45 + (i * 0.05), onComplete:onComplete});
 				}
 				TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
 				TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
@@ -174,11 +207,16 @@ package project.managers {
 		
 		private function _onShowComplete():void {
 			log('_onShowComplete');
+			_showing = true;
 			dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.SHOW_COMPLETE));
 		}
 		
 		private function _onHideComplete():void {
 			log('_onHideComplete');
+			_showing = false;
+			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
+				TweenMax.to(_sourceClipsV[i], 0, {x:0});
+			}
 			dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.HIDE_COMPLETE));
 		}
 		
@@ -194,7 +232,8 @@ package project.managers {
 		private function _onAdded($e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
 			this.stage.addEventListener(StoryboardManagerEvent.FIVE_CLIPS, _handleStoryboardManagerEvent);
-			this.stage.addEventListener(StoryboardManagerEvent.FOUR_CLIPS, _handleStoryboardManagerEvent);			
+			this.stage.addEventListener(StoryboardManagerEvent.FOUR_CLIPS, _handleStoryboardManagerEvent);
+			this.stage.addEventListener(AddMediaDrawerEvent.ADD_MEDIA_DRAWER_SHOW, _resetSourceClips);
 		}
 		
 		private function _handlePreviewEvent($e:PreviewEvent):void {
@@ -218,6 +257,38 @@ package project.managers {
 				case StoryboardManagerEvent.FIVE_CLIPS:
 					_enableSourceClips(false);
 					break;
+			}
+		}
+		
+		private function _onMouseEvent($e:MouseEvent):void {
+			
+			switch ($e.type) {
+				case MouseEvent.MOUSE_OVER:
+					if ($e.target == _addBtn) TweenMax.to(_addBtn, 0, {tint:0xFFFFFF});
+					break;
+				
+				case MouseEvent.MOUSE_OUT:
+					if ($e.target == _addBtn) TweenMax.to(_addBtn, 0.3, {tint:null, ease:Cubic.easeOut});
+					break;
+				
+				case MouseEvent.CLICK:
+					TweenMax.to(_addBtn, 0.3, {tint:null, ease:Cubic.easeOut});
+					if ($e.target == _addBtn) this.stage.dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.ADD_MEDIA));
+					break;
+			}
+		}
+		
+		private function _resetSourceClips($e:AddMediaDrawerEvent):void {
+			_addFromLibrary = false;
+			
+			TweenMax.allTo([_shadow, _scrollbar], 0, {autoAlpha:0});
+			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
+				if (i < 2){
+					TweenMax.to(_sourceClipsV[i], 0, {x:0, autoAlpha:0});
+				} else {
+					_sourceClipsV[i].y = (i == 2) ? (16 + 43) : _sourceClipsV[i - 1].y + 80;				
+					TweenMax.to(_sourceClipsV[i], 0, {x:20, autoAlpha:1});
+				}
 			}
 		}
 		

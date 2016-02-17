@@ -1,19 +1,21 @@
 package project.views.MediaLibrary.ui {
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
 	
-	import display.Sprite;
-	
+	// Framework
+	import components.controls.Label;	
+	import display.Sprite;	
 	import utils.Register;
 	import utils.StringUtilities;
+
+	// Project
 
 	
 	

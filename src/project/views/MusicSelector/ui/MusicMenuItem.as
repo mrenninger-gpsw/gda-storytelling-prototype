@@ -33,6 +33,9 @@ package project.views.MusicSelector.ui {
 		private var _featured:Boolean = false;
 		private var _title:String;
 		private var _bpmMeter:BPMMeter;
+		private var _initX:Number;
+		
+		
 
 		/***************** GETTERS & SETTERS ******************/			
 		public function get num():Number{ return _num; }
@@ -41,6 +44,8 @@ package project.views.MusicSelector.ui {
 		public function get featured():Boolean { return _featured; }
 		public function get title():String { return _title; }
 		public function get bpmMeter():BPMMeter { return _bpmMeter; }
+		public function get initX():Number{ return _initX; }
+		public function set initX($value:Number):void { _initX = $value; }
 		
 		
 		

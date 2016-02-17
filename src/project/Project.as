@@ -2,6 +2,7 @@ package project{
 	
 	// Flash
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Point;
@@ -10,7 +11,7 @@ package project{
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	
-	// Greensock
+	// Grensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	
@@ -18,18 +19,22 @@ package project{
 	import air.desktop.ProjectRoot;
 	import air.desktop.stage.Window;
 	import components.controls.TextArea;
-	import utils.Register;	
+	import utils.Register;
 	
 	// Project
+	import project.events.SourceClipManagerEvent;
 	import project.events.UITransitionEvent;
 	import project.events.ViewTransitionEvent;
+	import project.events.AddMediaDrawerEvent;
+	import project.views.AddClipsPreloader;
+	import project.views.Footer;
 	import project.views.Header;
 	import project.views.MediaLibrary;
 	import project.views.MusicSelector;
 	import project.views.StoryBuilder;
-	import project.views.Footer;
-	import project.views.SettingsOverlay.SettingsOverlay;	
-	import project.views.AddClipsPreloader;
+	import project.views.SettingsOverlay.SettingsOverlay;
+	import project.views.AddMediaDrawer;
+	
 	
 		
 	
@@ -52,7 +57,9 @@ package project{
 		private var _mediaLibrary:MediaLibrary;		
 		private var _footer:Footer;
 		private var _header:Header;
-		private var _addClipsPreloader:AddClipsPreloader
+		private var _addClipsPreloader:AddClipsPreloader;
+		private var _scrim:Sprite;
+		private var _addMediaDrawer:AddMediaDrawer;
 		
 		
 		
@@ -163,13 +170,20 @@ package project{
 			_header = new Header();
 			this.addChild(_header);
 
-			// alert drawer
+			_scrim = new Sprite();
+			s = new Shape();			
+			s.graphics.beginFill(0x222222, 0.65);
+			s.graphics.drawRoundRect(0,0,Register.APP.WIDTH, Register.APP.HEIGHT,10,10);
+			s.graphics.endFill();
+			_scrim.addChild(s)
+			TweenMax.to(_scrim, 0, {autoAlpha:0});
+			this.addChild(_scrim);
+
+			_addMediaDrawer = new AddMediaDrawer();
+			this.addChild(_addMediaDrawer);
+			_addMediaDrawer.addEventListener(AddMediaDrawerEvent.ADD_MEDIA_DRAWER_HIDE, _onAddMediaDrawerEvent)
+			this.stage.addEventListener(AddMediaDrawerEvent.ADD_MEDIA_DRAWER_SHOW, _onAddMediaDrawerEvent);
 			
-			// add media drawer
-			
-			// alert overlays
-			
-			// addClipsPreloader
 			_addClipsPreloader = new AddClipsPreloader();
 			this.addChild(_addClipsPreloader);
 			
@@ -177,6 +191,8 @@ package project{
 			this.stage.addEventListener(ViewTransitionEvent.MEDIA, _handleViewTransitionEvent);
 			this.stage.addEventListener(ViewTransitionEvent.ADD_LIBRARY_CLIPS, _handleViewTransitionEvent);
 			this.stage.addEventListener(ViewTransitionEvent.PREPARE_TO_ADD, _handleViewTransitionEvent);
+			
+			this.stage.addEventListener(SourceClipManagerEvent.ADD_MEDIA, _handleSourceClipManagerEvent);
 			
 			TweenMax.to(this, 0, {autoAlpha:0});						
 		}
@@ -284,8 +300,8 @@ package project{
 					
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
 					_mediaLibrary.hide();
-					TweenMax.delayedCall(0.8, _storyBuilder.show)
-					TweenMax.delayedCall(0.8, _footer.show);
+					TweenMax.delayedCall((_storyBuilder.isActive) ? 0 : 0.8, _storyBuilder.show)
+					TweenMax.delayedCall((_storyBuilder.isActive) ? 0 : 0.8, _footer.show);
 					break;
 				
 				case ViewTransitionEvent.MEDIA:
@@ -316,6 +332,28 @@ package project{
 					break;
 				
 			}			
+		}
+		
+		protected function _handleSourceClipManagerEvent($e:SourceClipManagerEvent):void {
+			switch ($e.type) {
+				case SourceClipManagerEvent.ADD_MEDIA:
+					log('SourceClipManager - ADD_MEDIA');
+					TweenMax.to(_scrim, 0.3, {autoAlpha:1});
+					_addMediaDrawer.show();
+					break;
+			}
+		}
+		
+		protected function _onAddMediaDrawerEvent($e:AddMediaDrawerEvent):void {
+			switch($e.type) {
+				case AddMediaDrawerEvent.ADD_MEDIA_DRAWER_HIDE:
+					TweenMax.to(_scrim, 0.3, {autoAlpha:0});
+					break;
+				case AddMediaDrawerEvent.ADD_MEDIA_DRAWER_SHOW:
+					// reset the SourceClipManager
+					break;
+			}
+			
 		}
 		
 	}

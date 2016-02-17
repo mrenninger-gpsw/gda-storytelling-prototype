@@ -1,21 +1,23 @@
 package project.views {
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
-	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import display.Sprite;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
 	
+	// Framework
+	import display.Sprite;
+	import utils.Register;
+	
+	// Project
 	import project.events.ViewTransitionEvent;
 	import project.views.Header.AlertDrawer;
-	import project.views.Header.HeaderNav;
-	
-	import utils.Register;
+	import project.views.Header.HeaderNav;	
 	
 		
 	

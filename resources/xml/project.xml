@@ -34,6 +34,10 @@
 	]]></about>
 	
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 0.02.001 - 02/17/2016
+	* Addition of AddMedia Drawer
+	* Numerous bug fixes
+
 VERSION 0.01.002 - 02/12/2016
 	* Addition of Media Library
 	* Addition of the Alerts Drawer
@@ -148,8 +152,6 @@ VERSION 0.00.001 - 01/20/2016
 				<alert file='alertDrawer_SyncedFromCloud' marker='' enabled=''/>
 			</alertDrawer>
 			
-			<addMediaDrawer>
-			</addMediaDrawer>
 		</header>
 		
 		<mediaLibrary>
@@ -195,12 +197,19 @@ VERSION 0.00.001 - 01/20/2016
 				</event>
 			</content>
 			
+			<addMediaDrawer>
+				<item file='addMediaDrawer_Group1' title='MONDAY, JULY 27 2015' total='2' selected='false'/>
+				<item file='addMediaDrawer_Group2new' title='FRIDAY, JULY 24 2015' total='4' selected='true'/>
+				<item file='addMediaDrawer_Group3' title='MONDAY, JULY 20 2015' total='10' selected='false'/>
+				<item file='addMediaDrawer_Group4' title='FRIDAY, JULY 17 2015' total='12' selected='false'/>
+			</addMediaDrawer>
+			
 		</mediaLibrary>
 	
 		<editor>			
 			<storybuilder>
 			
-				<sourceClips>
+				<sourceClips title='VIDEOS'>
 					<library>
 						<item title='GOPR0035' length='87' filename='vid3' highlights='9,39,69,78' storyboard=''/>
 						<item title='GOPR0062' length='29' filename='vid4' highlights='' storyboard=''/>			

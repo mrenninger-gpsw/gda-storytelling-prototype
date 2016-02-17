@@ -1,28 +1,28 @@
 package project.views.MediaLibrary {
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
 	
+	// Framework
+	import components.controls.Label;	
 	import display.Sprite;
+	import utils.Register;
 	
+	// Project
 	import project.events.MediaLibraryGroupEvent;
-	import project.views.MediaLibrary.ui.AlertBanner;
+	import project.events.SelectionBannerEvent;
 	import project.views.MediaLibrary.ui.SelectionBanner;
 	
-	import utils.Register;
-	import project.events.SelectionBannerEvent;
 		
-	
-	
+		
 	public class MediaLibraryContentArea extends Sprite {
 		
 		/********************* CONSTANTS **********************/	
@@ -280,7 +280,15 @@ package project.views.MediaLibrary {
 					if (_curGroup) _curGroup.showVideos(false);
 					break;
 				case SelectionBannerEvent.CLOSE:
-					if (_curGroup) _curGroup.deselectAll();
+					var p:Point = localToGlobal(new Point(mouseX, mouseY));
+					var mouseOverGroup:Boolean = false;
+					for (var i:uint = 0; i < _eventGroupsV.length-1; i++) {
+						if (_eventGroupsV[i].hitTestPoint(p.x,p.y)) mouseOverGroup = true;
+					}
+					if (_curGroup && !mouseOverGroup) {
+						_selectionBanner.hide();
+						_curGroup.deselectAll();
+					}
 					break;
 			}
 		}

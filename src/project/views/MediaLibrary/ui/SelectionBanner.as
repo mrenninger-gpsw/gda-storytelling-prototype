@@ -1,23 +1,26 @@
 package project.views.MediaLibrary.ui {
 	
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Back;
-	import com.greensock.easing.Cubic;
-	
+	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Back;
+	import com.greensock.easing.Cubic;
 	
+	// Framework
+	import components.controls.Label;	
 	import display.Sprite;
+	import utils.Register;
 	
+	// Project
 	import project.events.SelectionBannerEvent;
 	import project.events.ViewTransitionEvent;
 	
-	import utils.Register;
 
 	
 	public class SelectionBanner extends Sprite {
@@ -249,8 +252,7 @@ package project.views.MediaLibrary.ui {
 		
 		private function _handleMouseDown($e:MouseEvent):void {
 			if (!_mouseIsOver) {
-				if (_isShowing) {
-					hide();
+				if (_isShowing) {					
 					this.dispatchEvent(new SelectionBannerEvent(SelectionBannerEvent.CLOSE));
 				}
 			}

@@ -1,19 +1,21 @@
 package project.views.Header {
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
-	
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
+	
+	// Framework
 	import display.Sprite;
-	
-	import project.events.ViewTransitionEvent;
-	import project.views.Header.ui.HeaderNavBtn;
-	
 	import utils.Register;
+	
+	// Project
+	import project.events.ViewTransitionEvent;
+	import project.views.Header.ui.HeaderNavBtn;	
 	
 	
 			

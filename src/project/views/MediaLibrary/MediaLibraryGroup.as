@@ -1,26 +1,26 @@
 package project.views.MediaLibrary {
 	
 	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Back;
-	import com.greensock.easing.Cubic;
-	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Back;
+	import com.greensock.easing.Cubic;
 	
-	import display.Sprite;
-	
+	// Framework
+	import components.controls.Label;	
+	import display.Sprite;	
 	import layout.Grid;
+	import utils.Register;
 	
+	// Project
 	import project.events.MediaLibraryGroupEvent;
 	import project.events.ViewTransitionEvent;
-	import project.views.MediaLibrary.ui.EventClipPreview;
-	
-	import utils.Register;
+	import project.views.MediaLibrary.ui.EventClipPreview;	
 	
 	
 	
@@ -97,35 +97,8 @@ package project.views.MediaLibrary {
 				} 
 				if (!_allSelected && _clipsV[i].isVideo) {
 					_clipsV[i].select($b);
-				}
-				/*if (!$b && _allSelected && !_clipsV[i].isVideo) {
-					_clipsV[i].soften(false);
-				}
-				if (!$b && !_allSelected && _clipsV[i].isVideo) {
-					_clipsV[i].select(false);
-				}*/
+				}				
 			}
-			/*if ($b) {
-				if (_allSelected) {
-					for (i = 0; i < _clipsV.length; i++) {
-						if (!_clipsV[i].isVideo) _clipsV[i].soften();
-					}
-				} else {
-					for (i = 0; i < _clipsV.length; i++) {
-						if (_clipsV[i].isVideo) _clipsV[i].select();
-					}					
-				}
-			} else {
-				if (_allSelected) {
-					for (i = 0; i < _clipsV.length; i++) {
-						if (!_clipsV[i].isVideo) _clipsV[i].soften(false);
-					}
-				} else {
-					for (i = 0; i < _clipsV.length; i++) {
-						if (_clipsV[i].isVideo) _clipsV[i].select(false);
-					}
-				}
-			}*/
 		}
 		
 		public function deselectAll():void {
@@ -220,6 +193,7 @@ package project.views.MediaLibrary {
 		}
 		
 		private function _selectAll($b:Boolean = true):void {
+			log('_selectAll: '+$b);
 			_allSelected = $b;
 			for (var i:uint = 0; i < _clipsV.length; i++) {
 				TweenMax.delayedCall((i*0.03), _clipsV[i].select,[$b]);
@@ -236,6 +210,7 @@ package project.views.MediaLibrary {
 		}
 		
 		private function _handleMenuIcon($e:MouseEvent):void {
+			
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:
 					TweenMax.to($e.target, 0, {tint:0x00A3DA});

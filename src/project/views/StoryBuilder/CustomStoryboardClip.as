@@ -28,7 +28,6 @@ package project.views.StoryBuilder {
 		private var _curImageName:String;
 		private var _prevImageName:String;
 		private var _nextImageName:String;
-		private var _sourceClipNum:Number;
 		private var _frameNum:Number;
 		private var _markerIcon:Sprite;
 		private var _markerLine:Shape;
@@ -45,28 +44,25 @@ package project.views.StoryBuilder {
 		
 		
 		/******************** CONSTRUCTOR *********************/
-		public function CustomStoryboardClip($sourceClipNum:Number, $frameNum:Number, $hilite:SourceClipHighlight) {
+		public function CustomStoryboardClip($xml:XML, $frameNum:Number, $hilite:SourceClipHighlight) {
 			super();
 			
 			verbose = true;
 			
 			_hilite = $hilite;
-			_sourceClipNum = $sourceClipNum;
 			_frameNum = $frameNum;
 			
-			var tXML:XML = Register.PROJECT_XML.content.editor.storybuilder.sourceClips.item[_sourceClipNum];
+			_curImageName = $xml.@title + '_' + _addLeadingZeros(_frameNum);
 			
-			_curImageName = tXML.@title + '_' + _addLeadingZeros(_frameNum);
-			
-			var sourceClipLength:Number = Number(tXML.@length);
+			var sourceClipLength:Number = Number($xml.@length);
 			
 			var _prevFrameNum:Number = _frameNum - 20;
 			if (_prevFrameNum < 1) _prevFrameNum = 1;
-			_prevImageName = tXML.@title + '_' + _addLeadingZeros(_prevFrameNum);
+			_prevImageName = $xml.@title + '_' + _addLeadingZeros(_prevFrameNum);
 			
 			var _nextFrameNum:Number = _frameNum + 20;
 			if (_nextFrameNum > sourceClipLength) _nextFrameNum = sourceClipLength;
-			_nextImageName = tXML.@title + '_' + _addLeadingZeros(_nextFrameNum);
+			_nextImageName = $xml.@title + '_' + _addLeadingZeros(_nextFrameNum);
 			
 			_holder = new Sprite();			
 			addChild(_holder);

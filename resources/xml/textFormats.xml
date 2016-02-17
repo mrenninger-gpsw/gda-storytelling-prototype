@@ -145,6 +145,14 @@
 	
 	<!--  source clips -->
 	<textFormat
+		id='sourceclip-title'
+		size='18'
+		color='#FFFFFF'
+		font='Proxima Nova Extrabold'
+		align='left'
+	/>
+	
+	<textFormat
 		id='sourceclip-name'
 		size='12'
 		color='#a4a4a4'

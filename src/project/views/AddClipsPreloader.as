@@ -1,17 +1,20 @@
 package project.views {
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
 	
+	// Flash
 	import flash.display.Shape;
 	import flash.events.Event;
 	
-	import components.controls.Label;
+	// Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
 	
+	// Framework
+	import components.controls.Label;	
 	import display.Sprite;
-	
-	import project.events.ViewTransitionEvent;
-	
 	import utils.Register;
+	
+	// Project
+	import project.events.ViewTransitionEvent;	
 	
 	
 	

@@ -22,8 +22,8 @@ package project.views {
 	import project.managers.StoryboardManager;
 	import project.views.StoryBuilder.CustomStoryboardClip;
 	import project.views.StoryBuilder.VideoPreviewArea;
-	import project.views.StoryBuilder.ui.StoryboardClipMarker;	
-
+	import project.views.StoryBuilder.ui.StoryboardClipMarker;
+	
 	
 	
 	public class StoryBuilder extends Sprite {
@@ -168,6 +168,8 @@ package project.views {
 		
 		
 		
+		
+		
 		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
@@ -185,6 +187,9 @@ package project.views {
 					log('time elapsed: '+(new Date().getTime() - _sourceClipMgrTransitionStart));
 					break;			
 				
+				case SourceClipManagerEvent.ADD_MEDIA:
+					log('SourceClipManager - ADD_MEDIA');
+					break;
 			}
 		}
 		

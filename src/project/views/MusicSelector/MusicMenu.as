@@ -7,7 +7,7 @@ package project.views.MusicSelector {
 	
 	// Greensock
 	import com.greensock.TweenMax;
-	import com.greensock.easing.Cubic;
+	import com.greensock.easing.*;
 	
 	// Framework
 	import display.Sprite;
@@ -65,7 +65,7 @@ package project.views.MusicSelector {
 			for (var i:uint = 0; i < _menuItemsV.length; i++) {
 				//log('\titem: '+i+' | title: '+_menuItemsV[i].title);
 				var onCompleteFunc:Function = (i == (_menuItemsV.length - 1)) ? _onShowComplete : null;
-				TweenMax.to(_menuItemsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.5 + (i * 0.05), onComplete:onCompleteFunc});
+				TweenMax.to(_menuItemsV[i], 0.3, {x:_menuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.5 + (i * 0.05), onComplete:onCompleteFunc});
 			}
 		}
 		
@@ -96,7 +96,10 @@ package project.views.MusicSelector {
 		}
 		
 		private function _onHideComplete():void {
-			
+			for (var i:uint = 0; i < _menuItemsV.length; i++) {
+				TweenMax.to(_menuItemsV[i], 0, {x:(_menuItemsV[i].initX == 424) ? 424 : -20});
+			}
+			_selectNavItem(_navItemsV[0]);
 		}
 		
 		private function _createNav():void {
@@ -196,10 +199,10 @@ package project.views.MusicSelector {
 			// all menu items
 			for (i = 0; i < _musicXML.tracks.item.length(); i++) {
 				var tMenuItem:MusicMenuItem = new MusicMenuItem(i);
-				tMenuItem.y = i * 70;
 				
 				tMenuItem.mouseChildren = false;
-				TweenMax.to(tMenuItem, 0, {autoAlpha:0});
+				TweenMax.to(tMenuItem, 0, {x:-20, y:(i * 70), autoAlpha:0});
+				tMenuItem.initX = 0;
 				
 				tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
 				tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
@@ -222,12 +225,11 @@ package project.views.MusicSelector {
 				if (_musicXML.tracks.item[i].@newSong == 'true'){
 					//log('\tnew song: '+i);
 					var tNewMenuItem:MusicMenuItem = new MusicMenuItem(i);
-					tNewMenuItem.x = 424;
-					tNewMenuItem.y = newItemCount * 70;
 					
 					tNewMenuItem.mouseChildren = false;
-					TweenMax.to(tNewMenuItem, 0, {autoAlpha:0});
-					
+					TweenMax.to(tNewMenuItem, 0, {x:424, y:(newItemCount * 70), autoAlpha:0});
+					tNewMenuItem.initX = 424;
+
 					tNewMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
 					tNewMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
 					
@@ -253,6 +255,21 @@ package project.views.MusicSelector {
 			
 			dispatchEvent(new MusicMenuEvent(MusicMenuEvent.CHANGE));
 
+		}
+		
+		private function _selectNavItem($item:MusicNavBtn):void {
+			if (_curNavItem != $item) {
+				// update the nav
+				TweenMax.to(_curNavItem.label, 0.3, {tint:null});
+				_curNavItem = $item;
+				
+				// move the indicator
+				TweenMax.to(_navIndicator, 0.5, {x:_curNavItem.x, ease:Cubic.easeInOut});
+				
+				// move the items
+				TweenMax.to(_itemHolder, 0.5, {x:20 - (((_curNavItem.x - 20)/212) * 424), ease:Cubic.easeInOut});
+				
+			}
 		}
 		
 		
