@@ -1,4 +1,4 @@
-package project{
+package project {
 	
 	// Flash
 	import flash.display.Shape;

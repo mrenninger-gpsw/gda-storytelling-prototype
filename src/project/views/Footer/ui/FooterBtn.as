@@ -4,6 +4,7 @@ package project.views.Footer.ui {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
+	import flash.events.Event;
 	
 	// Greensock
 	import com.greensock.TweenMax;
@@ -20,7 +21,7 @@ package project.views.Footer.ui {
 		private var _width:Number;
 		private var _height:Number;
 		private var _icon:Bitmap;
-		private var _bgShape:Shape;
+		private var _bgShape:Shape;		
 		
 
 		
@@ -70,6 +71,7 @@ package project.views.Footer.ui {
 					break;
 				
 				case MouseEvent.CLICK:
+					dispatchEvent(new Event('clicked'));
 					break;
 				
 			}

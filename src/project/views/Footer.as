@@ -1,9 +1,8 @@
 package project.views {
 	
 	// Flash
-	import flash.display.Bitmap;
 	import flash.display.Shape;
-	import flash.events.MouseEvent;
+	import flash.events.Event;
 	
 	// Greensock
 	import com.greensock.TweenMax;
@@ -16,19 +15,18 @@ package project.views {
 	// Project
 	import project.events.UITransitionEvent;
 	import project.views.Footer.ui.FooterBtn;
-	import project.views.Footer.ui.UITransitionBtn;
 	
 	
 	
 	public class Footer extends Sprite {
 		
 		/********************* CONSTANTS **********************/	
-		private var _changeVideoBtn:UITransitionBtn;
-		private var _changeMusicBtn:UITransitionBtn;
+		private var _changeToEditorBtn:FooterBtn;
+		private var _changeToMusicBtn:FooterBtn;
 		private var _previewBtn:FooterBtn;
 		private var _saveBtn:FooterBtn;
-		private var _subscriptionBtn:FooterBtn;
-		private var _menu:Bitmap;
+		private var _addToVideoBtn:FooterBtn;
+		private var _clipLengthMenuBtn:FooterBtn;
 		private var _curState:String = 'video';
 		
 		
@@ -63,40 +61,30 @@ package project.views {
 			bgShape.graphics.endFill();
 			addChild(bgShape);
 			
-			_changeVideoBtn = new UITransitionBtn('footer_videoIcon');
-			_changeVideoBtn.x = 22;
-			_changeVideoBtn.y = 28;
-			_changeVideoBtn.id = '_changeVideoBtn';
-			this.addChild(_changeVideoBtn);			
-				
-			_changeMusicBtn = new UITransitionBtn('footer_musicIcon');
-			_changeMusicBtn.x = 66;
-			_changeMusicBtn.y = 29;
-			_changeMusicBtn.id = '_changeMusicBtn';
-			_changeMusicBtn.alpha = 0.66;
-			this.addChild(_changeMusicBtn);
-			_enableBtn(_changeMusicBtn);
+			_changeToMusicBtn = new FooterBtn(145, 44, Register.ASSETS.getBitmap('footer_musicBtnText'));//new UITransitionBtn('footer_musicIcon');
+			TweenMax.to(_changeToMusicBtn, 0, {autoAlpha:1, x:24, y:(bgShape.height - _changeToMusicBtn.height) * 0.5});
+			this.addChild(_changeToMusicBtn);
+			_enableBtn(_changeToMusicBtn);
 			
-			_menu = Register.ASSETS.getBitmap('footer_ClipLengthMenu')
-			_menu.x = 115;
-			_menu.y = 26;
-			this.addChild(_menu);
+			_changeToEditorBtn = new FooterBtn(145, 44, Register.ASSETS.getBitmap('footer_editorBtnText'));//new UITransitionBtn('footer_videoIcon');
+			TweenMax.to(_changeToEditorBtn, 0, {autoAlpha:0, x:24, y:(bgShape.height - _changeToEditorBtn.height) * 0.5});
+			this.addChild(_changeToEditorBtn);			
+				
+			_clipLengthMenuBtn = new FooterBtn(145, 44, Register.ASSETS.getBitmap('footer_ClipLengthMenu2'));//= Register.ASSETS.getBitmap('footer_ClipLengthMenu')
+			TweenMax.to(_clipLengthMenuBtn, 0, {x:_changeToMusicBtn.x + _changeToMusicBtn.width + 10, y:(bgShape.height - _clipLengthMenuBtn.height) * 0.5});
+			this.addChild(_clipLengthMenuBtn);
 			
 			_previewBtn = new FooterBtn(145, 44, Register.ASSETS.getBitmap('previewBtnText'));
-			_previewBtn.x = (Register.APP.WIDTH - _previewBtn.width) * 0.5;
-			_previewBtn.y = (bgShape.height - _previewBtn.height) * 0.5;
-			addChild(_previewBtn);
+			TweenMax.to(_previewBtn, 0, {x:(Register.APP.WIDTH - _previewBtn.width) * 0.5, y:(bgShape.height - _previewBtn.height) * 0.5});
+			this.addChild(_previewBtn);
 			
-			_saveBtn = new FooterBtn(114, 44, Register.ASSETS.getBitmap('saveBtnText'));
-			_saveBtn.x = Register.APP.WIDTH - _saveBtn.width - 21;
-			_saveBtn.y = (bgShape.height - _saveBtn.height) * 0.5;
-			addChild(_saveBtn);
+			_saveBtn = new FooterBtn(115, 44, Register.ASSETS.getBitmap('saveBtnText'));
+			TweenMax.to(_saveBtn, 0, {x:Register.APP.WIDTH - _saveBtn.width - 21, y:(bgShape.height - _saveBtn.height) * 0.5});
+			this.addChild(_saveBtn);
 			
-			_subscriptionBtn = new FooterBtn(202, 44, Register.ASSETS.getBitmap('subscriptionBtnText'));
-			_subscriptionBtn.x = Register.APP.WIDTH - _subscriptionBtn.width - 21;
-			_subscriptionBtn.y = (bgShape.height - _subscriptionBtn.height) * 0.5;
-			TweenMax.to(_subscriptionBtn, 0, {autoAlpha:0});
-			addChild(_subscriptionBtn);
+			_addToVideoBtn = new FooterBtn(165, 44, Register.ASSETS.getBitmap('FooterBtn_addToVideoText'));
+			TweenMax.to(_addToVideoBtn, 0, {autoAlpha:0, x:(Register.APP.WIDTH - _addToVideoBtn.width) * 0.5, y:(bgShape.height - _addToVideoBtn.height) * 0.5});
+			this.addChild(_addToVideoBtn);
 		}
 		
 		private function _onShowComplete():void {
@@ -107,22 +95,16 @@ package project.views {
 			_switchStates('video');
 		}
 		
-		private function _enableBtn($btn:UITransitionBtn):void {
-			//log('enabling: '+$btn.id)
-			TweenMax.to($btn, 0.3, {alpha:0.66});
-			
-			$btn.addEventListener(MouseEvent.MOUSE_OVER, _handleMouseEvents);
-			$btn.addEventListener(MouseEvent.MOUSE_OUT, _handleMouseEvents);
-			$btn.addEventListener(MouseEvent.CLICK, _handleMouseEvents);
+		private function _enableBtn($btn:FooterBtn):void {
+			log('enabling: '+$btn.id)
+			$btn.addEventListener('clicked', _handleClick);
+			TweenMax.to($btn, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
 		}		
 		
-		private function _disableBtn($btn:UITransitionBtn):void {
-			//log('disabling: '+$btn.id)
-			TweenMax.to($btn, 0, {alpha:1});
-			
-			$btn.removeEventListener(MouseEvent.MOUSE_OVER, _handleMouseEvents);
-			$btn.removeEventListener(MouseEvent.MOUSE_OUT, _handleMouseEvents);
-			$btn.removeEventListener(MouseEvent.CLICK, _handleMouseEvents);			
+		private function _disableBtn($btn:FooterBtn):void {
+			log('disabling: '+$btn.id)
+			$btn.removeEventListener('clicked', _handleClick);
+			TweenMax.to($btn, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 		}
 		
 		private function _switchStates($id:String):void {
@@ -130,19 +112,19 @@ package project.views {
 			_curState = $id;
 			switch ($id) {
 				case 'music':
-					_enableBtn(_changeVideoBtn);
-					_disableBtn(_changeMusicBtn);
-					TweenMax.to(_menu, 0.3, {autoAlpha:0});
+					_enableBtn(_changeToEditorBtn);
+					_disableBtn(_changeToMusicBtn);
+					TweenMax.to(_clipLengthMenuBtn, 0.3, {autoAlpha:0});
 					TweenMax.to(_previewBtn, 0.3, {autoAlpha:0, delay:0.05});
 					TweenMax.to(_saveBtn, 0.3, {autoAlpha:0, delay:0.1});
-					TweenMax.to(_subscriptionBtn, 0.3, {autoAlpha:1, delay:0.15});
+					TweenMax.to(_addToVideoBtn, 0.3, {autoAlpha:1, delay:0.15});
 					break;
 				
 				case 'video':
-					_enableBtn(_changeMusicBtn);
-					_disableBtn(_changeVideoBtn);
-					TweenMax.to(_subscriptionBtn, 0.3, {autoAlpha:0});
-					TweenMax.to(_menu, 0.3, {autoAlpha:1, delay:0.05});
+					_enableBtn(_changeToMusicBtn);
+					_disableBtn(_changeToEditorBtn);
+					TweenMax.to(_addToVideoBtn, 0.3, {autoAlpha:0});
+					TweenMax.to(_clipLengthMenuBtn, 0.3, {autoAlpha:1, delay:0.05});
 					TweenMax.to(_previewBtn, 0.3, {autoAlpha:1, delay:0.1});
 					TweenMax.to(_saveBtn, 0.3, {autoAlpha:1, delay:0.15});
 					break;
@@ -153,27 +135,14 @@ package project.views {
 		
 		
 		/******************* EVENT HANDLERS *******************/	
-		private function _handleMouseEvents($e:MouseEvent):void {
-			switch ($e.type) {
-				case MouseEvent.MOUSE_OVER:
-					TweenMax.to(($e.target as Sprite),0,{alpha:1});
-					break;
-				
-				case MouseEvent.MOUSE_OUT:
-					TweenMax.to(($e.target as Sprite),0.3,{alpha:0.66});
-					break;
-				
-				case MouseEvent.CLICK:
-					//log('CLICK: '+($e.target as UITransitionBtn).id);
-					_disableBtn($e.target as UITransitionBtn);
-					if ($e.target == _changeMusicBtn) {
-						dispatchEvent(new UITransitionEvent(UITransitionEvent.MUSIC, true));
-						_switchStates('music');
-					} else {
-						dispatchEvent(new UITransitionEvent(UITransitionEvent.VIDEO, true));
-						_switchStates('video');
-					}
-					break;				
+		private function _handleClick($e:Event):void {
+			//log('CLICK: '+($e.target as UITransitionBtn).id);
+			if ($e.target == _changeToMusicBtn) {
+				dispatchEvent(new UITransitionEvent(UITransitionEvent.MUSIC, true));
+				_switchStates('music');
+			} else {
+				dispatchEvent(new UITransitionEvent(UITransitionEvent.VIDEO, true));
+				_switchStates('video');
 			}
 		}		
 	}

@@ -1,4 +1,4 @@
-package project  {
+package project {
 	import flash.text.Font;
 	
 	import air.fonts.Fonts;

@@ -7,15 +7,17 @@ package project.views.MusicSelector {
 	
 	// Greensock
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
+	import com.greensock.easing.Back;
+	import com.greensock.easing.Cubic;
 	
 	// Framework
 	import display.Sprite;
-	import utils.Register;
+	import utils.Register;	
 	
 	// Project
 	import project.events.MusicMenuEvent;
 	import project.views.MusicSelector.ui.MusicMenuItem;
+	import project.views.MusicSelector.ui.MusicMenuSubscriptionSeparator;
 	import project.views.MusicSelector.ui.MusicNavBtn;
 	
 	
@@ -32,7 +34,7 @@ package project.views.MusicSelector {
 		private var _navItemsV:Vector.<MusicNavBtn>;
 		private var _curNavItem:MusicNavBtn;
 		private var _curMenuItem:MusicMenuItem;
-		private var _menuItemsV:Vector.<MusicMenuItem>;
+		private var _menuItemsV:Vector.<Sprite>;
 		private var _navHolder:Sprite;
 		
 		
@@ -58,7 +60,7 @@ package project.views.MusicSelector {
 		/********************* PUBLIC API *********************/	
 		public function show():void {
 			log('show');
-			_select(_menuItemsV[0]);
+			_select(MusicMenuItem(_menuItemsV[0]));
 			TweenMax.to(this, 0, {autoAlpha:1});
 			TweenMax.to(_navHolder, 0.5, {y:0, ease:Cubic.easeOut});
 			TweenMax.to(_menuBkgd, 0.5, {autoAlpha:1, ease:Cubic.easeOut, delay:0.3});
@@ -166,7 +168,7 @@ package project.views.MusicSelector {
 		
 		private function _createMenu():void {
 			log('_createMenu');
-			_menuItemsV = new Vector.<MusicMenuItem>();
+			_menuItemsV = new Vector.<Sprite>();
 			
 			// menu items bkgd
 			_menuBkgd = new Shape();
@@ -196,46 +198,105 @@ package project.views.MusicSelector {
 			log('\tTotal Tracks: '+_musicXML.tracks.item.length());
 			log('\tinitSongNum: '+_musicXML.@initSongNum);
 			var i:uint;
-			// all menu items
+			var tMenuItem:MusicMenuItem;
+			var separator:MusicMenuSubscriptionSeparator
+
+			// all unlocked menu items
 			for (i = 0; i < _musicXML.tracks.item.length(); i++) {
-				var tMenuItem:MusicMenuItem = new MusicMenuItem(i);
-				
-				tMenuItem.mouseChildren = false;
-				TweenMax.to(tMenuItem, 0, {x:-20, y:(i * 70), autoAlpha:0});
-				tMenuItem.initX = 0;
-				
-				tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
-				tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
-				tMenuItem.addEventListener(MouseEvent.CLICK, _handleMenuItem);
-				
-				if (i == Number(_musicXML.@initSongNum)) {
-					_curMenuItem = tMenuItem;
-					tMenuItem.select(true,true);
-				} else {
-					tMenuItem.select(false,true);
+				if (_musicXML.tracks.item[i].@locked != 'true'){
+					tMenuItem = new MusicMenuItem(i);
+					
+					tMenuItem.mouseChildren = false;
+					TweenMax.to(tMenuItem, 0, {x:-20, y:(i * 70), autoAlpha:0});
+					tMenuItem.initX = 0;
+					
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.CLICK, _handleMenuItem);
+					
+					if (i == Number(_musicXML.@initSongNum)) {
+						_curMenuItem = tMenuItem;
+						tMenuItem.select(true,true);
+					} else {
+						tMenuItem.select(false,true);
+					}
+					
+					_menuItemsV.push(tMenuItem);
+					
+					_itemHolder.addChild(tMenuItem);
 				}
-				
-				_menuItemsV.push(tMenuItem);
-				
-				_itemHolder.addChild(tMenuItem);
 			}
 			
-			var newItemCount:uint = 0;
+			// add a separator to the _itemHolder and _menuItemsV
+			separator = new MusicMenuSubscriptionSeparator();
+			TweenMax.to(separator, 0, {x:-20, y:_menuItemsV[_menuItemsV.length - 1].y + _menuItemsV[_menuItemsV.length - 1].height, autoAlpha:0});
+			separator.initX = 0;
+			_menuItemsV.push(separator);
+			_itemHolder.addChild(separator);
+			
+			// all locked menu items 
 			for (i = 0; i < _musicXML.tracks.item.length(); i++) {
-				if (_musicXML.tracks.item[i].@newSong == 'true'){
+				if (_musicXML.tracks.item[i].@locked == 'true'){
+					tMenuItem = new MusicMenuItem(i);
+					
+					tMenuItem.mouseChildren = false;
+					TweenMax.to(tMenuItem, 0, {x:-20, y:_menuItemsV[_menuItemsV.length - 1].y + _menuItemsV[_menuItemsV.length - 1].height, autoAlpha:0});
+					tMenuItem.initX = 0;
+					
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.CLICK, _handleMenuItem);
+					
+					_menuItemsV.push(tMenuItem);
+					
+					_itemHolder.addChild(tMenuItem);
+				}
+			}
+			
+			var newItemCount:uint = 0
+			// all new & unlocked menu items
+			for (i = 0; i < _musicXML.tracks.item.length(); i++) {
+				if (_musicXML.tracks.item[i].@newSong == 'true' && _musicXML.tracks.item[i].@locked != 'true'){
 					//log('\tnew song: '+i);
-					var tNewMenuItem:MusicMenuItem = new MusicMenuItem(i);
+					tMenuItem = new MusicMenuItem(i);
 					
-					tNewMenuItem.mouseChildren = false;
-					TweenMax.to(tNewMenuItem, 0, {x:424, y:(newItemCount * 70), autoAlpha:0});
-					tNewMenuItem.initX = 424;
+					tMenuItem.mouseChildren = false;
+					TweenMax.to(tMenuItem, 0, {x:424, y:(newItemCount * 70), autoAlpha:0});
+					tMenuItem.initX = 424;
 
-					tNewMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
-					tNewMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
 					
-					_menuItemsV.push(tNewMenuItem);
-					_itemHolder.addChild(tNewMenuItem);
+					_menuItemsV.push(tMenuItem);
+					_itemHolder.addChild(tMenuItem);
+					
 					newItemCount++;
+				}
+			}
+			
+			// add a separator to the _itemHolder and _menuItemsV
+			separator = new MusicMenuSubscriptionSeparator();
+			TweenMax.to(separator, 0, {x:424, y:_menuItemsV[_menuItemsV.length - 1].y + _menuItemsV[_menuItemsV.length - 1].height, autoAlpha:0});
+			separator.initX = 424;
+			_menuItemsV.push(separator);
+			_itemHolder.addChild(separator);
+			
+			// all new & locked menu items 
+			for (i = 0; i < _musicXML.tracks.item.length(); i++) {
+				if (_musicXML.tracks.item[i].@newSong == 'true' && _musicXML.tracks.item[i].@locked == 'true'){
+					tMenuItem = new MusicMenuItem(i);
+					
+					tMenuItem.mouseChildren = false;
+					TweenMax.to(tMenuItem, 0, {x:424, y:_menuItemsV[_menuItemsV.length - 1].y + _menuItemsV[_menuItemsV.length - 1].height, autoAlpha:0});
+					tMenuItem.initX = 424;
+					
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
+					tMenuItem.addEventListener(MouseEvent.CLICK, _handleMenuItem);
+					
+					_menuItemsV.push(tMenuItem);
+					
+					_itemHolder.addChild(tMenuItem);
 				}
 			}
 			

@@ -42,6 +42,9 @@
 	]]></about>
 	
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 0.02.002 - 02/18/2016
+	* Updated StoryBuilder and MusicSelector to reflect design changes 
+
 VERSION 0.02.001 - 02/17/2016
 	* Addition of AddMedia Drawer
 	* Numerous bug fixes
@@ -331,7 +334,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>96,216,384,564,672</positions>
 						</markers>
 					</item>			
-					<item title='Blinded By The Sun' genre='Ambient' bpm='60' featured='true' locked='false' newSong='false'>
+					<item title='Blinded By The Sun' genre='Ambient' bpm='60' featured='true' locked='true' newSong='false'>
 						<tag>Upbeat</tag>
 						<tag>Fun</tag>
 						<tag>Confident</tag>
