@@ -8,6 +8,7 @@ package project.views.MediaLibrary {
 	
 	// Greensock
 	import com.greensock.TweenMax;
+	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
 	
 	// Framework
@@ -61,7 +62,15 @@ package project.views.MediaLibrary {
 			log('show');
 			//TweenMax.to(this, 0, {autoAlpha:1, onComplete:_onShowComplete}); 
 			_transitionStart = new Date().getTime();
-			TweenMax.to(this, 0.3, {x:0, ease:Cubic.easeInOut, onComplete:_onShowComplete}); 
+			TweenMax.to(this, 0.3, {x:0, ease:Cubic.easeInOut});
+			
+			for (var i:uint = 0; i < _menuItemsV.length; i++){
+				var func:Function = (i == _menuItemsV.length - 1) ? _onShowComplete : null; 
+				TweenMax.to(_menuItemsV[i], 0.3, {autoAlpha:1, x:0, ease:Back.easeOut, delay:0.1+(i * 0.05), onComplete:func});
+				if (_menuItemsV[i] == _curMenuItem) {
+					TweenMax.to(_selector, 0.3, {autoAlpha:1, x:0, ease:Back.easeOut, delay:0.1+(i * 0.05)});
+				}
+			}
 		}
 		
 		public function hide():void {
@@ -100,7 +109,11 @@ package project.views.MediaLibrary {
 			_curMenuItem.select(true);
 			
 			this.addChild(_selector);
-			TweenMax.to(_selector, 0, {y:_curMenuItem.y});
+			TweenMax.to(_selector, 0, {autoAlpha:0, x:-20, y:_curMenuItem.y});
+			
+			for (var i:uint = 0; i < _menuItemsV.length; i++){
+				TweenMax.to(_menuItemsV[i], 0, {autoAlpha:0, x:-20});
+			}
 		}
 		
 		private function _createMenu():void {
@@ -185,6 +198,8 @@ package project.views.MediaLibrary {
 				tMenuItem.y = (_label.y + _label.height + 15) + (i * 40);
 				
 				this.addChild(tMenuItem);
+				_menuItemsV.push(tMenuItem);
+
 			}
 			
 			//log('\t_menuItemsV.length: '+_menuItemsV.length);

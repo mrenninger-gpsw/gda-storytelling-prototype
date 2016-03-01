@@ -66,7 +66,7 @@ package project.views.Header {
 			Utilities.mouseEnable(_icon,false,_onMouseEvent);
 			TweenMax.to(this, 0.3, {x:_initX-98, ease:Cubic.easeInOut});
 			TweenMax.to(_bg, 0.3, {x:-52, autoAlpha:1, ease:Cubic.easeInOut, onComplete:_onShowComplete});
-			
+			TweenMax.to(_closeBtn, 0, {tint:null});
 			for (var i:uint = 0; i < _alertsV.length; i++) {
 				if (_activated) {
 					_alertsV[i].reset();

@@ -36,6 +36,7 @@ package project.views.MusicSelector {
 		private var _curMenuItem:MusicMenuItem;
 		private var _menuItemsV:Vector.<Sprite>;
 		private var _navHolder:Sprite;
+		private var _startTime:Number;
 		
 		
 		
@@ -60,23 +61,27 @@ package project.views.MusicSelector {
 		/********************* PUBLIC API *********************/	
 		public function show():void {
 			log('show');
+			_startTime = new Date().getTime()
 			_select(MusicMenuItem(_menuItemsV[0]));
 			TweenMax.to(this, 0, {autoAlpha:1});
-			TweenMax.to(_navHolder, 0.5, {y:0, ease:Cubic.easeOut});
-			TweenMax.to(_menuBkgd, 0.5, {autoAlpha:1, ease:Cubic.easeOut, delay:0.3});
+			TweenMax.to(_navHolder, 0.3, {y:0, ease:Cubic.easeOut});
+			TweenMax.to(_menuBkgd, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.2});
 			for (var i:uint = 0; i < _menuItemsV.length; i++) {
 				//log('\titem: '+i+' | title: '+_menuItemsV[i].title);
-				var onCompleteFunc:Function = (i == (_menuItemsV.length - 1)) ? _onShowComplete : null;
-				TweenMax.to(_menuItemsV[i], 0.3, {x:_menuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.5 + (i * 0.05), onComplete:onCompleteFunc});
+				var onCompleteFunc:Function = (i == 8) ? _onShowComplete : null;
+				TweenMax.to(_menuItemsV[i], 0.3, {x:_menuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.3 + (i * 0.05), onComplete:onCompleteFunc});
 			}
 		}
 		
 		public function hide():void {
-			TweenMax.to(_menuBkgd, 0.5, {autoAlpha:0, ease:Cubic.easeOut});
+			log('hide');
+			_startTime = new Date().getTime()
+			TweenMax.to(_menuBkgd, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 			for (var i:uint = 0; i < _menuItemsV.length; i++) {
-				TweenMax.to(_menuItemsV[i], 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.05)});
+				var onCompleteFunc:Function = (i == 8) ? _onHideComplete : null;
+				TweenMax.to(_menuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.05), onComplete:onCompleteFunc});
 			}
-			TweenMax.to(_navHolder, 0.5, {y:-76, ease:Cubic.easeOut, delay:0.3, onComplete:_onHideComplete});
+			TweenMax.to(_navHolder, 0.3, {y:-76, ease:Cubic.easeOut, delay:0.2});
 		}
 		
 		
@@ -94,10 +99,11 @@ package project.views.MusicSelector {
 		}
 		
 		private function _onShowComplete():void {
-			
+			log('_onShowComplete - elapsed: '+(new Date().getTime() - _startTime));
 		}
 		
 		private function _onHideComplete():void {
+			log('_onHideComplete - elapsed: '+(new Date().getTime() - _startTime));
 			for (var i:uint = 0; i < _menuItemsV.length; i++) {
 				TweenMax.to(_menuItemsV[i], 0, {x:(_menuItemsV[i].initX == 424) ? 424 : -20});
 			}

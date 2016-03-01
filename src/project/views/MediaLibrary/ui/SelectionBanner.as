@@ -61,10 +61,9 @@ package project.views.MediaLibrary.ui {
 		
 		/********************* PUBLIC API *********************/	
 		public function show($numSelected:uint):void {
-				_isShowing = true;
-				_numSelected = $numSelected;
-				_numLabel.text = _numSelected.toString();
-				TweenMax.to(this, 0.3, {autoAlpha:1, ease:Cubic.easeOut, onComplete:_onShowComplete});
+			_update($numSelected);	
+			_isShowing = true;
+			TweenMax.to(this, 0.3, {autoAlpha:1, ease:Cubic.easeOut, onComplete:_onShowComplete});
 		}
 		
 		public function hide():void {
@@ -183,6 +182,11 @@ package project.views.MediaLibrary.ui {
 				this.stage.removeEventListener(MouseEvent.MOUSE_DOWN, _handleMouseDown);
 				this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, _handleMouseMove);
 			}
+		}
+		
+		private function _update($numSelected:uint):void {
+			_numSelected = $numSelected;
+			_numLabel.text = _numSelected.toString();
 		}
 		
 		private function _showToolTip($b:Boolean = true):void {

@@ -12,7 +12,7 @@ package project.views.MusicSelector {
 	import com.greensock.easing.Linear;
 	
 	// Framework
-	import components.controls.Label;
+	import components.controls.Label;	
 	import display.Sprite;
 	import utils.Register;
 	
@@ -22,6 +22,7 @@ package project.views.MusicSelector {
 	import project.views.MusicSelector.MusicMenu;
 	import project.views.MusicSelector.ui.MusicMenuItem;
 	import project.views.MusicSelector.ui.MusicPreviewHighlightIcon;
+	
 
 	
 	
@@ -44,6 +45,7 @@ package project.views.MusicSelector {
 		private var _markersV:Vector.<Shape>;		
 		private var _highlightsV:Vector.<MusicPreviewHighlightIcon>;		
 		private var _curMenuItem:MusicMenuItem;
+		private var _startTime:Number;
 
 		
 		
@@ -61,25 +63,31 @@ package project.views.MusicSelector {
 		/********************* PUBLIC API *********************/	
 		public function show():void {
 			log('show');
+			_startTime = new Date().getTime()
 			_showComplete = false;
+			_hideComplete = false;
 			_progressBar.width = 0;
-			TweenMax.allTo([_ds, _bgShape], 0.3, {autoAlpha:1, y:0, ease:Cubic.easeOut, delay:0.5});
-			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.7});
-			if (_curMenuItem.featured) TweenMax.to(_previewFeaturedBanner, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.75});			
-			TweenMax.allTo([_previewAudioWaves,_markerHolder, _markerHolderMask], 0.3, {autoAlpha:1, y:503, ease:Cubic.easeOut, delay:0.8});
-			TweenMax.to(_previewTimeline, 0.3, {autoAlpha:1, y:565, ease:Cubic.easeOut, delay:0.9, onComplete:_onShowComplete});
+			_previewTitleLabel.text = _curMenuItem.title;
+			TweenMax.allTo([_ds, _bgShape], 0.3, {autoAlpha:1, y:0, ease:Cubic.easeOut, delay:0.3});
+			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.5});
+			TweenMax.to(_previewFeaturedBanner, 0.3, {autoAlpha:(_curMenuItem.featured) ? 1 : 0, ease:Cubic.easeOut, delay:0.55});			
+			TweenMax.allTo([_previewAudioWaves,_markerHolder, _markerHolderMask], 0.3, {autoAlpha:1, y:503, ease:Cubic.easeOut, delay:0.6});
+			TweenMax.to(_previewTimeline, 0.3, {autoAlpha:1, y:565, ease:Cubic.easeOut, delay:0.7, onComplete:_onShowComplete});
 		}
 		
 		public function hide($immediate:Boolean = false):void {
 			log('hide - immediate? '+$immediate);
+			_startTime = new Date().getTime()
+			_showComplete = false;
 			_hideComplete = false;
 			_clearHighlights();
 			TweenMax.killTweensOf(_progressBar);
-			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});
-			if (_curMenuItem) { if (_curMenuItem.featured) TweenMax.to(_previewFeaturedBanner, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.05});}			
+			_curMenuItem = null;
+			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut});
+			TweenMax.to(_previewFeaturedBanner, ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:0.05});			
 			TweenMax.allTo([_previewAudioWaves,_markerHolder, _markerHolderMask], ($immediate) ? 0 : 0.3, {autoAlpha:0, y:483, ease:Cubic.easeOut, delay:0.1});
-			TweenMax.to(_previewTimeline, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:585, ease:Cubic.easeOut, delay:0.2});
-			TweenMax.allTo([_ds, _bgShape], ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut, delay:0.5, onComplete:_onHideComplete});
+			TweenMax.to(_previewTimeline, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:585, ease:Cubic.easeOut, delay:0.25});
+			TweenMax.allTo([_ds, _bgShape], ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut, delay:0.3, onComplete:_onHideComplete});
 		}
 		
 		
@@ -200,14 +208,14 @@ package project.views.MusicSelector {
 		}
 		
 		private function _onShowComplete():void {
-			log('_onShowComplete');
+			log('_onShowComplete - elapsed: '+(new Date().getTime() - _startTime));
 			_showComplete = true;
 			//log('\t_markerHolder.y: '+_markerHolder.y+' | _markerHolderMask.y: '+_markerHolderMask.y);
-			
 			_startProgress();
 		}
 		
 		private function _onHideComplete():void {
+			log('_onHideComplete - elapsed: '+(new Date().getTime() - _startTime));
 			_hideComplete = true;
 			_clearHighlights();
 		}
@@ -254,15 +262,20 @@ package project.views.MusicSelector {
 			}
 		}
 		
-		private function _clearHighlights():void{
+		private function _clearHighlights():void {
+			log('_clearHighlights');
 			for (var i:uint = 0; i < _highlightsV.length; i++) {
-				TweenMax.to(_highlightsV[i], 0.2, {scaleX:0, scaleY:0, ease:Cubic.easeOut, delay:(i * 0.05), onComplete:_onHighlightCleared, onCompleteParams:[i]});
+				var func:Function = (i == (_highlightsV.length - 1)) ? _onHighlightsCleared : null;
+				TweenMax.to(_highlightsV[i], 0.2, {scaleX:0, scaleY:0, ease:Cubic.easeOut, onComplete:func});
 			}
 		}
 		
-		private function _onHighlightCleared($num:int):void {
-			if (_highlightsV[$num]) this.removeChild(_highlightsV[$num]);
-			if ($num == _highlightsV.length - 1) _highlightsV = new Vector.<MusicPreviewHighlightIcon>();
+		private function _onHighlightsCleared():void {
+			log('_onHighlightsCleared');			
+			for (var i:uint = 0; i < _highlightsV.length; i++) {
+				this.removeChild(_highlightsV[i]);
+			}
+			_highlightsV = new Vector.<MusicPreviewHighlightIcon>();
 		}
 		
 						

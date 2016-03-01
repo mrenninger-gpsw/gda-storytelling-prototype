@@ -73,7 +73,7 @@ package project.views.MediaLibrary {
 			TweenMax.to(_eventLabel, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.05});
 			for (var i:uint = 0; i < _eventGroupsV.length - 1; i++) {
 				var func:Function = (i == (_eventGroupsV.length - 2)) ? _onShowComplete : null;
-				TweenMax.to(_eventGroupsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.1 + (i * 0.05), onComplete:func});
+				TweenMax.to(_eventGroupsV[i], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.15 + (i * 0.05), onComplete:func});
 			}
 		}
 		
@@ -82,6 +82,7 @@ package project.views.MediaLibrary {
 			this.removeEventListener(MouseEvent.MOUSE_MOVE, _handleMouseMove);
 			//TweenMax.to(this, 0, {autoAlpha:0, onComplete:_onHideComplete});
 			_transitionStart = new Date().getTime();
+			_selectionBanner.hide()
 			TweenMax.to(_titleLabel, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 			TweenMax.to(_sortByIcon, 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.05});
 			TweenMax.to(_filterIcon, 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.1});
@@ -90,7 +91,7 @@ package project.views.MediaLibrary {
 			TweenMax.to(_eventLabel, 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.05});
 			for (var i:uint = 0; i < _eventGroupsV.length; i++) {
 				var func:Function = (i == (_eventGroupsV.length - 1)) ? _onHideComplete : null;
-				TweenMax.to(_eventGroupsV[i], 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.1 + (i * 0.05), onComplete:func});
+				TweenMax.to(_eventGroupsV[i], 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:0.15, onComplete:func});
 			}
 		}
 		

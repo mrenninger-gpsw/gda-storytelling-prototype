@@ -274,7 +274,7 @@ package project {
 					
 					_musicSelector.hide();
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
-					TweenMax.delayedCall(0.8, _storyBuilder.show)					
+					TweenMax.delayedCall(0.6, _storyBuilder.show)					
 
 					break;			
 				
@@ -292,8 +292,8 @@ package project {
 					
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete
 					_mediaLibrary.hide();
-					TweenMax.delayedCall((_storyBuilder.isActive) ? 0 : 0.8, _storyBuilder.show)
-					TweenMax.delayedCall((_storyBuilder.isActive) ? 0 : 0.8, _footer.show);
+					TweenMax.delayedCall((_storyBuilder.isActive) ? 0 : 0.5, _storyBuilder.show)
+					TweenMax.delayedCall((_storyBuilder.isActive) ? 0 : 0.5, _footer.show);
 					break;
 				
 				case ViewTransitionEvent.MEDIA:
@@ -306,7 +306,7 @@ package project {
 					_storyBuilder.addFromLibrary = false;
 					if (_storyBuilder.isActive) _storyBuilder.hide();
 					if (_musicSelector.isActive) _musicSelector.hide();
-					TweenMax.delayedCall(0.8, _mediaLibrary.show);
+					TweenMax.delayedCall(0.6, _mediaLibrary.show);
 					
 					/*_musicSelector.hide();
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete

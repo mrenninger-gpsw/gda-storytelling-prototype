@@ -92,12 +92,18 @@ package project.views.MediaLibrary {
 		public function showVideos($b:Boolean = true):void {
 			var i:uint;
 			for (i = 0; i < _clipsV.length; i++) {
-				if (_allSelected && !_clipsV[i].isVideo) {
+				/*if (_allSelected && !_clipsV[i].isVideo) {
 					_clipsV[i].soften($b)
 				} 
 				if (!_allSelected && _clipsV[i].isVideo) {
 					_clipsV[i].select($b);
-				}				
+				}*/
+				if (!_clipsV[i].isVideo) {
+					_clipsV[i].soften($b)
+				} 
+				if (_clipsV[i].isVideo) {
+					_clipsV[i].select($b);
+				}
 			}
 		}
 		
@@ -185,6 +191,7 @@ package project.views.MediaLibrary {
 		}
 		
 		private function _showToolTip($b:Boolean = true):void {
+			showVideos($b);
 			if ($b) {
 				TweenMax.to(_tooltip, 0.3, {scaleX:1, scaleY:1, autoAlpha:1, ease:Back.easeOut});
 			} else {

@@ -170,6 +170,7 @@ package project.views {
 		private function _handleViewTransitionEvent($e:ViewTransitionEvent):void {
 			switch ($e.type) {
 				case ViewTransitionEvent.EDITOR:
+					_alertDrawer.hide();
 					TweenMax.to(_alertDrawer, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 					TweenMax.to(_settingsIcon, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 					break;

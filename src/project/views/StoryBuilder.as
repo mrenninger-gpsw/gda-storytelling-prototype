@@ -83,7 +83,7 @@ package project.views {
 			_sourceClipMgrTransitionStart = new Date().getTime();
 			
 			_sourceClipMgr.hide($immediate); // starts immediately, multi-part, takes .55s to complete
-			TweenMax.to(_storyboard, ($immediate) ? 0 : 0.7, {y:Register.APP.HEIGHT, ease:Circ.easeInOut}); // starts immediately, takes 0.7s to complete
+			TweenMax.to(_storyboard, ($immediate) ? 0 : 0.5, {y:Register.APP.HEIGHT, ease:Circ.easeInOut}); // starts immediately, takes 0.5s to complete
 			_previewArea.hide($immediate); // starts immediately, takes 0.3s to complete
 		}
 		
@@ -144,15 +144,17 @@ package project.views {
 			log('_moveCustomClipToStoryboard');
 			var newClipX:Number = (Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
 			var totalTime:Number = 0.7;
-			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 590)); 
 			var distance:Number = GeomUtilities.getDistance(new Point($clip.x,$clip.y), new Point((newClipX + 21), 590));
+			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 590)); 
 			var pct:Number = distance/totalDistance;
+			var normalizedTime:Number = totalTime * pct
 			log('\tdistance: '+distance);
-			log('\tpct distance to cover: '+distance/1150);
-			log('\ttime to move custom clip: '+totalTime * pct);
+			log('\tpct distance to cover: '+distance/totalDistance);
+			log('\ttime to move custom clip: '+normalizedTime);
 			_time = new Date().getTime();
-			TweenMax.to($clip, (0.4 * totalTime), {scaleX:$clip.scaleX * 2, scaleY:$clip.scaleY * 2, ease:Cubic.easeIn});
-			TweenMax.to($clip, (0.6 * totalTime), {scaleX:0, scaleY:0, x:newClipX + 21, y: 590, ease:Cubic.easeOut, delay:(0.4 * totalTime), onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});
+			TweenMax.to($clip, (0.4 * normalizedTime), {scaleX:$clip.scaleX * 2, scaleY:$clip.scaleY * 2, ease:Cubic.easeIn});
+			TweenMax.to($clip, (0.6 * normalizedTime), {scaleX:0, scaleY:0, ease:Cubic.easeOut, delay:(0.4 * totalTime)});
+			TweenMax.to($clip, normalizedTime, {x:newClipX + 21, y: 590, ease:Cubic.easeInOut, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});
 			
 			/*TweenMax.to($clip, 0.3, {width:160, height:90, x:210, y: 590, ease:Cubic.easeOut, delay:0.2});
 			TweenMax.to($clip, 0.2, {width:176, height:99, ease:Cubic.easeOut, delay:0.4, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});*/

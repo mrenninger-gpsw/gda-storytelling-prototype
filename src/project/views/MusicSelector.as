@@ -40,14 +40,14 @@ package project.views {
 		/********************* PUBLIC API *********************/	
 		public function show():void {
 			_isActive = true;
-			_musicPreview.show(); // starts immediately, multi-part, 0.8s to complete
 			_musicMenu.show(); // starts immediately, multi-part, 0.6s to complete
+			_musicPreview.show(); // starts immediately, multi-part, 0.8s to complete
 		}
 		
 		public function hide():void {
 			_isActive = false;
-			_musicPreview.hide(); // starts immediately, multi-part, takes 0.8s to complete
 			_musicMenu.hide();  // starts immediately, multi-part, takes 0.8s to complete
+			_musicPreview.hide(); // starts immediately, multi-part, takes 0.8s to complete
 		}
 		
 		

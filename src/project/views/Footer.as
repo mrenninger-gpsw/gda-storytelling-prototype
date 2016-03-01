@@ -114,16 +114,16 @@ package project.views {
 				case 'music':
 					_enableBtn(_changeToEditorBtn);
 					_disableBtn(_changeToMusicBtn);
-					TweenMax.to(_clipLengthMenuBtn, 0.3, {autoAlpha:0});
-					TweenMax.to(_previewBtn, 0.3, {autoAlpha:0, delay:0.05});
-					TweenMax.to(_saveBtn, 0.3, {autoAlpha:0, delay:0.1});
-					TweenMax.to(_addToVideoBtn, 0.3, {autoAlpha:1, delay:0.15});
+					TweenMax.to(_clipLengthMenuBtn, 0.3, {autoAlpha:0.05});
+					TweenMax.to(_previewBtn, 0.3, {autoAlpha:0, delay:0.1});
+					TweenMax.to(_saveBtn, 0.3, {autoAlpha:0, delay:0.15});
+					TweenMax.to(_addToVideoBtn, 0.3, {autoAlpha:1, delay:0.1});
 					break;
 				
 				case 'video':
 					_enableBtn(_changeToMusicBtn);
 					_disableBtn(_changeToEditorBtn);
-					TweenMax.to(_addToVideoBtn, 0.3, {autoAlpha:0});
+					TweenMax.to(_addToVideoBtn, 0.3, {autoAlpha:0.1});
 					TweenMax.to(_clipLengthMenuBtn, 0.3, {autoAlpha:1, delay:0.05});
 					TweenMax.to(_previewBtn, 0.3, {autoAlpha:1, delay:0.1});
 					TweenMax.to(_saveBtn, 0.3, {autoAlpha:1, delay:0.15});
