@@ -227,7 +227,7 @@ package project.views.MusicSelector {
 		
 		private function _repositionMarkers():void {
 			log('_repositionMarkers');
-			var positions:XML = _musicXML.tracks.item[_curMenuItem.num].markers.positions[(_numMarkers == 4) ? 0 : 1];
+			var positions:XML = _musicXML.tracks.item[(_curMenuItem)?_curMenuItem.num:0].markers.positions[(_numMarkers == 4) ? 0 : 1];
 			//log('positions: \r'+positions);
 			for (var i:uint = 0; i < 5; i++) {
 				var tMarker:Shape = _markersV[i];

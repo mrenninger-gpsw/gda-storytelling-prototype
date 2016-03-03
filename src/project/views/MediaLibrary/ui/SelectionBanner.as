@@ -245,6 +245,9 @@ package project.views.MediaLibrary.ui {
 				case MouseEvent.CLICK:
 					hide();	
 					if (tBtn == _editorBtn) {
+						TweenMax.to(tBtn, 0.3, {tint:0x025977, ease:Cubic.easeOut});
+						_showToolTip(false);
+						//this.dispatchEvent(new SelectionBannerEvent(SelectionBannerEvent.EDITOR_NORMAL));
 						this.stage.dispatchEvent(new ViewTransitionEvent(ViewTransitionEvent.PREPARE_TO_ADD));
 					}
 					if (tBtn == _closeBtn) {

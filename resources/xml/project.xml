@@ -42,6 +42,9 @@
 	]]></about>
 	
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 0.03.001 - 03/01/2016
+	* Bug fixes to MusicPreviewArea SelectionBanner and MediaLibraryGroup
+
 VERSION 0.03.000 - 02/29/2016
 	* Numerous timing tweaks and refinements to animations that speed up transitions and unify transition elements 
 

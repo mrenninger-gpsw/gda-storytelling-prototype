@@ -92,18 +92,18 @@ package project.views.MediaLibrary {
 		public function showVideos($b:Boolean = true):void {
 			var i:uint;
 			for (i = 0; i < _clipsV.length; i++) {
-				/*if (_allSelected && !_clipsV[i].isVideo) {
+				if (_allSelected && !_clipsV[i].isVideo) {
 					_clipsV[i].soften($b)
 				} 
 				if (!_allSelected && _clipsV[i].isVideo) {
 					_clipsV[i].select($b);
-				}*/
-				if (!_clipsV[i].isVideo) {
+				}
+				/*if (!_clipsV[i].isVideo) {
 					_clipsV[i].soften($b)
 				} 
 				if (_clipsV[i].isVideo) {
 					_clipsV[i].select($b);
-				}
+				}*/
 			}
 		}
 		
@@ -214,6 +214,7 @@ package project.views.MediaLibrary {
 		/******************* EVENT HANDLERS *******************/	
 		protected function _onAdded($e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
+			this.stage.addEventListener(ViewTransitionEvent.PREPARE_TO_ADD, _handleViewTransitionEvent);
 		}
 		
 		private function _handleMenuIcon($e:MouseEvent):void {
@@ -234,11 +235,21 @@ package project.views.MediaLibrary {
 				case MouseEvent.CLICK:
 					if (Sprite($e.target).id == _menuIconNames[0]) {
 						// somehow trigger a transition to the editor adding the 2 clips
+						_showToolTip(false);
 						this.stage.dispatchEvent(new ViewTransitionEvent(ViewTransitionEvent.PREPARE_TO_ADD));
 					}
 					if (Sprite($e.target).id == _menuIconNames[2]) {
 						_selectAll(!_allSelected);
 					}
+					break;
+			}
+		}
+		
+		protected function _handleViewTransitionEvent($e:ViewTransitionEvent):void {
+			switch ($e.type) {
+				case ViewTransitionEvent.PREPARE_TO_ADD:
+					showVideos(false)
+					deselectAll();
 					break;
 			}
 		}

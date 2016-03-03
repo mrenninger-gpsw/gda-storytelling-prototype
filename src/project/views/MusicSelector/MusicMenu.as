@@ -35,6 +35,7 @@ package project.views.MusicSelector {
 		private var _curNavItem:MusicNavBtn;
 		private var _curMenuItem:MusicMenuItem;
 		private var _menuItemsV:Vector.<Sprite>;
+		private var _newMenuItemsV:Vector.<Sprite>;
 		private var _navHolder:Sprite;
 		private var _startTime:Number;
 		
@@ -66,10 +67,16 @@ package project.views.MusicSelector {
 			TweenMax.to(this, 0, {autoAlpha:1});
 			TweenMax.to(_navHolder, 0.3, {y:0, ease:Cubic.easeOut});
 			TweenMax.to(_menuBkgd, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.2});
-			for (var i:uint = 0; i < _menuItemsV.length; i++) {
+			var i:uint;
+			var onCompleteFunc:Function;
+			for (i = 0; i < _menuItemsV.length; i++) {
 				//log('\titem: '+i+' | title: '+_menuItemsV[i].title);
-				var onCompleteFunc:Function = (i == 8) ? _onShowComplete : null;
+				onCompleteFunc = (i == 8) ? _onShowComplete : null;
 				TweenMax.to(_menuItemsV[i], 0.3, {x:_menuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.3 + (i * 0.05), onComplete:onCompleteFunc});
+			}
+			for (i = 0; i < _newMenuItemsV.length; i++) {
+				//log('\titem: '+i+' | title: '+_menuItemsV[i].title);
+				TweenMax.to(_newMenuItemsV[i], 0.3, {x:_newMenuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.3 + (i * 0.05)});
 			}
 		}
 		
@@ -77,9 +84,13 @@ package project.views.MusicSelector {
 			log('hide');
 			_startTime = new Date().getTime()
 			TweenMax.to(_menuBkgd, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
-			for (var i:uint = 0; i < _menuItemsV.length; i++) {
+			var i:uint;
+			for (i = 0; i < _menuItemsV.length; i++) {
 				var onCompleteFunc:Function = (i == 8) ? _onHideComplete : null;
 				TweenMax.to(_menuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.05), onComplete:onCompleteFunc});
+			}
+			for (i = 0; i < _newMenuItemsV.length; i++) {
+				TweenMax.to(_newMenuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.05)});
 			}
 			TweenMax.to(_navHolder, 0.3, {y:-76, ease:Cubic.easeOut, delay:0.2});
 		}
@@ -175,6 +186,7 @@ package project.views.MusicSelector {
 		private function _createMenu():void {
 			log('_createMenu');
 			_menuItemsV = new Vector.<Sprite>();
+			_newMenuItemsV = new Vector.<Sprite>();
 			
 			// menu items bkgd
 			_menuBkgd = new Shape();
@@ -273,18 +285,18 @@ package project.views.MusicSelector {
 					tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
 					tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
 					
-					_menuItemsV.push(tMenuItem);
+					_newMenuItemsV.push(tMenuItem);
 					_itemHolder.addChild(tMenuItem);
 					
 					newItemCount++;
 				}
 			}
 			
-			// add a separator to the _itemHolder and _menuItemsV
+			// add a separator to the _itemHolder and _newMenuItemsV
 			separator = new MusicMenuSubscriptionSeparator();
-			TweenMax.to(separator, 0, {x:424, y:_menuItemsV[_menuItemsV.length - 1].y + _menuItemsV[_menuItemsV.length - 1].height, autoAlpha:0});
+			TweenMax.to(separator, 0, {x:424, y:_newMenuItemsV[_newMenuItemsV.length - 1].y + _newMenuItemsV[_newMenuItemsV.length - 1].height, autoAlpha:0});
 			separator.initX = 424;
-			_menuItemsV.push(separator);
+			_newMenuItemsV.push(separator);
 			_itemHolder.addChild(separator);
 			
 			// all new & locked menu items 
@@ -293,20 +305,21 @@ package project.views.MusicSelector {
 					tMenuItem = new MusicMenuItem(i);
 					
 					tMenuItem.mouseChildren = false;
-					TweenMax.to(tMenuItem, 0, {x:424, y:_menuItemsV[_menuItemsV.length - 1].y + _menuItemsV[_menuItemsV.length - 1].height, autoAlpha:0});
+					TweenMax.to(tMenuItem, 0, {x:424, y:_newMenuItemsV[_newMenuItemsV.length - 1].y + _newMenuItemsV[_newMenuItemsV.length - 1].height, autoAlpha:0});
 					tMenuItem.initX = 424;
 					
 					tMenuItem.addEventListener(MouseEvent.MOUSE_OVER, _handleMenuItem);
 					tMenuItem.addEventListener(MouseEvent.MOUSE_OUT, _handleMenuItem);
 					tMenuItem.addEventListener(MouseEvent.CLICK, _handleMenuItem);
 					
-					_menuItemsV.push(tMenuItem);
+					_newMenuItemsV.push(tMenuItem);
 					
 					_itemHolder.addChild(tMenuItem);
 				}
 			}
 			
 			log('\t_menuItemsV.length: '+_menuItemsV.length);
+			log('\t_newMenuItemsV.length: '+_newMenuItemsV.length);
 		}
 		
 		private function _select($item:MusicMenuItem):void {
