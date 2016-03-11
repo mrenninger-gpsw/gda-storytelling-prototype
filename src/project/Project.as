@@ -23,7 +23,7 @@ package project {
 	
 	// Project
 	import project.events.SourceClipManagerEvent;
-	import project.events.UITransitionEvent;
+	import project.events.EditorTransitionEvent;
 	import project.events.ViewTransitionEvent;
 	import project.events.AddMediaDrawerEvent;
 	import project.views.*;
@@ -156,8 +156,8 @@ package project {
 			_footer = new Footer();
 			_footer.y = Register.APP.HEIGHT - _footer.height;
 			this.addChild(_footer);
-			_footer.addEventListener(UITransitionEvent.MUSIC, _handleUITransitionEvent);
-			_footer.addEventListener(UITransitionEvent.VIDEO, _handleUITransitionEvent);
+			_footer.addEventListener(EditorTransitionEvent.MUSIC, _handleEditorTransitionEvent);
+			_footer.addEventListener(EditorTransitionEvent.VIDEO, _handleEditorTransitionEvent);
 			
 			_header = new Header();
 			this.addChild(_header);
@@ -259,17 +259,17 @@ package project {
 			trace('DONE!!!');
 		}
 		
-		protected function _handleUITransitionEvent($e:UITransitionEvent):void {
+		protected function _handleEditorTransitionEvent($e:EditorTransitionEvent):void {
 			switch ($e.type) {
-				case UITransitionEvent.MUSIC:
+				case EditorTransitionEvent.MUSIC:
 					log('UITransitionEvent - MUSIC');
 					
 					_storyBuilder.hide();
 					_header.switchStates('music'); // starts immediately, takes 0.3s to complete					
-					TweenMax.delayedCall(0.6, _musicSelector.show);
+					TweenMax.delayedCall(0.5, _musicSelector.show);
 					break;
 				
-				case UITransitionEvent.VIDEO:
+				case EditorTransitionEvent.VIDEO:
 					log('UITransitionEvent - VIDEO');
 					
 					_musicSelector.hide();
@@ -306,7 +306,7 @@ package project {
 					_storyBuilder.addFromLibrary = false;
 					if (_storyBuilder.isActive) _storyBuilder.hide();
 					if (_musicSelector.isActive) _musicSelector.hide();
-					TweenMax.delayedCall(0.6, _mediaLibrary.show);
+					TweenMax.delayedCall(0.5, _mediaLibrary.show);
 					
 					/*_musicSelector.hide();
 					_header.switchStates('video'); // starts immediately, takes 0.3s to complete

@@ -12,7 +12,7 @@ package project.views.Footer.ui {
 	import utils.Register;
 		
 	// Project
-	import project.events.UITransitionEvent;
+	import project.events.EditorTransitionEvent;
 	
 	
 	
@@ -52,7 +52,7 @@ package project.views.Footer.ui {
 					break;
 				
 				case MouseEvent.CLICK:
-					dispatchEvent(new UITransitionEvent(UITransitionEvent.MUSIC, true));
+					dispatchEvent(new EditorTransitionEvent(EditorTransitionEvent.MUSIC, true));
 					break;
 				
 			}

@@ -65,34 +65,34 @@ package project.views.MusicSelector {
 			_startTime = new Date().getTime()
 			_select(MusicMenuItem(_menuItemsV[0]));
 			TweenMax.to(this, 0, {autoAlpha:1});
-			TweenMax.to(_navHolder, 0.3, {y:0, ease:Cubic.easeOut});
-			TweenMax.to(_menuBkgd, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.2});
+			TweenMax.to(_navHolder, 0.2, {y:0, ease:Cubic.easeOut});
+			TweenMax.to(_menuBkgd, 0.2, {autoAlpha:1, ease:Cubic.easeOut, delay:0.1});
 			var i:uint;
 			var onCompleteFunc:Function;
 			for (i = 0; i < _menuItemsV.length; i++) {
 				//log('\titem: '+i+' | title: '+_menuItemsV[i].title);
 				onCompleteFunc = (i == 8) ? _onShowComplete : null;
-				TweenMax.to(_menuItemsV[i], 0.3, {x:_menuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.3 + (i * 0.05), onComplete:onCompleteFunc});
+				TweenMax.to(_menuItemsV[i], 0.2, {x:_menuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.1 + (i * 0.03), onComplete:onCompleteFunc});
 			}
 			for (i = 0; i < _newMenuItemsV.length; i++) {
 				//log('\titem: '+i+' | title: '+_menuItemsV[i].title);
-				TweenMax.to(_newMenuItemsV[i], 0.3, {x:_newMenuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.3 + (i * 0.05)});
+				TweenMax.to(_newMenuItemsV[i], 0.2, {x:_newMenuItemsV[i].initX, autoAlpha:1, ease:Back.easeOut, delay:0.1 + (i * 0.03)});
 			}
 		}
 		
 		public function hide():void {
 			log('hide');
 			_startTime = new Date().getTime()
-			TweenMax.to(_menuBkgd, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
+			TweenMax.to(_menuBkgd, 0.2, {autoAlpha:0, ease:Cubic.easeOut});
 			var i:uint;
 			for (i = 0; i < _menuItemsV.length; i++) {
 				var onCompleteFunc:Function = (i == 8) ? _onHideComplete : null;
-				TweenMax.to(_menuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.05), onComplete:onCompleteFunc});
+				TweenMax.to(_menuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.03), onComplete:onCompleteFunc});
 			}
 			for (i = 0; i < _newMenuItemsV.length; i++) {
-				TweenMax.to(_newMenuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.05)});
+				TweenMax.to(_newMenuItemsV[i], 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:(i * 0.03)});
 			}
-			TweenMax.to(_navHolder, 0.3, {y:-76, ease:Cubic.easeOut, delay:0.2});
+			TweenMax.to(_navHolder, 0.2, {y:-76, ease:Cubic.easeOut, delay:0.1});
 		}
 		
 		

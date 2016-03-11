@@ -78,25 +78,25 @@ package project.managers {
 				for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
 					_sourceClipsV[i].y = (i == startIndex) ? (16 + 43) : _sourceClipsV[i - 1].y + 80;
 					var onComplete:Function = (i == _sourceClipsV.length - 1) ? _checkforLibraryAdd : null;
-					TweenMax.to(_sourceClipsV[i], 0.3, {x:20, autoAlpha:1, ease:Back.easeOut, delay:i * 0.05, onComplete:onComplete});
+					TweenMax.to(_sourceClipsV[i], 0.2, {x:20, autoAlpha:1, ease:Back.easeOut, delay:i * 0.03, onComplete:onComplete});
 				}
 				
 				//TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
-				TweenMax.to(_bgShape, 0.4, {autoAlpha:1, ease:Cubic.easeOut});
-				TweenMax.allTo([_titleLabel,_addBtn], 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.to(_bgShape, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.allTo([_titleLabel,_addBtn], 0.2, {autoAlpha:1, ease:Cubic.easeOut});
 				//TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
 			}
 		}
 		
-		public function hide($immediate:Boolean = false):void {			
+		public function hide($immediate:Boolean = false):void {
 			var startIndex:uint = 0;//(_addFromLibrary) ? 0 : 2;
 			for (var i:uint = startIndex; i < _sourceClipsV.length; i++) {
 				var onComplete:Function = (i == _sourceClipsV.length - 1) ? _onHideComplete : null;				
-				TweenMax.to(_sourceClipsV[i], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : (i * 0.05), onComplete:onComplete});
+				TweenMax.to(_sourceClipsV[i], ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : (i * 0.03), onComplete:onComplete});
 			}			
-			TweenMax.allTo([_titleLabel,_scrollbar,_addBtn], ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});		
-			TweenMax.to(_bgShape, ($immediate) ? 0 : 0.4, {autoAlpha:0, ease:Cubic.easeOut});			
-			TweenMax.to(_shadow, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.25});			
+			TweenMax.allTo([_titleLabel,_scrollbar,_addBtn], ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut});		
+			TweenMax.to(_bgShape, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});			
+			TweenMax.to(_shadow, ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.15});			
 		}
 		
 		
@@ -192,14 +192,14 @@ package project.managers {
 			if (_addFromLibrary) {
 				var i:uint;
 				for (i = (_sourceClipsV.length - 1); i > 1; i--) {
-					TweenMax.to(_sourceClipsV[i], 0.3, {y:_sourceClipsV[i].y + 160, ease:Cubic.easeInOut, delay:((_sourceClipsV.length-1) - i) * 0.05});					
+					TweenMax.to(_sourceClipsV[i], 0.2, {y:_sourceClipsV[i].y + 160, ease:Cubic.easeInOut, delay:((_sourceClipsV.length-1) - i) * 0.03});					
 				}
 				for (i = 0; i < 2; i++) {
 					var onComplete:Function = (i == 1) ? _onShowComplete : null;
-					TweenMax.to(_sourceClipsV[i], 0.3, {x:20, autoAlpha:1, ease:Back.easeOut, delay:0.45 + (i * 0.05), onComplete:onComplete});
+					TweenMax.to(_sourceClipsV[i], 0.2, {x:20, autoAlpha:1, ease:Back.easeOut, delay:0.15 + (i * 0.03), onComplete:onComplete});
 				}
-				TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
-				TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.to(_shadow, 0.2, {autoAlpha:1, ease:Cubic.easeOut});
+				TweenMax.to(_scrollbar, 0.2, {autoAlpha:1, ease:Cubic.easeOut});
 			} else {
 				_onShowComplete();
 			}

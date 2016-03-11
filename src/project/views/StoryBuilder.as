@@ -1,21 +1,16 @@
 package project.views {
 	
 	// Flash
-	import flash.display.Shape;
-	import flash.events.Event;
-	import flash.geom.Point;
-	
-	// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Circ;
 	import com.greensock.easing.Cubic;
 	
-	// Framework
-	import display.Sprite;
-	import utils.GeomUtilities;
-	import utils.Register;
+	import flash.display.Shape;
+	import flash.events.Event;
+	import flash.geom.Point;
 	
-	// Project
+	import display.Sprite;
+	
 	import project.events.SourceClipManagerEvent;
 	import project.events.StoryboardManagerEvent;
 	import project.managers.SourceClipManager;
@@ -23,6 +18,9 @@ package project.views {
 	import project.views.StoryBuilder.CustomStoryboardClip;
 	import project.views.StoryBuilder.VideoPreviewArea;
 	import project.views.StoryBuilder.ui.StoryboardClipMarker;
+	
+	import utils.GeomUtilities;
+	import utils.Register;
 	
 	
 	
@@ -33,9 +31,11 @@ package project.views {
 		private var _previewArea:VideoPreviewArea;
 		private var _storyboard:StoryboardManager;
 		private var _sourceClipMgrTransitionStart:Number;
+		private var _transitionStart:Number;
 		private var _time:Number;
 		private var _tempClipMarker:StoryboardClipMarker;
 		private var _isActive:Boolean = false;
+		private var _transitionCompleteCount:uint = 0;
 			
 
 		
@@ -73,17 +73,20 @@ package project.views {
 		
 		public function show():void {
 			_isActive = true;
+			_transitionStart = new Date().getTime();
+			_transitionCompleteCount = 0;
 			_sourceClipMgr.show(); // 0.55s to complete
-			TweenMax.to(_storyboard, 0.5, {y:520, ease:Circ.easeInOut}); // 0.5s to complete
-			_previewArea.show(); // 0.2s delay, 0.5s to complete
+			TweenMax.to(_storyboard, 0.4, {y:520, ease:Circ.easeInOut, onComplete:function():void{_storyboard.dispatchEvent(new Event('showComplete'));}}); // 0.4s to complete
+			_previewArea.show(); // 0.1s delay, 0.35s to complete
 		}
 		
 		public function hide($immediate:Boolean = false):void {
 			_isActive = false;
+			_transitionCompleteCount = 0;
 			_sourceClipMgrTransitionStart = new Date().getTime();
-			
+			_transitionStart = new Date().getTime();
 			_sourceClipMgr.hide($immediate); // starts immediately, multi-part, takes .55s to complete
-			TweenMax.to(_storyboard, ($immediate) ? 0 : 0.5, {y:Register.APP.HEIGHT, ease:Circ.easeInOut}); // starts immediately, takes 0.5s to complete
+			TweenMax.to(_storyboard, ($immediate) ? 0 : 0.5, {y:Register.APP.HEIGHT, ease:Circ.easeInOut, onComplete:function():void{_storyboard.dispatchEvent(new Event('hideComplete'));}}); // starts immediately, takes 0.5s to complete
 			_previewArea.hide($immediate); // starts immediately, takes 0.3s to complete
 		}
 		
@@ -96,8 +99,8 @@ package project.views {
 			_sourceClipMgr = new SourceClipManager();
 			_sourceClipMgr.y = 66;
 			this.addChild(_sourceClipMgr);
-			_sourceClipMgr.addEventListener(SourceClipManagerEvent.SHOW_COMPLETE, _handleSourceClipManagerEvent);
-			_sourceClipMgr.addEventListener(SourceClipManagerEvent.HIDE_COMPLETE, _handleSourceClipManagerEvent);
+			_sourceClipMgr.addEventListener('showComplete', _handleTransitionCompleteEvent);
+			_sourceClipMgr.addEventListener('hideComplete', _handleTransitionCompleteEvent);
 			
 			var s:Shape = new Shape();
 			s.graphics.beginFill(0x1e1e1e);
@@ -116,6 +119,8 @@ package project.views {
 			_previewArea.x = 571;
 			_previewArea.y = 98;
 			this.addChild(_previewArea);
+			_previewArea.addEventListener('showComplete', _handleTransitionCompleteEvent);
+			_previewArea.addEventListener('hideComplete', _handleTransitionCompleteEvent);
 			_sourceClipMgr.previewArea = _previewArea;
 			// ************************************************
 			// ************************************************
@@ -126,6 +131,8 @@ package project.views {
 			_storyboard = new StoryboardManager();			
 			_storyboard.y = 520;
 			this.addChild(_storyboard);
+			_storyboard.addEventListener('showComplete', _handleTransitionCompleteEvent);
+			_storyboard.addEventListener('hideComplete', _handleTransitionCompleteEvent);
 			// ************************************************
 			// ************************************************	
 			
@@ -182,15 +189,36 @@ package project.views {
 			switch ($e.type) {
 				case SourceClipManagerEvent.SHOW_COMPLETE:
 					log('SourceClipManager - SHOW_COMPLETE');
+					log('time elapsed: '+(new Date().getTime() - _transitionStart));
 					break;
 				
 				case SourceClipManagerEvent.HIDE_COMPLETE:
 					log('SourceClipManager - HIDE_COMPLETE');
-					log('time elapsed: '+(new Date().getTime() - _sourceClipMgrTransitionStart));
+					//log('time elapsed: '+(new Date().getTime() - _transitionStart));
 					break;			
 				
 				case SourceClipManagerEvent.ADD_MEDIA:
 					log('SourceClipManager - ADD_MEDIA');
+					break;
+			}
+		}
+		
+		private function _handleTransitionCompleteEvent($e:Event):void {
+			switch ($e.type) {
+				case 'showComplete':
+					_transitionCompleteCount++;
+					if (_transitionCompleteCount == 3){
+						log('showComplete - elapsed: '+(new Date().getTime() - _transitionStart));
+						dispatchEvent(new Event('showComplete'));
+					}
+					break;
+				
+				case 'hideComplete':
+					_transitionCompleteCount++;
+					if (_transitionCompleteCount == 3){
+						log('hideComplete - elapsed: '+(new Date().getTime() - _transitionStart));
+						dispatchEvent(new Event('hideComplete'));
+					}
 					break;
 			}
 		}

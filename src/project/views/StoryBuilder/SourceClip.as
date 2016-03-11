@@ -288,7 +288,8 @@ package project.views.StoryBuilder {
 					TweenMax.to(_scrubber, 0.3, {alpha:0, ease:Cubic.easeOut});
 					TweenMax.to(_preview, 0.2, {alpha:0, scaleX:1, scaleY:1, ease:Cubic.easeIn});
 					_curFileName = '';
-					dispatchEvent(new PreviewEvent(PreviewEvent.CLEAR,true))
+					for (var i:uint = 0; i < _highlightsV.length; i++){ _highlightsV[i].hide(); }
+					dispatchEvent(new PreviewEvent(PreviewEvent.CLEAR,true));
 					break;
 
 				case MouseEvent.MOUSE_MOVE:

@@ -68,11 +68,11 @@ package project.views.MusicSelector {
 			_hideComplete = false;
 			_progressBar.width = 0;
 			_previewTitleLabel.text = _curMenuItem.title;
-			TweenMax.allTo([_ds, _bgShape], 0.3, {autoAlpha:1, y:0, ease:Cubic.easeOut, delay:0.3});
-			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.5});
-			TweenMax.to(_previewFeaturedBanner, 0.3, {autoAlpha:(_curMenuItem.featured) ? 1 : 0, ease:Cubic.easeOut, delay:0.55});			
-			TweenMax.allTo([_previewAudioWaves,_markerHolder, _markerHolderMask], 0.3, {autoAlpha:1, y:503, ease:Cubic.easeOut, delay:0.6});
-			TweenMax.to(_previewTimeline, 0.3, {autoAlpha:1, y:565, ease:Cubic.easeOut, delay:0.7, onComplete:_onShowComplete});
+			TweenMax.allTo([_ds, _bgShape], 0.2, {autoAlpha:1, y:0, ease:Cubic.easeOut});
+			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], 0.2, {autoAlpha:1, ease:Cubic.easeOut, delay:0.05});
+			TweenMax.to(_previewFeaturedBanner, 0.2, {autoAlpha:(_curMenuItem.featured) ? 1 : 0, ease:Cubic.easeOut, delay:0.1});			
+			TweenMax.allTo([_previewAudioWaves,_markerHolder, _markerHolderMask], 0.2, {autoAlpha:1, y:503, ease:Cubic.easeOut, delay:0.15});
+			TweenMax.to(_previewTimeline, 0.2, {autoAlpha:1, y:565, ease:Cubic.easeOut, delay:0.2, onComplete:_onShowComplete});
 		}
 		
 		public function hide($immediate:Boolean = false):void {
@@ -86,8 +86,8 @@ package project.views.MusicSelector {
 			TweenMax.allTo([_previewMusicIcon, _previewTitleLabel], ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut});
 			TweenMax.to(_previewFeaturedBanner, ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:0.05});			
 			TweenMax.allTo([_previewAudioWaves,_markerHolder, _markerHolderMask], ($immediate) ? 0 : 0.3, {autoAlpha:0, y:483, ease:Cubic.easeOut, delay:0.1});
-			TweenMax.to(_previewTimeline, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:585, ease:Cubic.easeOut, delay:0.25});
-			TweenMax.allTo([_ds, _bgShape], ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut, delay:0.3, onComplete:_onHideComplete});
+			TweenMax.to(_previewTimeline, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:585, ease:Cubic.easeOut, delay:0.15});
+			TweenMax.allTo([_ds, _bgShape], ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut, delay:0.2, onComplete:_onHideComplete});
 		}
 		
 		

@@ -3,6 +3,7 @@ package project.views.StoryBuilder {
 	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
+	import flash.events.Event;
 	
 	// Greensock
 	import com.greensock.TweenMax;
@@ -55,11 +56,11 @@ package project.views.StoryBuilder {
 		}
 		
 		public function show($immediate:Boolean = false):void {
-			TweenMax.to(this, ($immediate) ? 0 : 0.3, {autoAlpha:1, y:98, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.2});		
+			TweenMax.to(this, ($immediate) ? 0 : 0.25, {autoAlpha:1, y:98, ease:Cubic.easeOut, onComplete:_onShowComplete});		
 		}
 		
 		public function hide($immediate:Boolean = false):void {
-			TweenMax.to(this, ($immediate) ? 0 : 0.3, {autoAlpha:0, y:'-20', ease:Cubic.easeOut});
+			TweenMax.to(this, ($immediate) ? 0 : 0.25, {autoAlpha:0, y:'-20', ease:Cubic.easeOut, onComplete:_onHideComplete});
 		}
 		
 		
@@ -83,6 +84,14 @@ package project.views.StoryBuilder {
 			
 			TweenMax.to(this, 0, {autoAlpha:0, y:'-20'});
 
+		}
+		
+		private function _onShowComplete():void {
+			dispatchEvent(new Event('showComplete'));
+		}
+
+		private function _onHideComplete():void {
+			dispatchEvent(new Event('hideComplete'));
 		}
 	}
 }
