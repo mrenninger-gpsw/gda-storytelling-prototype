@@ -4,11 +4,11 @@
 	<title>GDA Storytelling Prototype</title>
 	<!-- console should be either enabled or disabled -->
 	<console>disabled</console>
-	
+
 	<appTokens>
 		<appToken id = 'flurry' value='JFCJTGCP3SFXPJK7P9Z2'/>
 	</appTokens>
-	
+
 	<about title='RELEASE NOTES'><![CDATA[RELEASE NOTES:
 • Story Builder:
 	- Hover on the SourceClips to preview
@@ -19,7 +19,7 @@
 • Music Selector:
 	- Select a track to see it’s changes applied to the AudioTimeline
 	- Simulated preview includes when a Highlight is reached on the Audio Timeline
-		
+
 • Media Library:
 	- Change between All Media and Recently Added
 	- Click on "Recently Added", AlertBanner appears.  Click to add videos in current group to SourceClip bin in Editor
@@ -27,29 +27,32 @@
 	- Hover on EditBtn, ToolTip appears
 	- Click EditBtn, videos in group are added to SourceClip bin in Editor
 	- Click select all, SelectionBanner appears with relevant information
-	 		
+
 • Alerts Drawer:
 	- Press 1 to simulate activation of alerts
 	- Press 2 to simulate deactivation of alerts
-	- Click icon to open drawer 
-			
+	- Click icon to open drawer
+
 • Add Media Drawer:
-	- In Editor, click "Add Media" to open, click close button or outside drawer to close 
-	- On open, SourceClip bin reverts to 4 clips - Drawer reflects this. 
+	- In Editor, click "Add Media" to open, click close button or outside drawer to close
+	- On open, SourceClip bin reverts to 4 clips - Drawer reflects this.
 	- Click "Add All"/"Remove All" on any of the event groups
 	- Clicking on "Add All" for the 1st group only adds those clips to the SourceClip bin
-			
+
 	]]></about>
-	
+
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 0.04.001 - 03/16/2016
+    * Clean-up and migration to new dev environment
+
 VERSION 0.03.001 - 03/01/2016
 	* Bug fixes to MusicPreviewArea SelectionBanner and MediaLibraryGroup
 
 VERSION 0.03.000 - 02/29/2016
-	* Numerous timing tweaks and refinements to animations that speed up transitions and unify transition elements 
+	* Numerous timing tweaks and refinements to animations that speed up transitions and unify transition elements
 
 VERSION 0.02.002 - 02/18/2016
-	* Updated StoryBuilder and MusicSelector to reflect design changes 
+	* Updated StoryBuilder and MusicSelector to reflect design changes
 
 VERSION 0.02.001 - 02/17/2016
 	* Addition of AddMedia Drawer
@@ -67,15 +70,15 @@ VERSION 0.00.007 - 02/01/2016
 	* StoryboardClips are now added to the end of the Storyboard
 	* Normalized the time of motion for AddClipToStoryboard animation
 	* Added yellow SourceClipHighlights to the SourceClips
-	* Creating a StoryboardClip creates a corresponding blue SourceClipHighlight 
+	* Creating a StoryboardClip creates a corresponding blue SourceClipHighlight
 
 VERSION 0.00.006 - 01/29/2016
 	* Tightened up AddClipToStoryboard animation to improve immediacy
-	* Modified the transition animation between the Storyboard and MusicEditor views so the exiting view wipes completely before the next view appears 
+	* Modified the transition animation between the Storyboard and MusicEditor views so the exiting view wipes completely before the next view appears
 
 VERSION 0.00.005 - 01/27/2016
-	* Added music progress animation and related animations for highlight appearance 
-	* Tweaked timing of AddClipToStoryboard animation 
+	* Added music progress animation and related animations for highlight appearance
+	* Tweaked timing of AddClipToStoryboard animation
 
 VERSION 0.00.004 - 01/26/2016
 	* Updated animation for adding a clip to the stoyboard to clarify intent
@@ -92,17 +95,17 @@ VERSION 0.00.002 - 01/22/2016
 
 VERSION 0.00.001 - 01/20/2016
 	***	Initial Release Build
-	
-	
+
+
 
 	]]></about>
-	
+
 	<about title='LIBRARIES' method='getLibraryInfo'/>
-	
+
 	<!-- assetQue-->
-	
+
 	<!-- Framework automatically loads the assets from the resources/startup folder at runtime -->
-	
+
 	<applicationMenu>
 		<menu name='Storytelling'>
 			<item name='About' key=''/>
@@ -113,7 +116,7 @@ VERSION 0.00.001 - 01/20/2016
 			<item name='Hide Others' key='H'/>
 			<item name='Quit' key='q'/>
 		</menu>
-		
+
 		<menu name='File'>
 			<item name='New' key='n'/>
 			<item name='Open File' key='o'/>
@@ -127,8 +130,8 @@ VERSION 0.00.001 - 01/20/2016
 			<item name='Print' key='p'/>
 			<item name='Adding an ALT identifier' key='p' modifiers='alt, control'/>
 		</menu>
-		
-		
+
+
 		<menu name='Edit'>
 			<item name='Undo' key='z'/>
 			<item name='Redo' key='Z'/>
@@ -144,22 +147,22 @@ VERSION 0.00.001 - 01/20/2016
 		<menu name='Debug'>
 			<item name='Console' key='d'/>
 		</menu>
-		
+
 		<menu name='Help'/>
-	
+
 	</applicationMenu>
-	
-	
+
+
 	<legal><![CDATA[© Copyright 2016 GoPro]]></legal>
-	
+
 	<content>
-		
+
 		<header>
 			<nav>
 				<item marker='false'>Media</item>
 				<item marker='true'>Editor</item>
 			</nav>
-			
+
 			<alertDrawer>
 				<alert file='alertDrawer_DockedAlert' marker='' enabled=''/>
 				<alert file='alertDrawer_IndexingFiles' marker='' enabled=''/>
@@ -168,9 +171,9 @@ VERSION 0.00.001 - 01/20/2016
 				<alert file='alertDrawer_SyncToCloud' marker='' enabled=''/>
 				<alert file='alertDrawer_SyncedFromCloud' marker='' enabled=''/>
 			</alertDrawer>
-			
+
 		</header>
-		
+
 		<mediaLibrary>
 			<menu title='MANAGE'>
 				<item icon='mediaMenuItem_mediaIcon' title='MEDIA'>ALL MEDIA</item>
@@ -182,7 +185,7 @@ VERSION 0.00.001 - 01/20/2016
 				<item icon='mediaMenuItem_cameraIcon' title='HERO4 SILVER'>YOUR HERO4 SILVER</item>
 				<item icon='mediaMenuItem_cameraIcon' title='HERO4 SESSION'>YOUR HERO4 SESSION</item>
 			</menu>
-			
+
 			<content title='SUMMER FUN'>
 				<event title='TUESDAY, JULY 28 2015'>
 					<clip type='photo' amt='0'    file='mediaContentArea_image1'></clip>
@@ -213,23 +216,23 @@ VERSION 0.00.001 - 01/20/2016
 					<clip type='photo' amt='0' 	  file='mediaContentArea_image11'></clip>
 				</event>
 			</content>
-			
+
 			<addMediaDrawer>
 				<item file='addMediaDrawer_Group1' title='MONDAY, JULY 27 2015' total='2' selected='false'/>
 				<item file='addMediaDrawer_Group2new' title='FRIDAY, JULY 24 2015' total='4' selected='true'/>
 				<item file='addMediaDrawer_Group3' title='MONDAY, JULY 20 2015' total='10' selected='false'/>
 				<item file='addMediaDrawer_Group4' title='FRIDAY, JULY 17 2015' total='12' selected='false'/>
 			</addMediaDrawer>
-			
+
 		</mediaLibrary>
-	
-		<editor>			
+
+		<editor>
 			<storybuilder>
-			
+
 				<sourceClips title='VIDEOS'>
 					<library>
 						<item title='GOPR0035' length='87' filename='vid3' highlights='9,39,69,78' storyboard=''/>
-						<item title='GOPR0062' length='29' filename='vid4' highlights='' storyboard=''/>			
+						<item title='GOPR0062' length='29' filename='vid4' highlights='' storyboard=''/>
 					</library>
 					<editor>
 						<item title='GOPR0002' length='34' filename='vid1' highlights='3,12,26,30' storyboard='20'/>
@@ -238,7 +241,7 @@ VERSION 0.00.001 - 01/20/2016
 						<item title='GOPR0070' length='47' filename='vid6' highlights='5,16,27,42' storyboard='37.5'/>
 					</editor>
 				</sourceClips>
-			
+
 				<storyboard>
 					<!-- location[i].@position is the center-justified x-position of the sourceClips -->
 					<!-- location[i].mask.@left is the left position of the mask (from center) -->
@@ -274,7 +277,7 @@ VERSION 0.00.001 - 01/20/2016
 							<mask left='-163' width='325'/>
 						</location>
 					</clip>
-					
+
 					<!-- this is the info for the clip you add/delete -->
 					<clip>
 						<location id='4' position=''>
@@ -285,15 +288,15 @@ VERSION 0.00.001 - 01/20/2016
 						</location>
 					</clip>
 				</storyboard>
-			
+
 			</storybuilder>
-			
+
 			<music initSongNum='0'>
 				<nav>
 					<item>ALL TRACKS</item>
-					<item>RECENTLY ADDED</item>				
+					<item>RECENTLY ADDED</item>
 				</nav>
-				
+
 				<tracks>
 					<item title='The Night We Danced' genre='EDM' bpm='140' featured='false' locked='false' newSong='true'>
 						<tag>Upbeat</tag>
@@ -303,7 +306,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,72,292,512,720</positions>
 							<positions>48,204,408,540,720</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Ether' genre='Ambient' bpm='80' featured='false' locked='false' newSong='false'>
 						<tag>Chill</tag>
 						<tag>Reflective</tag>
@@ -312,7 +315,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,96,304,524,720</positions>
 							<positions>84,228,372,552,672</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Bite Me' genre='Rock' bpm='120' featured='true' locked='false' newSong='true'>
 						<tag>Aggressive</tag>
 						<tag>Determined</tag>
@@ -321,7 +324,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,72,304,500,696</positions>
 							<positions>72,252,408,540,684</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Screen Door Slammed' genre='Pop' bpm='100' featured='false' locked='false' newSong='false'>
 						<tag>Fun</tag>
 						<tag>Happy</tag>
@@ -330,7 +333,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,84,268,488,560</positions>
 							<positions>84,204,372,540,684</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Come Through' genre='Rock' bpm='100' featured='false' locked='false' newSong='true'>
 						<tag>Confident</tag>
 						<tag>Warm</tag>
@@ -339,7 +342,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,48,304,488,696</positions>
 							<positions>96,216,384,564,672</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Blinded By The Sun' genre='Ambient' bpm='60' featured='true' locked='true' newSong='false'>
 						<tag>Upbeat</tag>
 						<tag>Fun</tag>
@@ -348,7 +351,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,120,304,560,672</positions>
 							<positions>60,228,408,552,684</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Heavy Weather' genre='Rock' bpm='140' featured='true' locked='true' newSong='false'>
 						<tag>Upbeat</tag>
 						<tag>Fun</tag>
@@ -357,7 +360,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,48,256,536,672</positions>
 							<positions>72,216,384,528,684</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Song #8 Title' genre='Rock' bpm='110' featured='false' locked='true' newSong='false'>
 						<tag>Upbeat</tag>
 						<tag>Fun</tag>
@@ -366,7 +369,7 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,60,268,476,696</positions>
 							<positions>48,204,384,540,696</positions>
 						</markers>
-					</item>			
+					</item>
 					<item title='Song #9 Title' genre='Rock' bpm='90' featured='true' locked='true' newSong='true'>
 						<tag>Upbeat</tag>
 						<tag>Fun</tag>
@@ -375,15 +378,15 @@ VERSION 0.00.001 - 01/20/2016
 							<positions>-3,84,292,512,708</positions>
 							<positions>72,204,384,540,708</positions>
 						</markers>
-					</item>			
+					</item>
 				</tracks>
 			</music>
-			
+
 		</editor>
-		
-		
+
+
 	</content>
 
-	
-	
+
+
 </prototype>
