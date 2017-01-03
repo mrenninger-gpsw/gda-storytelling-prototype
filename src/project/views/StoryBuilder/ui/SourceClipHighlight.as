@@ -3,8 +3,10 @@ package project.views.StoryBuilder.ui {
 	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
-		
-	// Greensock
+
+import starling.display.Shape;
+
+// Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 
