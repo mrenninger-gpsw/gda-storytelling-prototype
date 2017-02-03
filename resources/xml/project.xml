@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prototype>
 	<author>mrenninger@gopro.com</author>
-	<title>GDA Storytelling Prototype</title>
+	<title>QDA Storytelling Prototype</title>
 	<!-- console should be either enabled or disabled -->
 	<console>disabled</console>
 
@@ -13,8 +13,8 @@
 • Story Builder:
 	- Hover on the SourceClips to preview
 	- Existing yellow SourceClipHighlights grow/shrink on mouse over
-	- Click anywhere on a SourceClip to add a CustomStoryboardClip to the Storyboard
-	- Click anywhere on the CustomStoryboardClip to delete before adding a new one
+	- Click anywhere on a SourceClip to add a StoryboardClip to the Storyboard
+	- Click on the delete icon on the StoryboardClip to delete before adding a new one
 
 • Music Selector:
 	- Select a track to see it’s changes applied to the AudioTimeline
@@ -42,6 +42,21 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 1.01.003 - 02/02/2017
+    * On Click of on a StoryboardClip's highlight marker causes that marker's associated SourceClip reposition so that it's visible
+    * Initial implementation of a draggable StoryBoardScrubber
+    * On Click of a StoryboardClip, StoryboardScrubber repositions to that point and PreviewArea locks to the associated image
+
+VERSION 1.01.002 - 01/30/2017
+    * StoryboardClips no longer normalize their widths on drag
+    * On MouseOver of a StoryboardClip's highlight marker causes that marker to activate
+    * On Click of on a StoryboardClip's highlight marker causes that marker's associated SourceClip highlight marker to activate
+    * On MouseOut of a StoryboardClip's highlight marker causes that marker an its associated SourceClip highlight marker to deactivate
+
+VERSION 1.01.001 - 01/24/2017
+    * StoryboardClips can now be repositioned and any clip on the timeline can be deleted
+    * New delete and edit clip UI icons appear on rollover
+
 VERSION 0.04.001 - 03/16/2016
     * Clean-up and migration to new dev environment
 
@@ -153,7 +168,7 @@ VERSION 0.00.001 - 01/20/2016
 	</applicationMenu>
 
 
-	<legal><![CDATA[© Copyright 2016 GoPro]]></legal>
+	<legal><![CDATA[© Copyright 2017 GoPro]]></legal>
 
 	<content>
 
@@ -238,7 +253,9 @@ VERSION 0.00.001 - 01/20/2016
 						<item title='GOPR0002' length='34' filename='vid1' highlights='3,12,26,30' storyboard='20'/>
 						<item title='GOPR0008' length='100' filename='vid2' highlights='10,35,60,85' storyboard='20'/>
 						<item title='GOPR0065' length='17' filename='vid5' highlights='2,8,11,14' storyboard='10'/>
-						<item title='GOPR0070' length='47' filename='vid6' highlights='5,16,27,42' storyboard='37.5'/>
+                        <item title='GOPR0008' length='100' filename='vid7' highlights='20,66' storyboard=''/>
+                        <item title='GOPR0002' length='34' filename='vid8' highlights='17' storyboard=''/>
+						<item title='GOPR0070' length='47' filename='vid6' highlights='5,16,27,42' storyboard='38'/>
 					</editor>
 				</sourceClips>
 
@@ -246,35 +263,35 @@ VERSION 0.00.001 - 01/20/2016
 					<!-- location[i].@position is the center-justified x-position of the sourceClips -->
 					<!-- location[i].mask.@left is the left position of the mask (from center) -->
 					<clip src='storyboardClip_image1'>
-						<location id='4' position='150'>
-							<mask left='-150' width='300'/>
+						<location id='4' position='86'>
+							<mask left='-86' width='200'/>
 						</location>
 						<location id='5' position='189'>
 							<mask left='-189' width='327'/>
 						</location>
 					</clip>
 					<clip src='storyboardClip_image2'>
-						<location id='4' position='462'>
-							<mask left='-149' width='300'/>
+						<location id='4' position='357'>
+							<mask left='-147' width='397'/>
 						</location>
 						<location id='5' position='425'>
 							<mask left='-88' width='174'/>
 						</location>
 					</clip>
 					<clip src='storyboardClip_image4'>
-						<location id='4' position='777'>
-							<mask left='-150' width='300'/>
+						<location id='4' position='854'>
+							<mask left='-237' width='346'/>
 						</location>
 						<location id='5' position='577'>
-							<mask left='-57' width='114'/>
+							<mask left='-56' width='114'/>
 						</location>
 					</clip>
 					<clip src='storyboardClip_image5'>
-						<location id='4' position='1089'>
-							<mask left='-150' width='300'/>
+						<location id='4' position='1073'>
+							<mask left='-100' width='267'/><!-- 1239 -->
 						</location>
 						<location id='5' position='806'>
-							<mask left='-163' width='325'/>
+							<mask left='-161' width='325'/>
 						</location>
 					</clip>
 
@@ -284,9 +301,24 @@ VERSION 0.00.001 - 01/20/2016
 							<mask left='' width=''/>
 						</location>
 						<location id='5' position='1105'>
-							<mask left='-128' width='261'/>
+							<mask left='-125' width='260'/><!-- 1238 -->
 						</location>
 					</clip>
+
+                    <positions id='4'>
+                        <location x='150' maskwidth='300'/>
+                        <location x='462' maskwidth='300'/>
+                        <location x='777' maskwidth='300'/>
+                        <location x='1089' maskwidth='300'/>
+                    </positions>
+
+                    <positions id='5'>
+                        <location x='189' maskwidth='327'/>
+                        <location x='425' maskwidth='174'/>
+                        <location x='577' maskwidth='114'/>
+                        <location x='806' maskwidth='325'/>
+                        <location x='1105' maskwidth='261'/>
+                    </positions>
 				</storyboard>
 
 			</storybuilder>
