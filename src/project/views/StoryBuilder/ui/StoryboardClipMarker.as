@@ -42,7 +42,7 @@ package project.views.StoryBuilder.ui {
 		public function show($immediate:Boolean = false):void {
 			// show the marker
 			TweenMax.to(_icon, ($immediate) ? 0 : 0.4, {scaleX:1, scaleY:1, alpha:1, ease:Back.easeOut});
-			TweenMax.to(_line, ($immediate) ? 0 : 0.4, {alpha:1, height:94, y:-47, ease:Expo.easeInOut, delay:($immediate) ? 0 : 0.3, onComplete:($immediate) ? null : _onShowMarkerComplete});
+			TweenMax.to(_line, ($immediate) ? 0 : 0.4, {alpha:1, height:98, y:-49, ease:Expo.easeInOut, delay:($immediate) ? 0 : 0.3, onComplete:($immediate) ? null : _onShowMarkerComplete});
 		}
 
         public function activate($b:Boolean = true):void {
@@ -81,6 +81,7 @@ package project.views.StoryBuilder.ui {
 
 		private function _onShowMarkerComplete():void {
 			log('_onShowMarkerComplete');
+            //************
 			Register.PROJECT.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.SHOW_MARKER));
 		}
 

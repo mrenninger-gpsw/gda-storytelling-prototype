@@ -95,14 +95,14 @@ import project.events.SourceClipManagerEvent;
 		private function _createTimelineThumbs():void {
 			//log('_createTimelineThumbs');
 
-			for (var i:uint = 0; i < 4; i++) {
+			for (var i:uint = 0; i < 5; i++) {
 
 				var frameNum:Number = (i == 0) ? 1 : i * Math.round((Number(_xml.@length) * 4)/4);
 
 				var tThumb:Bitmap = Register.ASSETS.getBitmap(_title+'_'+_addLeadingZeros(frameNum));
-				tThumb.width = 128;
-				tThumb.height = 72;
-				tThumb.x = i * 130;
+				tThumb.width = 125;
+				tThumb.height = 70;
+				tThumb.x = i * 127;
 
 				_holder.addChild(tThumb);
 

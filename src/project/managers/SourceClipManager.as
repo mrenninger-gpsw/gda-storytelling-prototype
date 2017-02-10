@@ -86,8 +86,9 @@ package project.managers {
 				}
 
 				//TweenMax.to(_scrollbar, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
-				TweenMax.to(_bgShape, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
-				TweenMax.allTo([_titleLabel,_addBtn, _shadow, _scrollbar], 0.2, {autoAlpha:1, ease:Cubic.easeOut});
+				//TweenMax.to(_bgShape, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
+                //TweenMax.allTo([_titleLabel,_addBtn, _shadow, _scrollbar], 0.2, {autoAlpha:1, ease:Cubic.easeOut});
+                TweenMax.allTo([_titleLabel,_addBtn, _scrollbar], 0.2, {autoAlpha:1, ease:Cubic.easeOut});
 				//TweenMax.to(_shadow, 0.3, {autoAlpha:1, ease:Cubic.easeOut, delay:0.25});
 			}
 		}
@@ -99,8 +100,8 @@ package project.managers {
 				TweenMax.to(_sourceClipsV[i], ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : (i * 0.03), onComplete:onComplete});
 			}
 			TweenMax.allTo([_titleLabel,_scrollbar,_addBtn], ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut});
-			TweenMax.to(_bgShape, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});
-			TweenMax.to(_shadow, ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.15});
+			//TweenMax.to(_bgShape, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});
+			//TweenMax.to(_shadow, ($immediate) ? 0 : 0.2, {autoAlpha:0, ease:Cubic.easeOut, delay:($immediate) ? 0 : 0.15});
 		}
 
 
@@ -108,12 +109,12 @@ package project.managers {
 		/******************** PRIVATE API *********************/
 		private function _init():void {
 			// create the _bgShape
-			_bgShape = new Shape();
+			/*_bgShape = new Shape();
 			_bgShape.graphics.beginFill(0x1e1e1e);
-			_bgShape.graphics.drawRect(0,0,Register.APP.WIDTH, 454);
+			_bgShape.graphics.drawRect(0,0,Register.APP.WIDTH, 399);
 			_bgShape.graphics.endFill();
 			_bgShape.alpha = 0;
-			this.addChild(_bgShape);
+			this.addChild(_bgShape);*/
 
 			_titleLabel = new Label();
 			_titleLabel.text = _xml.@title;
@@ -130,7 +131,7 @@ package project.managers {
 
             var s:Shape = new Shape();
             s.graphics.beginFill(0x1e1e1e);
-            s.graphics.drawRect(0,0,Register.APP.WIDTH, 395);
+            s.graphics.drawRect(0,0,Register.APP.WIDTH, 339);//395
             s.graphics.endFill();
             s.y = _sourceClipHolder.y;
             this.addChild(s);
@@ -185,7 +186,7 @@ package project.managers {
             __shape.graphics.endFill();
             _scrollbar.addChild(__shape);
             _scrollbar.mouseChildren = false;
-			_scrollbar.x = 547;
+			_scrollbar.x = 662;//547;
 			_scrollbar.y = 59;
 			_scrollbar.alpha = 0;
 			this.addChild(_scrollbar);
@@ -193,7 +194,7 @@ package project.managers {
 
 			_shadow = Register.ASSETS.getBitmap('sourceclip_gradient');
 			_shadow.x = 20;
-			_shadow.y = 440;
+			_shadow.y = 385;
 			_shadow.alpha = 0;
 			this.addChild(_shadow);
 
@@ -220,7 +221,7 @@ package project.managers {
 					var onComplete:Function = (i == 1) ? _onShowComplete : null;
 					TweenMax.to(_sourceClipsV[i], 0.2, {x:0, autoAlpha:1, ease:Back.easeOut, delay:0.21 + (i * 0.03), onComplete:onComplete});
 				}
-				TweenMax.to(_shadow, 0.2, {autoAlpha:1, ease:Cubic.easeOut});
+				//TweenMax.to(_shadow, 0.2, {autoAlpha:1, ease:Cubic.easeOut});
 				TweenMax.to(_scrollbar, 0.2, {autoAlpha:1, ease:Cubic.easeOut});
 			} else {
 				_onShowComplete();
@@ -358,7 +359,8 @@ package project.managers {
 		private function _resetSourceClips($e:AddMediaDrawerEvent):void {
 			_addFromLibrary = false;
 
-			TweenMax.allTo([_shadow, _scrollbar], 0, {autoAlpha:1});
+            //TweenMax.allTo([_shadow, _scrollbar], 0, {autoAlpha:1});
+            TweenMax.to(_scrollbar, 0, {autoAlpha:1});
             _scrollbar.y = _sourceClipHolder.mask.y;
 			for (var i:uint = 0; i < _sourceClipsV.length; i++) {
 				if (i < 2){
@@ -381,15 +383,17 @@ package project.managers {
                     // put logic here to move the _sourceClipHolder so that the clip is visible
                     // and so that the scrollbar.y reflects the proper scroll pct
 
-                    if (__clipY > 439 || __clipY < 125) {
+                    var __btmLimit:Number = 384;//439;
+                    var __topLimit:Number = 125;
+                    if (__clipY > __btmLimit || __clipY < __topLimit) {
                         var __shiftY:Number = _sourceClipHolder.y;
                         // determine the y difference to make the clip visible and move the holder
-                        if (__clipY > 439) {
-                            __shiftY = _sourceClipHolder.y + (440 - __clipY);
+                        if (__clipY > __btmLimit) {
+                            __shiftY = _sourceClipHolder.y + ((__btmLimit + 1) - __clipY);
                         }
 
-                        if (__clipY < 439) {
-                            __shiftY = _sourceClipHolder.y + (125 - __clipY);
+                        if (__clipY < __btmLimit) {
+                            __shiftY = _sourceClipHolder.y + (__topLimit - __clipY);
                         }
 
                         //_sourceClipHolder.y = 454 - __clip.y;

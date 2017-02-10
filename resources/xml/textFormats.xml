@@ -2,9 +2,9 @@
 
 
 <!-- TEXT FORMATS -->
-	
-	
-		
+
+
+
 	<!-- BUILT IN SUBARASHII COMPONENTS -->
 	<textFormat
 		id='label'
@@ -14,8 +14,8 @@
 		font='Helvetica Neue'
 		align='center'
 	/>
-		
-		
+
+
 	<textFormat
 		id='title'
 		size='30'
@@ -24,17 +24,17 @@
 		font='Helvetica Neue'
 		align='left'
 	/>
-		
-		
-		
-			
+
+
+
+
 	<!-- SPLASH SCREEN-->
 	<textFormat
 		id='splashTitle'
 		size='18'
 		color='#17A7C0'
 		font='Helvetica Neue Light'
-		align='left'		
+		align='left'
 	/>
 
 	<textFormat
@@ -44,7 +44,7 @@
 		font='Helvetica Neue'
 		align='center'
 	/>
-	
+
 	<textFormat
 		id='splashVersionNumber'
 		size='10'
@@ -72,10 +72,10 @@
 		font='Roboto Light'
 		align='left'
 	/>
-	
-	
-	
-	
+
+
+
+
 	<!-- ABOUT -->
 	<textFormat
 		id='about'
@@ -84,7 +84,7 @@
 		font='Helvetica Neue'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='aboutMenu'
 		size='11'
@@ -93,7 +93,7 @@
 		font='Helvetica Neue'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='aboutVersion'
 		size='9'
@@ -102,10 +102,10 @@
 		font='Helvetica Neue'
 		align='left'
 	/>
-	
-	
-	
-	
+
+
+
+
 	<!--  PROJECT -->
 	<!-- Settings Overlay -->
 	<textFormat
@@ -139,19 +139,19 @@
 		font='Gill Sans MT Pro Book'
 		align='left'
 	/>
-	
-	
-	
-	
+
+
+
+
 	<!--  source clips -->
 	<textFormat
 		id='sourceclip-title'
 		size='18'
 		color='#FFFFFF'
-		font='Proxima Nova Extrabold'
+		font='Proxima Nova Semibold'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='sourceclip-name'
 		size='12'
@@ -159,7 +159,7 @@
 		font='Proxima Nova Semibold'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='sourceclip-length'
 		size='14'
@@ -167,7 +167,15 @@
 		font='Proxima Nova Semibold'
 		align='left'
 	/>
-	
+
+    <textFormat
+        id='storyboard-songtitle'
+        size='14'
+        color='#FFFFFF'
+        font='Proxima Nova Semibold'
+        align='left'
+    />
+
 
 
 
@@ -179,7 +187,7 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='music-item-icon'
 		size='9'
@@ -187,7 +195,7 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='music-item-title'
 		size='16'
@@ -195,7 +203,7 @@
 		font='Proxima Nova Bold'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='music-item-tags'
 		size='14'
@@ -203,7 +211,7 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='music-item-bpm'
 		size='12'
@@ -211,7 +219,7 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='music-preview-title'
 		size='16'
@@ -219,7 +227,7 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='music-preview-featured-text'
 		size='14'
@@ -227,10 +235,10 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
-	
-	
-	
+
+
+
+
 	<!--  media library -->
 	<textFormat
 		id='media-menu-title'
@@ -255,7 +263,7 @@
 		font='Proxima Nova Bold'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='media-content-title'
 		size='24'
@@ -263,7 +271,7 @@
 		font='Proxima Nova ExtraBold'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='media-event-group-title'
 		size='18'
@@ -271,7 +279,7 @@
 		font='Proxima Nova SemiBold'
 		align='left'
 	/>
-		
+
 	<textFormat
 		id='media-event-title'
 		size='14'
@@ -279,7 +287,7 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='media-event-clip-preview-amount'
 		size='12'
@@ -287,10 +295,10 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-	
-	
-	
-	
+
+
+
+
 	<!--  Alert Drawer -->
 	<textFormat
 		id='alert-drawer-amount'
@@ -299,8 +307,8 @@
 		font='Proxima Nova Bold'
 		align='left'
 	/>
-	
-	
+
+
 	<!--  Selection Banner -->
 	<textFormat
 		id='selection-banner-num-selected'
@@ -309,7 +317,7 @@
 		font='Proxima Nova Bold'
 		align='left'
 	/>
-	
+
 	<textFormat
 		id='selection-banner-default'
 		size='24'
@@ -317,8 +325,8 @@
 		font='Proxima Nova Regular'
 		align='left'
 	/>
-		
-		
+
+
 	<!--  header -->
 	<textFormat
 		id='header-nav-item'
@@ -327,10 +335,10 @@
 		font='Proxima Nova Bold'
 		align='left'
 	/>
-	
-	
-	
-	
+
+
+
+
 	<!--  footer -->
 	<textFormat
 		id='footer-song-title'
@@ -338,11 +346,11 @@
 		color='#F4F4F4'
 		font='Proxima Nova Regular'
 		align='left'
-	/>	
-		
-		
-	
-	
+	/>
+
+
+
+
 	<!-- CONSOLE -->
 	<!--  note this is not a starling text format
 	but instead a flash text format. This is due
@@ -364,7 +372,7 @@
 		font='Helvetica Neue'
 		align='left'
 	/>
-	
-	
+
+
 
 </data>

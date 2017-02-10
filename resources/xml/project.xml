@@ -42,6 +42,14 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 1.01.004 - 02/08/2017
+
+
+VERSION 1.01.004 - 02/08/2017
+    * Update Editor visuals and functionality to reflect current design
+    * Initial implementation of Playable/Pauseable PreviewArea
+    * Refinements of clip selection
+
 VERSION 1.01.003 - 02/02/2017
     * On Click of on a StoryboardClip's highlight marker causes that marker's associated SourceClip reposition so that it's visible
     * Initial implementation of a draggable StoryBoardScrubber
@@ -174,8 +182,8 @@ VERSION 0.00.001 - 01/20/2016
 
 		<header>
 			<nav>
-				<item marker='false'>Media</item>
-				<item marker='true'>Editor</item>
+				<item marker='false'>View</item>
+				<item marker='true'>Create</item>
 			</nav>
 
 			<alertDrawer>
@@ -244,7 +252,7 @@ VERSION 0.00.001 - 01/20/2016
 		<editor>
 			<storybuilder>
 
-				<sourceClips title='VIDEOS'>
+				<sourceClips title='Media'>
 					<library>
 						<item title='GOPR0035' length='87' filename='vid3' highlights='9,39,69,78' storyboard=''/>
 						<item title='GOPR0062' length='29' filename='vid4' highlights='' storyboard=''/>
@@ -263,35 +271,35 @@ VERSION 0.00.001 - 01/20/2016
 					<!-- location[i].@position is the center-justified x-position of the sourceClips -->
 					<!-- location[i].mask.@left is the left position of the mask (from center) -->
 					<clip src='storyboardClip_image1'>
-						<location id='4' position='86'>
-							<mask left='-86' width='200'/>
+						<location id='4' position='85'>
+							<mask left='-85' width='200'/>
 						</location>
-						<location id='5' position='189'>
-							<mask left='-189' width='327'/>
+						<location id='5' position='197'>
+							<mask left='-197' width='325'/>
 						</location>
 					</clip>
 					<clip src='storyboardClip_image2'>
 						<location id='4' position='357'>
-							<mask left='-147' width='397'/>
+							<mask left='-147' width='345'/>
 						</location>
-						<location id='5' position='425'>
-							<mask left='-88' width='174'/>
+						<location id='5' position='408'>
+							<mask left='-73' width='144'/>
 						</location>
 					</clip>
 					<clip src='storyboardClip_image4'>
-						<location id='4' position='854'>
-							<mask left='-237' width='346'/>
+						<location id='4' position='802'>
+							<mask left='-237' width='294'/>
 						</location>
-						<location id='5' position='577'>
-							<mask left='-56' width='114'/>
+						<location id='5' position='537'>
+							<mask left='-48' width='95'/>
 						</location>
 					</clip>
 					<clip src='storyboardClip_image5'>
-						<location id='4' position='1073'>
-							<mask left='-100' width='267'/><!-- 1239 -->
+						<location id='4' position='969'>
+							<mask left='-100' width='214'/><!-- 1239 -->
 						</location>
-						<location id='5' position='806'>
-							<mask left='-161' width='325'/>
+						<location id='5' position='727'>
+							<mask left='-133' width='268'/>
 						</location>
 					</clip>
 
@@ -300,8 +308,8 @@ VERSION 0.00.001 - 01/20/2016
 						<location id='4' position=''>
 							<mask left='' width=''/>
 						</location>
-						<location id='5' position='1105'>
-							<mask left='-125' width='260'/><!-- 1238 -->
+						<location id='5' position='998'>
+							<mask left='-126' width='211'/><!-- 1238 -->
 						</location>
 					</clip>
 

@@ -47,7 +47,7 @@ import project.events.SourceClipManagerEvent;
 		public function show():void {
 			if (!_showing) {
 				_showing = true;
-                dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.SHOW_HILITE))
+                dispatchEvent(new SourceClipManagerEvent(SourceClipManagerEvent.SHOW_HILITE));
 				TweenMax.to(_cover, 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 				TweenMax.to(this, 0.3, {tint:null, scaleX:1, scaleY:1, ease:Back.easeOut, onComplete:_onShowComplete});
 			}

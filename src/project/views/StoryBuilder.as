@@ -39,6 +39,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
 		private var _tempClipMarker:StoryboardClipMarker;
 		private var _isActive:Boolean = false;
 		private var _transitionCompleteCount:uint = 0;
+        private var _bgShape:Shape;
 
 
 
@@ -80,9 +81,10 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			_isActive = true;
 			_transitionStart = new Date().getTime();
 			_transitionCompleteCount = 0;
+            TweenMax.to(_bgShape, 0.3, {autoAlpha:1, ease:Cubic.easeOut});
 			_sourceClipMgr.show(); // 0.55s to complete
             _storyboard.resetScrubber();
-			TweenMax.to(_storyboard, 0.4, {y:520, ease:Circ.easeInOut, onComplete:function():void{_storyboard.dispatchEvent(new Event('showComplete'));}}); // 0.4s to complete
+			TweenMax.to(_storyboard, 0.4, {y:465, ease:Circ.easeInOut, onComplete:function():void{_storyboard.dispatchEvent(new Event('showComplete'));}}); // 0.4s to complete
 			_previewArea.show(); // 0.1s delay, 0.35s to complete
 		}
 
@@ -91,6 +93,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			_transitionCompleteCount = 0;
 			_sourceClipMgrTransitionStart = new Date().getTime();
 			_transitionStart = new Date().getTime();
+            TweenMax.to(_bgShape, ($immediate) ? 0 : 0.3, {autoAlpha:0, ease:Cubic.easeOut});
 			_sourceClipMgr.hide($immediate); // starts immediately, multi-part, takes .55s to complete
 			TweenMax.to(_storyboard, ($immediate) ? 0 : 0.5, {y:Register.APP.HEIGHT, ease:Circ.easeInOut, onComplete:function():void{_storyboard.dispatchEvent(new Event('hideComplete'));}}); // starts immediately, takes 0.5s to complete
 			_previewArea.hide($immediate); // starts immediately, takes 0.3s to complete
@@ -104,15 +107,13 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			// ************************************************
             addEventListener(SourceClipManagerEvent.CREATE_INITIAL_CLIP, _handleInitialClipCreation);
 
-            _sourceClipMgr = new SourceClipManager();
-			_sourceClipMgr.y = 66;
-			_sourceClipMgr.addEventListener('showComplete', _handleTransitionCompleteEvent);
-            _sourceClipMgr.addEventListener('hideComplete', _handleTransitionCompleteEvent);
-            _sourceClipMgr.addEventListener(PreviewEvent.PREVIEW, _handlePreviewEvent);
-            _sourceClipMgr.addEventListener(PreviewEvent.CLEAR, _handlePreviewEvent);
-            this.addChild(_sourceClipMgr);
+            _bgShape = new Shape();
+            _bgShape.graphics.beginFill(0x1e1e1e);
+            _bgShape.graphics.drawRect(0,66,Register.APP.WIDTH, 399);
+            _bgShape.graphics.endFill();
+            this.addChild(_bgShape);
 
-			/*var s:Shape = new Shape();
+            /*var s:Shape = new Shape();
 			s.graphics.beginFill(0x1e1e1e);
 			s.graphics.drawRect(0,0,Register.APP.WIDTH, 454);
 			s.graphics.endFill();
@@ -126,26 +127,46 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			// ************* VideoPreviewArea *****************
 			// ************************************************
 			_previewArea = new VideoPreviewArea();
-			_previewArea.x = 571;
-			_previewArea.y = 98;
+			/*_previewArea.x = 571;
+			_previewArea.y = 98;*/
+            _previewArea.x = 676;//627;
+            _previewArea.y = 77;
 			this.addChild(_previewArea);
 			_previewArea.addEventListener('showComplete', _handleTransitionCompleteEvent);
-			_previewArea.addEventListener('hideComplete', _handleTransitionCompleteEvent);
-			//_sourceClipMgr.previewArea = _previewArea;
+            _previewArea.addEventListener('hideComplete', _handleTransitionCompleteEvent);
+            _previewArea.addEventListener(PreviewEvent.PLAY, _handlePreviewEvent);
+            _previewArea.addEventListener(PreviewEvent.PAUSE, _handlePreviewEvent);
+
+            //_sourceClipMgr.previewArea = _previewArea;
 			// ************************************************
 			// ************************************************
 
 
-			// *************** Storyboard area ****************
+            // ************* SourceClipManager *****************
+            // ************************************************
+            _sourceClipMgr = new SourceClipManager();
+            _sourceClipMgr.y = 66;
+            _sourceClipMgr.addEventListener('showComplete', _handleTransitionCompleteEvent);
+            _sourceClipMgr.addEventListener('hideComplete', _handleTransitionCompleteEvent);
+            _sourceClipMgr.addEventListener(PreviewEvent.PREVIEW, _handlePreviewEvent);
+            _sourceClipMgr.addEventListener(PreviewEvent.CLEAR, _handlePreviewEvent);
+            this.addChild(_sourceClipMgr);
+            // ************************************************
+            // ************************************************
+
+
+            // *************** Storyboard area ****************
 			// ************************************************
 			_storyboard = new StoryboardManager();
-			_storyboard.y = 520;
+			_storyboard.y = 465;//520;
 			this.addChild(_storyboard);
 			_storyboard.addEventListener('showComplete', _handleTransitionCompleteEvent);
 			_storyboard.addEventListener('hideComplete', _handleTransitionCompleteEvent);
             _storyboard.addEventListener(PreviewEvent.PREVIEW, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.CLEAR, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.LOCK, _handlePreviewEvent);
+            _storyboard.addEventListener(PreviewEvent.COMPLETE, _handlePreviewEvent);
+
             // ************************************************
 			// ************************************************
 
@@ -164,17 +185,17 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			log('_moveClipToStoryboard');
 			var newClipX:Number = (Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
 			var totalTime:Number = 0.7;
-			var distance:Number = GeomUtilities.getDistance(new Point($clip.x,$clip.y), new Point((newClipX + 21), 590));
-			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 590));
+			var distance:Number = GeomUtilities.getDistance(new Point($clip.x,$clip.y), new Point((newClipX + 21), 570));
+			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 570));
 			var pct:Number = distance/totalDistance;
-			var normalizedTime:Number = totalTime * pct
+			var normalizedTime:Number = totalTime * pct;
 			log('\tdistance: '+distance);
 			log('\tpct distance to cover: '+distance/totalDistance);
 			log('\ttime to move custom clip: '+normalizedTime);
 			_time = new Date().getTime();
 			TweenMax.to($clip, (0.4 * normalizedTime), {scaleX:$clip.scaleX * 2, scaleY:$clip.scaleY * 2, ease:Cubic.easeIn});
-			TweenMax.to($clip, (0.6 * normalizedTime), {scaleX:0, scaleY:0, ease:Cubic.easeOut, delay:(0.4 * totalTime)});
-			TweenMax.to($clip, normalizedTime, {x:newClipX + 21, y: 590, ease:Cubic.easeInOut, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});
+			TweenMax.to($clip, (0.6 * normalizedTime), {scaleX:0, scaleY:0, ease:Cubic.easeOut, delay:(0.4 * normalizedTime)});
+			TweenMax.to($clip, normalizedTime, {x:newClipX + 21, y: 570, ease:Cubic.easeInOut, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});
 
 			/*TweenMax.to($clip, 0.3, {width:160, height:90, x:210, y: 590, ease:Cubic.easeOut, delay:0.2});
 			TweenMax.to($clip, 0.2, {width:176, height:99, ease:Cubic.easeOut, delay:0.4, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});*/
@@ -187,8 +208,6 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			_storyboard.addClip($clip);
 			this.removeChild(_tempClipMarker);
 		}
-
-
 
 
 
@@ -233,6 +252,18 @@ import project.views.StoryBuilder.VideoPreviewArea;
                     //log('_handlePreviewEvent: lock the VideoPreviewArea to '+$e.data.filename);
                     _previewArea.lock(true, $e.data.filename);
                     break;
+
+                case PreviewEvent.PLAY:
+                    _storyboard.playTimeline();
+                    break;
+
+                case PreviewEvent.PAUSE:
+                    _storyboard.playTimeline(false);
+                    break;
+
+                case PreviewEvent.COMPLETE:
+                    _previewArea.resetControls();
+                    break;
             }
         }
 
@@ -266,7 +297,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			log('_addClipMarker');
 			_tempClipMarker = new StoryboardClipMarker();
 			_tempClipMarker.x = _storyboard.x + 20 + Number(Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
-			_tempClipMarker.y = _storyboard.y + 70;
+			_tempClipMarker.y = 570;
 			this.addChild(_tempClipMarker);
 			log('_tempMarker.stage: '+_tempClipMarker.stage);
 			TweenMax.delayedCall(0.2, _tempClipMarker.show);

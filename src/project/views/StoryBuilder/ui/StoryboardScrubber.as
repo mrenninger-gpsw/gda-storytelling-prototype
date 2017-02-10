@@ -28,30 +28,31 @@ import utils.Register;
 
         private function _init():void {
             var __line:Sprite = new Sprite();
-            __line.graphics.lineStyle(1,0xF5A700);
+            __line.graphics.lineStyle(1,0xFFFFFF);
             __line.graphics.moveTo(0,0);
-            __line.graphics.lineTo(0,94);
+            __line.graphics.lineTo(0,192);
             /*__line.mouseEnabled = false;
             __line.mouseChildren = false;*/
+            __line.y = -2;
             this.addChild(__line);
 
             _handleTop = new Sprite();
             _handleTop.addChild(Register.ASSETS.getBitmap('StoryboardScrubberHandle'));
             _handleTop.x = -_handleTop.width/2;
-            _handleTop.y = -9;
-            TweenMax.to(_handleTop, 0, {tint:0xF5A700});
+            _handleTop.y = -11;
+            TweenMax.to(_handleTop, 0, {tint:0xFFFFFF});
             /*_handle.addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
             _handle.addEventListener(MouseEvent.MOUSE_UP, _handleMouseEvent);*/
             this.addChild(_handleTop);
 
-            _handleBtm = new Sprite();
+            /*_handleBtm = new Sprite();
             _handleBtm.addChild(Register.ASSETS.getBitmap('StoryboardScrubberHandle'));
             _handleBtm.x = _handleBtm.width/2 + 0.5;
-            _handleBtm.y = 103;
+            _handleBtm.y = 107;
             TweenMax.to(_handleBtm, 0, {tint:0xF5A700, rotation:180});
-            /*_handle.addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
-             _handle.addEventListener(MouseEvent.MOUSE_UP, _handleMouseEvent);*/
-            this.addChild(_handleBtm);
+            /!*_handle.addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
+             _handle.addEventListener(MouseEvent.MOUSE_UP, _handleMouseEvent);*!/
+            this.addChild(_handleBtm);*/
 
         }
 

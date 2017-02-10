@@ -22,16 +22,18 @@ package project.views.Footer.ui {
 		private var _height:Number;
 		private var _icon:Bitmap;
 		private var _bgShape:Shape;
+        private var _hasBkgd:Boolean;
 
 
 
 		/******************** CONSTRUCTOR *********************/
-		public function FooterBtn($w:Number, $h:Number, $icon:Bitmap) {
+		public function FooterBtn($w:Number, $h:Number, $icon:Bitmap, $hasBkgd:Boolean = true) {
 			super();
 
 			_width = $w;
 			_height = $h;
 			_icon = $icon;
+            _hasBkgd = $hasBkgd;
 
 			_init();
 		}
@@ -40,13 +42,14 @@ package project.views.Footer.ui {
 
 		/******************** PRIVATE API *********************/
 		private function _init():void {
-			_bgShape = new Shape();
-			_bgShape.graphics.beginFill(0x222222);
-			_bgShape.graphics.drawRect(0,0,_width,_height);
-			_bgShape.graphics.endFill();
-			addChild(_bgShape);
+            _bgShape = new Shape();
+            _bgShape.graphics.beginFill(0x353535);
+            _bgShape.graphics.drawRect(0,0,_width,_height);
+            _bgShape.graphics.endFill();
+            addChild(_bgShape);
+            if (!_hasBkgd) TweenMax.to(_bgShape, 0, {autoAlpha:0.01});
 
-			_icon.x = (_width - _icon.width) * 0.5;
+            _icon.x = (_width - _icon.width) * 0.5;
 			_icon.y = (_height- _icon.height) * 0.5;
 			addChild(_icon);
 
@@ -61,12 +64,12 @@ package project.views.Footer.ui {
 		protected function _handleMouseEvents($e:MouseEvent):void {
 			switch ($e.type) {
 				case MouseEvent.MOUSE_OVER:
-					TweenMax.to(_bgShape, 0, {tint:0x00A3DA});
+					if (_hasBkgd) TweenMax.to(_bgShape, 0, {tint:0x00A3DA});
 					TweenMax.to(_icon, 0, {tint:0xFFFFFF});
 					break;
 
 				case MouseEvent.MOUSE_OUT:
-					TweenMax.to(_bgShape, 0.3, {tint:null, ease:Cubic.easeOut});
+                    if (_hasBkgd) TweenMax.to(_bgShape, 0.3, {tint:null, ease:Cubic.easeOut});
 					TweenMax.to(_icon, 0.3, {tint:null, ease:Cubic.easeOut});
 					break;
 

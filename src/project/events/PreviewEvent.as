@@ -7,6 +7,9 @@ package project.events {
 		public static const PREVIEW:String = 'preview';
         public static const CLEAR:String = 'clear';
         public static const LOCK:String = 'lock';
+        public static const PAUSE:String = 'pause';
+        public static const PLAY:String = 'play';
+        public static const COMPLETE:String = 'complete';
 
         public var data:Object = {};
 
