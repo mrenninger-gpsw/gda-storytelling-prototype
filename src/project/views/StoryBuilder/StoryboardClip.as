@@ -75,6 +75,11 @@ import project.events.PreviewEvent;
         public function get clipLength():Number { return (_mask.width/_timelineWidth) * _timelineLength; }
         public function get hiliteScrubPct():Number { return ((0 - _mask.x) / _mask.width); }// pct of scrub where the hilite is placed
         public function get clipStartFrame():Number { return (_hiliteFrameNum - Math.round((clipLength * hiliteScrubPct) * 4));}
+        public function get clipStartTime():Number { return (clipStartFrame / 4);}
+        public function get curPlayheadTime():Number { return 0; }
+        public function get clipTitle():String { return _title; }
+
+
 
         /******************** CONSTRUCTOR *********************/
 		public function StoryboardClip($xml:XML, $frameNum:Number, $hilite:SourceClipHighlight) {
@@ -225,19 +230,7 @@ import project.events.PreviewEvent;
 
             log(' new icon x: '+_deleteIcon.x);
 
-           /* _outline.graphics.lineStyle(2, 0x00A3DA, 1, false, 'none', 'square');
-            _outline.graphics.moveTo(0,0);
-            _outline.graphics.lineTo(_mask.width,0);
-            _outline.graphics.lineTo(_mask.width,_mask.height);
-            _outline.graphics.lineTo(0,_mask.height);
-            _outline.graphics.lineTo(0,0);
-            _outline.x = _mask.x;
-            _outline.y = -_holder.height/2;*/
-
             _drawOutline();
-
-            //_drawOutline();
-            //_addListeners();
 
             _tf = new Label();
             _tf.mouseEnabled = false;
@@ -251,15 +244,8 @@ import project.events.PreviewEvent;
         }
 
         private function _updateClipUI():void {
-            /*log('_updateClipUI');
-            log(' new icon x: '+(Number(_maskXML.@left) + Number(_maskXML.@width) - _deleteIcon.width));*/
-            /*TweenMax.to(_deleteIcon, 0, {x:_editIcon.x, y:_editIcon.y + _editIcon.height + 1 ,autoAlpha:0});
-            TweenMax.to(_editIcon, 0, {x:Number(_maskXML.@left) + Number(_maskXML.@width) - _editIcon.width, y:_mask.y, autoAlpha:0});*/
-
             TweenMax.to(_deleteIcon, 0, {x:Number(_maskXML.@left) + Number(_maskXML.@width) - _deleteIcon.width, y:_mask.y ,autoAlpha:0});
             TweenMax.to(_editIcon, 0, {x:_deleteIcon.x - _editIcon.width - 1, y:_mask.y, autoAlpha:0});
-
-            //_drawOutline();
         }
 
         private function _updateIndexTF():void{
@@ -269,18 +255,7 @@ import project.events.PreviewEvent;
         private function _drawOutline():void {
             log('_drawOutline');
 
-
             var __line:Sprite;
-
-            __line = new Sprite();
-            /*_outline.graphics.lineStyle(3, 0x00A3DA, 1, false, 'none');
-            _outline.graphics.moveTo(0,0);
-            _outline.graphics.lineTo(_mask.width,0);
-            _outline.graphics.lineTo(_mask.width,_mask.height);
-            _outline.graphics.lineTo(0,_mask.height);
-            _outline.graphics.lineTo(0,0);*/
-            //_outline.visible = false;
-            //_outline.addChild(__line);
 
             // top
             __line = new Sprite();
@@ -364,27 +339,6 @@ import project.events.PreviewEvent;
         public function showScrubber($b:Boolean = true, $clear:Boolean = true, $visible:Boolean = true):void{
             if ($b){
                 TweenMax.to(_scrubber, 0, {x:this.mouseX, autoAlpha:($visible)?1:0});
-
-                /*
-                var __timelineWidth:Number = 1082;
-                var __timelineLength:Number = 60; // the fixed example length (in seconds) for the timeline
-                var __clipLength:Number = (_mask.width/__timelineWidth) * __timelineLength;
-
-                var __hiliteScrubPct:Number = (0 - _mask.x) / _mask.width; // pct of scrub where the hilite is placed
-                var __clipStartFrame:Number = _hiliteFrameNum - Math.round((__clipLength * __hiliteScrubPct) * 4); // where 4 is the amount of fps in this prototype
-                */
-
-
-                /*
-                //****************
-                var __curScrubPct:Number = (_scrubber.x - _mask.x) / _mask.width; // pct relative to mask width
-                var __curFrameNum:Number = clipStartFrame + Math.round((clipLength-1) * 4 * __curScrubPct);
-                log('1 clipLength: '+clipLength+' | hiliteScrubPct: '+hiliteScrubPct+' | clipStartFrame: '+clipStartFrame+' | curScrubPct: '+__curScrubPct+' | curFrameNum: '+__curFrameNum);
-
-                _curFileName = _title+'_'+_addLeadingZeros(__curFrameNum);
-                //dispatchEvent(new PreviewEvent(PreviewEvent.PREVIEW, true, {filename:_curFileName}));
-                */
-
                 dispatchEvent(new PreviewEvent(PreviewEvent.PREVIEW, true, {filename:getFrameUnderObject(_scrubber, false)}));
             }
 
@@ -399,24 +353,21 @@ import project.events.PreviewEvent;
 
         public function getFrameUnderObject($obj:DisplayObject, $convert:Boolean = true):String{
             var pt:Point = ($convert) ? globalToLocal(new Point($obj.x,$obj.y)) : new Point($obj.x,$obj.y);
-            //log('getFrameUnderObject: '+pt);
-
-            /*
-            var __timelineWidth:Number = 1082;
-            var __timelineLength:Number = 60; // the fixed example length (in seconds) for the timeline
-            var __clipLength:Number = (_mask.width/__timelineWidth) * __timelineLength;
-
-            var __hiliteScrubPct:Number = (0 - _mask.x) / _mask.width; // pct of scrub where the hilite is placed
-            var __clipStartFrame:Number = _hiliteFrameNum - Math.round((__clipLength * __hiliteScrubPct) * 4); // where 4 is the amount of fps in this prototype
-            */
 
             var __curScrubPct:Number = (pt.x - _mask.x) / _mask.width; // pct relative to mask width
             var __curFrameNum:Number = clipStartFrame + Math.round((clipLength-1) * 4 * __curScrubPct);
-            log('clipLength: '+clipLength+' | hiliteScrubPct: '+hiliteScrubPct+' | clipStartFrame: '+clipStartFrame+' | curScrubPct: '+__curScrubPct+' | curFrameNum: '+__curFrameNum);
+            //log('clipLength: '+clipLength+' | hiliteScrubPct: '+hiliteScrubPct+' | clipStartFrame: '+clipStartFrame+' | curScrubPct: '+__curScrubPct+' | curFrameNum: '+__curFrameNum);
 
             _curFileName = _title+'_'+_addLeadingZeros(__curFrameNum);
-
             return _curFileName;
+        }
+
+        public function getPlayheadTimeUnderObject($obj:DisplayObject, $convert:Boolean = true):Number{
+            var pt:Point = ($convert) ? globalToLocal(new Point($obj.x,$obj.y)) : new Point($obj.x,$obj.y);
+            var __curScrubPct:Number = (pt.x - _mask.x) / _mask.width; // pct relative to mask width
+            var __curPlayheadTime:Number = clipStartTime + (clipLength * __curScrubPct);
+            log('clipTitle: '+clipTitle+' | startTime: '+clipStartTime+' | length: '+clipLength+' | pct: '+__curScrubPct+' | curTime: '+__curPlayheadTime);
+            return __curPlayheadTime;
         }
 
 

@@ -42,8 +42,9 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
-VERSION 1.01.004 - 02/08/2017
-
+VERSION 1.01.005 - 02/13/2017
+    * When playing, PreviewArea now displays an approximate, SourceVideo-based playback of the Storyboard
+    * Various bug fixes and performance improvements
 
 VERSION 1.01.004 - 02/08/2017
     * Update Editor visuals and functionality to reflect current design

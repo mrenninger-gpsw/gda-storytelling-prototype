@@ -166,6 +166,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
             _storyboard.addEventListener(PreviewEvent.CLEAR, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.LOCK, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.COMPLETE, _handlePreviewEvent);
+            _storyboard.addEventListener(PreviewEvent.CHANGE_VIDEO, _handlePreviewEvent);
 
             // ************************************************
 			// ************************************************
@@ -255,14 +256,20 @@ import project.views.StoryBuilder.VideoPreviewArea;
 
                 case PreviewEvent.PLAY:
                     _storyboard.playTimeline();
+                    _previewArea.playVideo(_storyboard.curPlayingClip.clipTitle, _storyboard.curPlayingClipPlayheadTime);
                     break;
 
                 case PreviewEvent.PAUSE:
                     _storyboard.playTimeline(false);
+                    _previewArea.pauseVideo();
                     break;
 
                 case PreviewEvent.COMPLETE:
                     _previewArea.resetControls();
+                    break;
+
+                case PreviewEvent.CHANGE_VIDEO:
+                    _previewArea.playVideo(_storyboard.curPlayingClip.clipTitle, _storyboard.curPlayingClip.clipStartTime);
                     break;
             }
         }

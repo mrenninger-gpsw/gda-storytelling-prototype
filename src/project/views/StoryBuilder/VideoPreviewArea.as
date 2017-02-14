@@ -1,11 +1,15 @@
 package project.views.StoryBuilder {
 
 	// Flash
-	import flash.display.Bitmap;
+import com.greensock.loading.LoaderMax;
+import com.greensock.loading.VideoLoader;
+
+import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.media.StageVideo;
 import flash.ui.Keyboard;
 
 import project.events.PreviewEvent;
@@ -30,6 +34,10 @@ import project.events.PreviewEvent;
         private var _lockFilename:String;
         private var _nav:Sprite;
         private var _isPlaying:Boolean = false;
+        private var _video:VideoLoader;
+        private var _videoHolder:Sprite;
+        private var _startTime:Number;
+        private var _clipName:String;
 
 
 
@@ -47,28 +55,36 @@ import project.events.PreviewEvent;
 
 		/******************** PUBLIC API *********************/
 		public function update($filename:String):void {
+            if(!_isPlaying) {
+                _videoHolder.visible = false;
+            }
             _holder.removeChildren();
             try {
-			    _holder.addChild(Register.ASSETS.getBitmap($filename));
+                _holder.addChild(Register.ASSETS.getBitmap($filename));
             } catch ($e) {
                 log($filename+'does not exist');
             }
 		}
 
 		public function clear():void {
+            if(!_isPlaying) {
+                _videoHolder.visible = false;
+            }
+
             _holder.removeChildren();
             if (_locked) {
                 try {
                     _holder.addChild(Register.ASSETS.getBitmap(_lockFilename));
                 } catch ($e) {
-                    log(_lockFilename+'does not exist');
+                    log(_lockFilename + 'does not exist');
                 }
             }
+
 		}
 
         public function lock($b:Boolean, $filename:String):void {
             if ($b) {
-                //log('LOCK - '+$filename);
+                log('LOCK - '+$filename);
                 _locked = true;
                 _lockFilename = $filename;
                 clear();
@@ -82,6 +98,8 @@ import project.events.PreviewEvent;
             TweenMax.to(_nav.getChildByName('pause'), 0, {autoAlpha:0});
             TweenMax.to(_nav.getChildByName('play'), 0, {autoAlpha:1});
             _isPlaying = false;
+            if (_video) { _video.pauseVideo(); }
+
         }
 
 		public function switchStates($id:String,$immediate:Boolean = false):void {
@@ -105,7 +123,49 @@ import project.events.PreviewEvent;
 			TweenMax.to(this, ($immediate) ? 0 : 0.25, {autoAlpha:0, y:'-20', ease:Cubic.easeOut, onComplete:_onHideComplete});
 		}
 
+        public function playVideo($name:String, $startTime:Number):void {
+            log('playVideo: '+$name+' | time: '+$startTime);
+            if (_videoHolder.numChildren > 0){
+                _video.pauseVideo();
+                _videoHolder.removeChildren();
+                _videoHolder.visible = false;
+            }
 
+            _video = VideoLoader(LoaderMax.getLoader($name));
+
+            _videoHolder.addChild(_video.content);
+            _videoHolder.visible = false;
+            _videoHolder.width = 575;
+            _videoHolder.height = 323;
+
+            _startTime = $startTime;
+            _clipName = $name;
+
+            log('\t_videoHolder.numChildren: '+_videoHolder.numChildren);
+            log('\t_video content parent: '+_video.content.parent);
+            log('\t_video content x|y: '+_video.content.x+'|'+_video.content.y);
+            log('\t_video content w|h: '+_video.content.width+'|'+_video.content.height);
+            log('\t_video content visible: '+_video.content.visible);
+            _videoHolder.addEventListener(Event.ENTER_FRAME, _checkVideoTime);
+            _video.gotoVideoTime($startTime);
+
+
+        }
+
+        private function _checkVideoTime($e:Event):void {
+            _video.gotoVideoTime(_startTime);
+            log('_checkVideoTime ('+_clipName+'): _video.videoTime: '+_video.videoTime+' | _startTime: '+_startTime);
+            if (_video.videoTime == _startTime) {
+                _videoHolder.visible = true;
+                _videoHolder.removeEventListener(Event.ENTER_FRAME, _checkVideoTime);
+                _video.volume = 0;
+                _video.playVideo();
+            }
+        }
+
+        public function pauseVideo():void {
+            _video.pauseVideo();
+        }
 
 		/******************** PRIVATE API *********************/
 		private function _init():void {
@@ -170,7 +230,12 @@ import project.events.PreviewEvent;
 
             TweenMax.to(this, 0, {autoAlpha:0, y:'-20'});
 
-		}
+            _videoHolder = new Sprite();
+            _videoHolder.scaleX = 0.83575581;
+            _videoHolder.scaleY = 0.83575581;
+            this.addChild(_videoHolder);
+
+        }
 
 		private function _onShowComplete():void {
 			dispatchEvent(new Event('showComplete'));

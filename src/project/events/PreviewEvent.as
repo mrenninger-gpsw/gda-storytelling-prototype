@@ -10,6 +10,9 @@ package project.events {
         public static const PAUSE:String = 'pause';
         public static const PLAY:String = 'play';
         public static const COMPLETE:String = 'complete';
+        public static const PLAY_VIDEO:String = 'playVideo';
+        public static const PAUSE_VIDEO:String = 'pauseVideo';
+        public static const CHANGE_VIDEO:String = 'changeVideo'
 
         public var data:Object = {};
 

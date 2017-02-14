@@ -1,30 +1,24 @@
 package project.managers {
 
 	// Flash
-import com.greensock.easing.Circ;
-import com.greensock.easing.Linear;
-
-import flash.display.Bitmap;
+    import flash.display.Bitmap;
     import flash.display.DisplayObject;
     import flash.display.Shape;
 	import flash.events.Event;
     import flash.events.MouseEvent;
-import flash.events.TimerEvent;
-import flash.events.TimerEvent;
+    import flash.events.TimerEvent;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-import flash.ui.Mouse;
-import flash.utils.Timer;
+    import flash.ui.Mouse;
+    import flash.utils.Timer;
 
 import project.events.PreviewEvent;
-import project.events.ViewTransitionEvent;
-import project.views.StoryBuilder.ui.GrabbyMcGrabberson;
-import project.views.StoryBuilder.ui.StoryboardScrubber;
 
 // Greensock
 	import com.greensock.TweenMax;
     import com.greensock.easing.Expo;
     import com.greensock.easing.Back;
+    import com.greensock.easing.Linear;
 
 	// Subarashii Framework
 	import components.controls.Label;
@@ -32,9 +26,13 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
 	import utils.Register;
 
 	// Project
+    import project.events.PreviewEvent;
 	import project.events.StoryboardManagerEvent;
-	import project.views.StoryBuilder.ui.StoryboardClipMarker;
+    import project.events.ViewTransitionEvent;
     import project.views.StoryBuilder.StoryboardClip;
+	import project.views.StoryBuilder.ui.StoryboardClipMarker;
+    import project.views.StoryBuilder.ui.GrabbyMcGrabberson;
+    import project.views.StoryBuilder.ui.StoryboardScrubber;
 
 
 
@@ -72,6 +70,8 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
         private var _playbackDuration:Number = 30;
         //private var _curPlaybackPct:Number = 0;
         private var _previewIsPlaying:Boolean = false;
+        private var _curPlayingClip:StoryboardClip = null;
+        private var _curPlayingClipPlayheadTime:Number;
 
 
 
@@ -88,6 +88,11 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
         }
 
         private function get _curPlaybackPct():Number { return ((_previewScrubber.x - _clipHolder.x)/1082); }
+
+        public function get curPlayingClipName():String { return _curPlayingClip.clipTitle; }
+        public function get curPlayingClip():StoryboardClip{ return _curPlayingClip; }
+        public function get curPlayingClipPlayheadTime():Number { return _curPlayingClip.getPlayheadTimeUnderObject(_previewScrubber); }
+
 
 
 
@@ -165,7 +170,11 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             tMarker.graphics.endFill();
             tMarker.x = _clipsV[_clipHolder.numChildren - 1].x;
 
-            if (__clip.index == 0) { log('createClip calling _selectClip'); _selectClip(__clip); }
+            if (__clip.index == 0) {
+                log('createClip calling _selectClip'); _selectClip(__clip);
+                _curPlayingClip = __clip;
+                //_curPlayingClipPlayheadTime = _curPlayingClip.getPlayheadTimeUnderObject(_previewScrubber);
+            }
 
             _markerHolder.addChild(tMarker);
             _markersV.push(tMarker);
@@ -184,8 +193,8 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
                 if (_clipsV[i].maskShape.hitTestObject(_previewScrubber)){
                     //log('\tintersected clip'+i);
                     _curScrubClip = _clipsV[i];
-                    var __filename:String = _curScrubClip.getFrameUnderObject(_previewScrubber);
-                    dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:__filename}));
+                    if (!_previewIsPlaying) _selectClip(_curScrubClip);
+                    dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curScrubClip.getFrameUnderObject(_previewScrubber)}));
                 } else {
                     //log('\tdid not intersect clip'+i);
                 }
@@ -202,13 +211,15 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
                     //_curPlaybackPct = 0;
                     _previewScrubber.x = _clipHolder.x;
                 }
+                _deselectAllClips();
                 var __time:Number = (1 - _curPlaybackPct) * _playbackDuration;
                 _progressShape.scaleX = _curPlaybackPct;
-                TweenMax.to(_previewScrubber, __time, {x:1102, ease:Linear.easeNone, onUpdate:_updatePreviewLockImage, onComplete:_onPlaybackComplete});
+                TweenMax.to(_previewScrubber, __time, {x:1102, ease:Linear.easeNone, onUpdate:_checkForNewClip, onComplete:_onPlaybackComplete});
                 TweenMax.to(_progressShape, __time, {scaleX:1, ease:Linear.easeNone});
             } else {
                 _previewIsPlaying = false;
                 TweenMax.killTweensOf([_previewScrubber, _progressShape]);
+                dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curPlayingClip.getFrameUnderObject(_previewScrubber)}));
             }
         }
 
@@ -217,56 +228,10 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
 		/******************** PRIVATE API *********************/
 		private function _init():void {
 
-            /*var __bg:Shape = new Shape();
-            __bg.graphics.beginFill(0xFF00FF);
-            __bg.graphics.drawRect(0,0,Register.APP.WIDTH, 200);
-            __bg.graphics.endFill();
-            __bg.alpha = 1;
-            this.addChild(__bg);*/
-
-            // song title block
-            /*var musicIcon:Sprite = new Sprite();
-            musicIcon.graphics.beginFill(0x171717);
-            musicIcon.graphics.drawRect(0,0,24,24);
-            musicIcon.graphics.endFill();
-            TweenMax.to(musicIcon, 0, {x:20, y:14});
-            this.addChild(musicIcon);
-
-            var musicIconBmp:Bitmap = Register.ASSETS.getBitmap('footer_musicIcon');
-			TweenMax.to(musicIconBmp, 0, {x:6, y:6, width:12, height:12, alpha:0.66});
-            musicIcon.addChild(musicIconBmp);
-
-			_songTitleTF = new Label();
-			_songTitleTF.mouseEnabled = false;
-			_songTitleTF.mouseChildren = false;
-			_songTitleTF.id = 'storyboard-song-title';
-			_songTitleTF.text = _musicXML.tracks.item[Number(_musicXML.@initSongNum)].@title;
-			_songTitleTF.autoSize = 'left';
-			_songTitleTF.textFormatName = 'storyboard-songtitle';
-			_songTitleTF.x = 52;
-			_songTitleTF.y = 18;
-			this.addChild(_songTitleTF);*/
-            // ***************
-
-
             // new top controls 2/8/17
             var __topControls:Bitmap = Register.ASSETS.getBitmap('Storyboard-TopControls');
             TweenMax.to(__topControls, 0, {x:20, y:15});
             this.addChild(__topControls);
-            // ***************
-
-            /*var timeIndicator:Bitmap = Register.ASSETS.getBitmap('Storyboard-TimeIndicator');
-            TweenMax.to(timeIndicator, 0, {x:_songTitleTF.x + _songTitleTF.width + 30, y:18});
-            this.addChild(timeIndicator);
-
-            var clipsRemaining:Bitmap = Register.ASSETS.getBitmap('Storyboard-ClipsRemaining');
-            TweenMax.to(clipsRemaining, 0, {x:timeIndicator.x + timeIndicator.width + 30, y:18});
-            this.addChild(clipsRemaining);*/
-
-            // bitmap of empty storyboard
-            /*var empty:Bitmap = Register.ASSETS.getBitmap('Storyboard_empty');
-            TweenMax.to(empty, 0, {x:20, y:70 - empty.height/2, alpha:0.2});
-            this.addChild(empty);*/
             // ***************
 
 
@@ -275,6 +240,7 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             TweenMax.to(_clipHolder, 0, {x:20, y:106});
 			this.addChild(_clipHolder);
             // ***************
+
 
             //*********
             // main preview playhead
@@ -286,6 +252,17 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             _previewScrubber.addEventListener(MouseEvent.MOUSE_OVER, _handlePreviewScrubberInteraction);
             _previewScrubber.addEventListener(MouseEvent.MOUSE_OUT, _handlePreviewScrubberInteraction);
             _previewScrubber.addEventListener(MouseEvent.MOUSE_DOWN, _handlePreviewScrubberInteraction);
+            // ***************
+
+
+            // return to 0
+            var __returnToZero:Sprite = new Sprite();
+            __returnToZero.graphics.beginFill(0xFF00FF, 0);
+            __returnToZero.graphics.drawRect(0, 0, 20, 98);
+            __returnToZero.graphics.endFill();
+            __returnToZero.y = 57;
+            this.addChild(__returnToZero);
+            __returnToZero.addEventListener(MouseEvent.MOUSE_DOWN, _handleReturnToZero);
             // ***************
 
 
@@ -370,7 +347,7 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
 
 		}
 
-        private function _selectClip($clip:StoryboardClip):void {
+        private function _selectClip($clip:StoryboardClip = null):void {
             //log('ƒ _selectClip - _selectedClip == $clip? '+(_selectedClip == $clip));
 
             if (_selectedClip != $clip){
@@ -382,8 +359,17 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
 
                 if (_previewIsPlaying) {
                     // do something here to begin video playback of the clip according to the width & x of the mask
+                    _curPlayingClip = $clip;
+                    dispatchEvent(new PreviewEvent(PreviewEvent.CHANGE_VIDEO));
 
                 }
+            }
+        }
+
+        private function _deselectAllClips():void {
+            _selectedClip = null;
+            for (var i:uint = 0; i < _clipsV.length; i++) {
+                _clipsV[i].outline.visible = false;
             }
         }
 
@@ -394,7 +380,7 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             for (var i:uint = 0; i < _clipsV.length; i++) {
                 var tClip:StoryboardClip = _clipsV[i];
 
-                /****
+                /*
                 // for normalized clip widths
                 var newX:Number = _normalizedMaskW/2 + (_clipsV[i].index * (_normalizedMaskW + 10));
                 if (_clipsV[i] != _selectedClip) TweenMax.to(tClip, 0.4, {x:newX, ease:Expo.easeInOut, onComplete:_repositionComplete});
@@ -492,24 +478,6 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             }
         }
 
-        /*private function _onDropClip():void {
-            for (var i:uint = 0; i < _clipsV.length; i++){
-                if (_clipsV[i].maskShape.hitTestObject(_previewScrubber)){
-                    _curScrubClip = _clipsV[i];
-                    _curScrubClip.showScrubber(true);
-                    dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curScrubClip.curFileName}));
-                    _curScrubClip.showScrubber(false);
-                }
-            }
-        }*/
-
-        /*private function _normalizeAllClipWidths():void {
-            for (var i:uint = 0; i < _clipsV.length; i++){
-                TweenMax.to(_clipsV[i].maskShape, 0.2, {x:0-(_normalizedMaskW/2), width:_normalizedMaskW, ease:Expo.easeOut});
-                if (_clipsV[i] != _selectedClip) TweenMax.to(_clipsV[i], 0.2, {x:_normalizedMaskW/2 + (_clipsV[i].index * (_normalizedMaskW + 10)), ease:Expo.easeOut});
-            }
-        }*/
-
         private function _revertAllClipWidths():void {
             var __locationIndex:uint = (_clipHolder.numChildren < 5) ? 0 : 1;
             for (var i:uint = 0; i < _clipsV.length; i++){
@@ -524,20 +492,14 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             if (_checkMouseOver($clip.deleteIcon)){
                 TweenMax.to($clip.deleteIcon.getChildByName('bg'), 0, {tint:0x00A3DA, alpha:1});
                 TweenMax.to($clip.editIcon.getChildByName('bg'), 0, {tint:null, alpha:0.7});
-                //$clip.deleteIcon.getChildByName('bg').alpha = 1;
-                //$clip.editIcon.getChildByName('bg').alpha = 0.7;
             } else if (_checkMouseOver($clip.editIcon)) {
                 TweenMax.to($clip.editIcon.getChildByName('bg'), 0, {tint:0x00A3DA, alpha:1});
                 TweenMax.to($clip.deleteIcon.getChildByName('bg'), 0, {tint:null, alpha:0.7});
-                //$clip.deleteIcon.getChildByName('bg').alpha = 0.7;
-                //$clip.editIcon.getChildByName('bg').alpha = 1;
             } else if (_checkMouseOver($clip.marker.icon)) {
                 $clip.marker.activate();
             } else {
                 TweenMax.to($clip.editIcon.getChildByName('bg'), 0, {tint:null, alpha:0.7});
                 TweenMax.to($clip.deleteIcon.getChildByName('bg'), 0, {tint:null, alpha:0.7});
-                //$clip.deleteIcon.getChildByName('bg').alpha = 0.7;
-                //$clip.editIcon.getChildByName('bg').alpha = 0.7;
                 $clip.marker.activate(false);
                 $clip.hilite.hide();
             }
@@ -558,6 +520,10 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
                 TweenMax.to(_previewScrubber, 0, {tint:null});
                 resetScrubber();
                 removeEventListener(Event.ENTER_FRAME, _trackScrubber);
+                if (!_checkMouseOver(_previewScrubber)) {
+                    _grabby.show(false);
+                    Mouse.show();
+                }
             }
         }
 
@@ -572,13 +538,34 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
                 if (_clipsV[i].maskShape.hitTestObject(_previewScrubber)){
                     //log('\tintersected clip'+i);
                     //if(_curScrubClip != _clipsV[i]){
-                        _curScrubClip = _clipsV[i];
+                    _curScrubClip = _clipsV[i];
+                    _curPlayingClip = _curScrubClip;
                     //log('_updatePreviewLockImage calling _selectClip');
-                    _selectClip(_curScrubClip);
+
+                    //if (!_previewIsPlaying) _selectClip(_curScrubClip);
 
                     //}
                     //var __filename:String = _curScrubClip.getFrameUnderObject(_previewScrubber);
                     dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curScrubClip.getFrameUnderObject(_previewScrubber)}));
+                }
+            }
+        }
+
+        private function _checkForNewClip():void {
+            if (_curPlayingClip) {
+                //_curPlayingClipPlayheadTime = _curPlayingClip.getPlayheadTimeUnderObject(_previewScrubber);
+                //dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curPlayingClip.getFrameUnderObject(_previewScrubber)}));
+            }
+
+            // need to take into account whether _previewIsPlaying is true or false
+            // maybe on PAUSE, _curPlayingClip gets set to null?
+            for (var i:uint = 0; i < _clipsV.length; i++) {
+                if (_clipsV[i].maskShape.hitTestObject(_previewScrubber) && _clipsV[i] != _curPlayingClip) {
+                    dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curPlayingClip.getFrameUnderObject(_previewScrubber)}));
+                    _curPlayingClip = _clipsV[i];
+                    dispatchEvent(new PreviewEvent(PreviewEvent.CHANGE_VIDEO));
+                    // determine where on the clips timeline the _previewScrubber is and tell the VideoPreview to play from that point
+
                 }
             }
         }
@@ -782,6 +769,11 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
                                     //playTimeline(false); // to kill the tweens
                                     _onPlaybackComplete(); // to reset playback boolean and tell the VideoPreviewArea to resetControls
 
+                                    Mouse.show();
+                                    _grabby.show(false);
+                                    _grabby.grab(false);
+                                    _dragScrubber(false);
+
                                     // do something here to alert the preview window to lock on to this location
                                     dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_selectedClip.curFileName}));
 
@@ -828,6 +820,8 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
                                 TweenMax.to(_previewScrubber, 0.2, {alpha:0.5});
 
                             }
+
+
                             /*Mouse.show();
                             _grabby.show(false);*/
                             _grabby.grab(false);
@@ -903,6 +897,11 @@ import project.views.StoryBuilder.ui.StoryboardScrubber;
             _updatePreviewLockImage();
         }
 
+        private function _handleReturnToZero($e:MouseEvent):void {
+            playTimeline(false);
+            resetScrubber(true);
+            _updatePreviewLockImage();
+        }
 
 
         /*********************** HELPERS **********************/
