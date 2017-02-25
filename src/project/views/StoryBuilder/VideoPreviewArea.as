@@ -164,7 +164,7 @@ import project.events.PreviewEvent;
         }
 
         public function pauseVideo():void {
-            _video.pauseVideo();
+            if (_video) _video.pauseVideo();
         }
 
 		/******************** PRIVATE API *********************/

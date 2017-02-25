@@ -42,6 +42,9 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 2.00.001 - 02/22/2017
+    * Initial implementation of Timeline-Zooming
+
 VERSION 1.01.005 - 02/13/2017
     * When playing, PreviewArea now displays an approximate, SourceVideo-based playback of the Storyboard
     * Various bug fixes and performance improvements
@@ -271,7 +274,9 @@ VERSION 0.00.001 - 01/20/2016
 				<storyboard>
 					<!-- location[i].@position is the center-justified x-position of the sourceClips -->
 					<!-- location[i].mask.@left is the left position of the mask (from center) -->
-					<clip src='storyboardClip_image1'>
+
+                    <!-- ********* BUMPER ******** -->
+					<!--<clip src='storyboardClip_image1'>
 						<location id='4' position='85'>
 							<mask left='-85' width='200'/>
 						</location>
@@ -297,22 +302,112 @@ VERSION 0.00.001 - 01/20/2016
 					</clip>
 					<clip src='storyboardClip_image5'>
 						<location id='4' position='969'>
-							<mask left='-100' width='214'/><!-- 1239 -->
+							<mask left='-100' width='214'/>&lt;!&ndash; 1239 &ndash;&gt;
 						</location>
 						<location id='5' position='727'>
 							<mask left='-133' width='268'/>
 						</location>
 					</clip>
 
-					<!-- this is the info for the clip you add/delete -->
+					&lt;!&ndash; this is the info for the clip you add/delete &ndash;&gt;
 					<clip>
 						<location id='4' position=''>
 							<mask left='' width=''/>
 						</location>
 						<location id='5' position='998'>
-							<mask left='-126' width='211'/><!-- 1238 -->
+							<mask left='-126' width='211'/>&lt;!&ndash; 1238 &ndash;&gt;
 						</location>
-					</clip>
+					</clip>-->
+
+
+                    <!-- *********** NO Bumper (new) ************** -->
+                    <clip src='storyboardClip_image1'>
+                        <location id='4' position='86'>
+                            <mask left='-86' width='200'/>
+                        </location>
+                        <location id='5' position='189'>
+                            <mask left='-189' width='327'/>
+                        </location>
+                    </clip>
+                    <clip src='storyboardClip_image2'>
+                        <location id='4' position='405'>
+                            <mask left='-195' width='397'/>
+                        </location>
+                        <location id='5' position='425'>
+                            <mask left='-88' width='174'/>
+                        </location>
+                    </clip>
+                    <clip src='storyboardClip_image4'>
+                        <location id='4' position='854'>
+                            <mask left='-237' width='346'/>
+                        </location>
+                        <location id='5' position='577'>
+                            <mask left='-56' width='114'/>
+                        </location>
+                    </clip>
+                    <clip src='storyboardClip_image5'>
+                        <location id='4' position='1073'>
+                            <mask left='-100' width='267'/><!-- 1239 -->
+                        </location>
+                        <location id='5' position='806'>
+                            <mask left='-161' width='325'/>
+                        </location>
+                    </clip>
+
+                    <!-- this is the info for the clip you add/delete -->
+                    <clip>
+                        <location id='4' position=''>
+                            <mask left='' width=''/>
+                        </location>
+                        <location id='5' position='1105'>
+                            <mask left='-125' width='260'/><!-- 1238 -->
+                        </location>
+                    </clip>
+
+
+                    <!-- *********** NO Bumper (original) ************** -->
+                    <!--<clip src='storyboardClip_image1'>
+                        <location id='4' position='150'>
+                            <mask left='-150' width='300'/>
+                        </location>
+                        <location id='5' position='189'>
+                            <mask left='-189' width='327'/>
+                        </location>
+                    </clip>
+                    <clip src='storyboardClip_image2'>
+                        <location id='4' position='462'>
+                            <mask left='-149' width='300'/>
+                        </location>
+                        <location id='5' position='425'>
+                            <mask left='-88' width='174'/>
+                        </location>
+                    </clip>
+                    <clip src='storyboardClip_image4'>
+                        <location id='4' position='777'>
+                            <mask left='-150' width='300'/>
+                        </location>
+                        <location id='5' position='577'>
+                            <mask left='-57' width='114'/>
+                        </location>
+                    </clip>
+                    <clip src='storyboardClip_image5'>
+                        <location id='4' position='1089'>
+                            <mask left='-150' width='300'/>
+                        </location>
+                        <location id='5' position='806'>
+                            <mask left='-163' width='325'/>
+                        </location>
+                    </clip>
+
+                    &lt;!&ndash; this is the info for the clip you add/delete &ndash;&gt;
+                    <clip>
+                        <location id='4' position=''>
+                            <mask left='' width=''/>
+                        </location>
+                        <location id='5' position='1105'>
+                            <mask left='-128' width='261'/>
+                        </location>
+                    </clip>-->
 
                     <positions id='4'>
                         <location x='150' maskwidth='300'/>

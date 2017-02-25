@@ -34,9 +34,6 @@ import project.events.PreviewEvent;
 		private var _holder:Sprite;
         private var _curFileName:String;
         private var _hiliteFileName:String;
-        private var _firstFileName:String;
-		private var _prevImageName:String;
-		private var _nextImageName:String;
 		private var _hiliteFrameNum:Number;
 		private var _mask:Shape;
 		private var _maskXML:XMLList;
@@ -49,34 +46,33 @@ import project.events.PreviewEvent;
         private var _tf:Label;
         private var _title:String;
         private var _outline:Sprite;
+        private var _sourceClipLength:Number;
+        private var _curZoomLevel:Number = 1;
 
-        private static const _timelineWidth:Number = 1082;
+        private static const _timelineWidth:Number = 1240;
         private static const _timelineLength:Number = 30; // the fixed example length (in seconds) for the timeline
 
 
 
 		/***************** GETTERS & SETTERS ******************/
         public function get curFileName():String { return _curFileName; }
-        public function get hiliteFileName():String { return _hiliteFileName; }
-        public function get firstFileName():String { return _firstFileName; }
         public function get outline():Sprite { return _outline; }
         public function get maskShape():Shape { return _mask; }
         public function get hilite():SourceClipHighlight { return _hilite; }
         public function get deleteIcon():Sprite { return _deleteIcon; }
         public function get editIcon():Sprite { return _editIcon; }
         public function get marker():StoryboardClipMarker { return _marker; }
-        public function get hiliteFrameNum():Number { return _hiliteFrameNum; }
 
         public function set maskXML($value:XMLList):void { _maskXML = $value;  _updateClipUI()}
+        public function set curZoomLevel($value:Number):void { _curZoomLevel = $value; }
 
         public function get index():uint { return _index; }
         public function set index($value:uint):void { _index = $value; _updateIndexTF(); }
 
-        public function get clipLength():Number { return (_mask.width/_timelineWidth) * _timelineLength; }
+        public function get clipLength():Number { return ((_mask.width/_timelineWidth) * _timelineLength)/_curZoomLevel; }
         public function get hiliteScrubPct():Number { return ((0 - _mask.x) / _mask.width); }// pct of scrub where the hilite is placed
         public function get clipStartFrame():Number { return (_hiliteFrameNum - Math.round((clipLength * hiliteScrubPct) * 4));}
         public function get clipStartTime():Number { return (clipStartFrame / 4);}
-        public function get curPlayheadTime():Number { return 0; }
         public function get clipTitle():String { return _title; }
 
 
@@ -90,23 +86,12 @@ import project.events.PreviewEvent;
 			_hilite = $hilite;
             _hiliteFrameNum = $frameNum;
             _title = $xml.@title;
+            _sourceClipLength = Number($xml.@length);
 
             _hiliteFileName = _title + '_' + _addLeadingZeros(_hiliteFrameNum);
             log('_hiliteFrameNum: '+_hiliteFrameNum+' | _hiliteFileName: '+_hiliteFileName);
 
-            _firstFileName = _title + '_' + _addLeadingZeros(1);
-
-			var sourceClipLength:Number = Number($xml.@length);
-
-			var _prevFrameNum:Number = _hiliteFrameNum - 20;
-			if (_prevFrameNum < 1) _prevFrameNum = 1;
-			_prevImageName = $xml.@title + '_' + _addLeadingZeros(_prevFrameNum);
-
-			var _nextFrameNum:Number = _hiliteFrameNum + 20;
-			if (_nextFrameNum > sourceClipLength) _nextFrameNum = sourceClipLength;
-			_nextImageName = $xml.@title + '_' + _addLeadingZeros(_nextFrameNum);
-
-			_holder = new Sprite();
+            _holder = new Sprite();
             _holder.mouseEnabled = false;
             _holder.mouseChildren = false;
 			addChild(_holder);
@@ -145,6 +130,21 @@ import project.events.PreviewEvent;
 			_marker.show($immediate);
 			_createAdditionalImages();
 		}
+
+        public function zoom($inc:Number):void {
+            _curZoomLevel = $inc;
+
+            var newW:Number = Number(_maskXML.@width) * _curZoomLevel;
+            var newX:Number = (Number(_maskXML.@left)/_maskXML.@width) * newW;
+
+            _mask.width = newW;
+            _mask.x = newX;
+
+            TweenMax.to(_outline, 0, {x:newX});
+            TweenMax.to(_outline.getChildByName('t'), 0, {width:newW});
+            TweenMax.to(_outline.getChildByName('b'), 0, {width:newW});
+            TweenMax.to(_outline.getChildByName('r'), 0, {x:newW - 3});
+        }
 
 
 
@@ -216,7 +216,7 @@ import project.events.PreviewEvent;
             _deleteIcon.addChild(__bg);
             __icon = Register.ASSETS.getBitmap('StoryboardClip_Delete');
             __icon.x = (__bg.width - __icon.width)/2;
-            __icon.y = (__bg.height - __icon.height)/2;x
+            __icon.y = (__bg.height - __icon.height)/2;
             /*__icon.x = 2;
             __icon.y = 2;*/
             _deleteIcon.addChild(__icon);
@@ -300,38 +300,64 @@ import project.events.PreviewEvent;
         }
 
 		private function _createAdditionalImages():void {
-			// add the prev and next thumbs;
-			var prevThumb:Bitmap = Register.ASSETS.getBitmap(_prevImageName);
-			prevThumb.width = 174;
-			prevThumb.height = 98;
-			prevThumb.x = -prevThumb.width - (prevThumb.width * 0.5);
-			prevThumb.y = -prevThumb.height * 0.5;
-			_holder.addChild(prevThumb);
+			log('_createAdditionalImages');
 
-			var nextThumb:Bitmap = Register.ASSETS.getBitmap(_nextImageName);
-			nextThumb.width = 174;
-			nextThumb.height = 98;
-			nextThumb.x = (nextThumb.width * 0.5);
-			nextThumb.y = -nextThumb.height * 0.5;
-			_holder.addChild(nextThumb);
+            // add the prev and next thumbs;
 
-            showAdditionalImages();
+            var $thumb:Bitmap;
+            var $i:uint;
+            var $frameNum:Number;
+
+            for ($i = 0; $i < 3; $i++){
+                $frameNum = _hiliteFrameNum - (($i+1) * 4);
+                if ($frameNum < 1) $frameNum = 1;
+
+                $thumb = Register.ASSETS.getBitmap(_title + '_' + _addLeadingZeros($frameNum));
+                $thumb.width = 174;
+                $thumb.height = 98;
+                $thumb.x = (0 - $thumb.width/2) - (($i + 1) * 174);//_holder.getChildAt(i).x - thumb.width;// -prevThumb.width - (prevThumb.width * 0.5);
+                $thumb.y = -$thumb.height/2;//_holder.getChildAt(0).y;//-prevThumb.height * 0.5;
+                _holder.addChild($thumb);
+            }
+
+            for ($i = 0; $i < 3; $i++){
+                $frameNum = _hiliteFrameNum + (($i+1) * 4);
+                if ($frameNum > (_sourceClipLength * 4)) $frameNum = (_sourceClipLength * 4);
+
+                $thumb = Register.ASSETS.getBitmap(_title + '_' + _addLeadingZeros($frameNum));
+                $thumb.width = 174;
+                $thumb.height = 98;
+                $thumb.x = ($thumb.width/2) + ($i * 174);//_holder.getChildAt(0).x + _holder.getChildAt(0).width;// -prevThumb.width - (prevThumb.width * 0.5);
+                $thumb.y = -$thumb.height/2;//_holder.getChildAt(0).y;//-prevThumb.height * 0.5;
+                _holder.addChild($thumb);
+            }
+
+            TweenMax.delayedCall(0.1, showAdditionalImages);
         }
 
         public function showAdditionalImages($speed:Number = 0.5):void {
-            //log('ƒ showAdditionalImages: '+$speed);
+            log('ƒ showAdditionalImages: '+$speed);
             //log('\tmask - left: '+_maskXML.@left+' | width: '+_maskXML.@width);
+
+            var newW:Number = Number(_maskXML.@width) * _curZoomLevel;
+            var newX:Number = (Number(_maskXML.@left)/_maskXML.@width) * newW;
+
             if (x != Number(_maskXML.@left) || width != Number(_maskXML.@width)) {
-                TweenMax.to(_mask, $speed, {x:Number(_maskXML.@left), width:Number(_maskXML.@width), ease:Expo.easeInOut});
-                TweenMax.to(_outline, $speed, {x:Number(_maskXML.@left), ease:Expo.easeInOut});
-                TweenMax.to(_outline.getChildByName('t'), $speed, {width:Number(_maskXML.@width), ease:Expo.easeInOut});
-                TweenMax.to(_outline.getChildByName('b'), $speed, {width:Number(_maskXML.@width), ease:Expo.easeInOut});
-                TweenMax.to(_outline.getChildByName('r'), $speed, {x:Number(_maskXML.@width) - 3, ease:Expo.easeInOut});
+                TweenMax.to(_mask, $speed, {x:newX, width:newW, ease:Expo.easeInOut});
+                TweenMax.to(_outline, $speed, {x:newX, ease:Expo.easeInOut});
+                TweenMax.to(_outline.getChildByName('t'), $speed, {width:newW, ease:Expo.easeInOut});
+                TweenMax.to(_outline.getChildByName('b'), $speed, {width:newW, ease:Expo.easeInOut});
+                TweenMax.to(_outline.getChildByName('r'), $speed, {x:newW - 3, ease:Expo.easeInOut});
             }
         }
 
         public function showNav($b:Boolean = true):void{
             var aTarg:Number = ($b) ? 1 : 0;
+
+            // make sure they're in the right place
+            TweenMax.to(_deleteIcon, 0, {x:_mask.x + _mask.width - _deleteIcon.width, y:_mask.y});
+            TweenMax.to(_editIcon, 0, {x:_deleteIcon.x - _editIcon.width - 1, y:_mask.y});
+
             TweenMax.to(_deleteIcon, 0.2, {autoAlpha:aTarg});
             TweenMax.to(_editIcon, 0.2, {autoAlpha:aTarg});
         }

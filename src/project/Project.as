@@ -78,7 +78,9 @@ package project {
 			Register.PROJECT = this;
 			Multitouch.inputMode = MultitouchInputMode.GESTURE;
 
-			_xml = Register.PROJECT_XML;0
+			_xml = Register.PROJECT_XML;
+
+            Register.DATA = new Object();
 
 			// Subarashii TextFormats
 			//log('TEXTFORMATS_XML\r'+Register.TEXTFORMATS_XML);
@@ -107,6 +109,13 @@ package project {
 			super.init($e);
 			log('############   INITIALIZED  ############');
 
+            Register.DATA.resetZoomOnClipAddDelete = true;
+            Register.DATA.autoScrollToStartOnClipAddDelete = true;
+            Register.DATA.autoScrollToEndOnClipAdd = false;
+            log('DATA')
+            for (var i:Object in Register.DATA){
+                log('\t'+i+': '+Register.DATA[i]);
+            }
 			// ******************** WINDOW ********************
 			// ************************************************
 			_window = Register.APP.windowManager.getWindowByID('project');

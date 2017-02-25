@@ -167,6 +167,8 @@ import project.views.StoryBuilder.VideoPreviewArea;
             _storyboard.addEventListener(PreviewEvent.LOCK, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.COMPLETE, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.CHANGE_VIDEO, _handlePreviewEvent);
+            _storyboard.addEventListener(PreviewEvent.PAUSE, _handlePreviewEvent);
+            _storyboard.addEventListener(PreviewEvent.PLAY, _handlePreviewEvent);
 
             // ************************************************
 			// ************************************************
@@ -184,7 +186,8 @@ import project.views.StoryBuilder.VideoPreviewArea;
 
 		private function _moveClipToStoryboard($clip:StoryboardClip):void {
 			log('_moveClipToStoryboard');
-			var newClipX:Number = (Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
+            var clip5X:Number = Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position;
+            var newClipX:Number = (Register.DATA.resetZoomOnClipAddDelete) ? clip5X : _storyboard.clipHolder.x + (_storyboard.curZoomLevel * clip5X);
 			var totalTime:Number = 0.7;
 			var distance:Number = GeomUtilities.getDistance(new Point($clip.x,$clip.y), new Point((newClipX + 21), 570));
 			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 570));
@@ -303,7 +306,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
 		private function _addClipMarker($e:StoryboardManagerEvent):void {
 			log('_addClipMarker');
 			_tempClipMarker = new StoryboardClipMarker();
-			_tempClipMarker.x = _storyboard.x + 20 + Number(Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position);
+			_tempClipMarker.x = _storyboard.x + 20 + (_storyboard.curZoomLevel * Number(Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position));
 			_tempClipMarker.y = 570;
 			this.addChild(_tempClipMarker);
 			log('_tempMarker.stage: '+_tempClipMarker.stage);

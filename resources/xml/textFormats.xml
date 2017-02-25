@@ -112,7 +112,7 @@
 		id='settings-closeIcon'
 		size='16'
 		color='#000000'
-		font='Gill Sans MT Pro Bold'
+		font='Proxima Nova Bold'
 		align='left'
 	/>
 
@@ -120,7 +120,7 @@
 		id='settings-title'
 		size='21'
 		color='#000000'
-		font='Gill Sans MT Pro Medium'
+		font='Proxima Nova Semibold'
 		align='left'
 	/>
 
@@ -128,7 +128,7 @@
 		id='settings-text'
 		size='16'
 		color='#000000'
-		font='Gill Sans MT Pro Book'
+		font='Proxima Nova Regular'
 		align='left'
 	/>
 
@@ -136,7 +136,7 @@
 		id='settings-save'
 		size='16'
 		color='#FFFFFF'
-		font='Gill Sans MT Pro Book'
+		font='Proxima Nova Regular'
 		align='left'
 	/>
 
@@ -173,6 +173,14 @@
         size='14'
         color='#FFFFFF'
         font='Proxima Nova Semibold'
+        align='left'
+    />
+
+    <textFormat
+        id='storyboard-timeline'
+        size='12'
+        color='#666666'
+        font='Proxima Nova Light'
         align='left'
     />
 
