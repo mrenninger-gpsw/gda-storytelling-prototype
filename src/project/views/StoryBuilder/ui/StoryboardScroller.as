@@ -45,10 +45,10 @@ import display.Sprite;
             }
         }
 
-        public function scrollTo($pct, $speed = 0):void {
+        public function scrollTo($pct:Number, $speed:Number = 0, $throwing:Boolean = false):void {
             _pct = $pct;
 
-            TweenMax.to(_bar, $speed, {x:$pct * (_barWidth - _bar.width), ease:Expo.easeInOut});
+            TweenMax.to(_bar, $speed, {x:$pct * (_barWidth - _bar.width), ease:($throwing) ? Expo.easeOut : Expo.easeInOut});
             //_bar.x = $pct * (_barWidth - _bar.width);
         }
 

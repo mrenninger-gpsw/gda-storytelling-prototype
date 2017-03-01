@@ -233,11 +233,18 @@ package project.views {
             _checkBoxesV.push(__cb);
 
             /*__cb = new LabelledCheckbox('autoScrollToEndOnClipAdd', 'AutoScroll to end when adding Moments', true);
+             __cb.x = 20;
+             __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + 20;
+             __cb.selected = Register.DATA[__cb.id];
+             _panel.addChild(__cb);
+             _checkBoxesV.push(__cb);*/
+
+            __cb = new LabelledCheckbox('centerPlayheadOnScreenDuringPlayback', 'Center playhead on screen during playback');
             __cb.x = 20;
             __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + 20;
             __cb.selected = Register.DATA[__cb.id];
             _panel.addChild(__cb);
-            _checkBoxesV.push(__cb);*/
+            _checkBoxesV.push(__cb);
 
 			_onResize();
 

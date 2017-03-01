@@ -42,6 +42,16 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 2.02.001 - 03/01/2017
+    * Added Pan gesture to scrolling
+    * When zoom > 100%, Play marker is centered as long as current scroll % is greater than 0 and less than 1
+    * Timeline autoscrolls to the left during playback - increasing scroll % - until scroll % reaches 1
+
+VERSION 2.01.003 - 02/27/2017
+    * Refinements to Storyboard Zooming/Scrolling
+    * AutoZoom to 100% when adding Moment to Storyboard
+    * Initial implementation of a Settings panel to toggle between certain settings
+
 VERSION 2.00.001 - 02/22/2017
     * Initial implementation of Timeline-Zooming
 

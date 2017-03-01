@@ -7,7 +7,8 @@ package project.managers {
 	import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.events.TimerEvent;
-    import flash.geom.Point;
+import flash.events.TransformGestureEvent;
+import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.ui.Mouse;
     import flash.utils.Timer;
@@ -42,62 +43,75 @@ package project.managers {
 
 	public class StoryboardManager extends Sprite {
 
-		/******************** PRIVATE VARS ********************/
-		//private var _waveform:Bitmap;
-        private var _waveform:AudioWaveformDisplay;
-		private var _timeline:Timeline;
-		private var _clipHolder:Sprite;
-		private var _clipsV:Vector.<StoryboardClip>;
-		private var _clipsXML:XMLList;
-		private var _musicXML:XMLList;
+		/****************** PRIVATE CONSTANTS******************/
+        private static const ZOOM_MULTIPLIER:Number = 2;
+        private static const WIDTH:Number = 1240;
+        private static const TIMELINE_DURATION:Number = 30;
+
+        /******************** PRIVATE VARS ********************/
+        private var _curScrubClipVisibleInViewport:Boolean = true;
         private var _dragging:Boolean = false;
         private var _mouseIsDown:Boolean = false;
-        private var _longPressTimer:Timer;
-        private var _selectedClip:StoryboardClip;
-        private var _collidedClipIndex:uint;
-        private var _prevDragClipX:Number;
-        private var _dragDirectionV:Vector.<String>;
-        private var _curDragDirection:String;
-        private var _previewScrubber:StoryboardScrubber;
-        private var _scrubberDrag:Boolean = false;
-        private var _curScrubClip:StoryboardClip;
-        private var _grabby:GrabbyMcGrabberson;
-        private var _playbackDuration:Number = 30;
         private var _previewIsPlaying:Boolean = false;
         private var _previewWasPlaying:Boolean = false;
-        private var _curPlayingClip:StoryboardClip = null;
-        private var _zoomMultiplier:Number = 2;
+        private var _scrubberDrag:Boolean = false;
+
+        private var _collidedClipIndex:uint;
+
+        private var _prevDragClipX:Number;
         private var _curZoomLevel:Number = 1;
-        private var _scrollbar:StoryboardScroller;
-        private var _returnToZero:Sprite;
-        private static const WIDTH:Number = 1240; //1104
         private var _lastScrubbedPct:Number;
         private var _curScrollPct:Number = 0;
-        private var _curScrubClipVisibleInViewport:Boolean = true;
+        private var _lastPanOffsetX:Number;
+
+        private var _curDragDirection:String;
+
+        private var _returnToZero:Sprite;
+
+        private var _clipHolder:Sprite;
+
+        private var _clipsXML:XMLList;
+
+        private var _longPressTimer:Timer;
+
+        private var _dragDirectionV:Vector.<String>;
+		private var _clipsV:Vector.<StoryboardClip>;
+
+        private var _waveform:AudioWaveformDisplay;
+        private var _grabby:GrabbyMcGrabberson;
+        private var _curScrubClip:StoryboardClip;
+        private var _curPlayingClip:StoryboardClip = null;
+        private var _selectedClip:StoryboardClip;
+        private var _scrollbar:StoryboardScroller;
+        private var _previewScrubber:StoryboardScrubber;
+		private var _timeline:Timeline;
         private var _zoomSlider:ZoomSlider;
 
 
 
+        /******************** PUBLIC VARS ********************/
+        public var curPlaybackTime:Number = 0;
+
+
+
         /***************** GETTERS & SETTERS ******************/
+        private function get _curPlaybackPct():Number { return curPlaybackTime/TIMELINE_DURATION; }
+        private function get _curScrubPct():Number {
+            var __pct:Number = ((_previewScrubber.x - _clipHolder.x)/widthAtCurZoom);
+            curPlaybackTime = __pct * TIMELINE_DURATION;
+            return __pct;
+        }
+
+        private function get _normalizedMaskW():Number { return (1240 - ((_clipsV.length - 1) * 10))/_clipsV.length; }
+        private function get _selectedClipDragRect():Rectangle { return new Rectangle(_selectedClip.maskShape.width/2, _selectedClip.y, 1240 - _selectedClip.maskShape.width, 0); }
+
 		public function get canAddClips():Boolean { return (_clipHolder.numChildren == 4); }
-
-        private function get _normalizedMaskW():Number {
-            return (1240 - ((_clipsV.length - 1) * 10))/_clipsV.length;
-        }
-
-        private function get _selectedClipDragRect():Rectangle {
-            return new Rectangle(_selectedClip.maskShape.width/2, _selectedClip.y, 1240 - _selectedClip.maskShape.width, 0);
-        }
-
-        private function get _curPlaybackPct():Number { return ((_previewScrubber.x - _clipHolder.x)/widthAtCurZoom); }
-
-        public function get curPlayingClipName():String { return _curPlayingClip.clipTitle; }
         public function get curPlayingClip():StoryboardClip{ return _curPlayingClip; }
         public function get curPlayingClipPlayheadTime():Number { return _curPlayingClip.getPlayheadTimeUnderObject(_previewScrubber); }
         public function get widthAtCurZoom():Number { return (_curZoomLevel * WIDTH); }
         public function get curZoomLevel():Number { return _curZoomLevel; }
         public function get clipHolder():Sprite { return _clipHolder; }
-
+        public function get curPlayingClipName():String { return _curPlayingClip.clipTitle; }
 
 
 
@@ -107,7 +121,6 @@ package project.managers {
 			verbose = true;
 
 			_clipsXML = Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip;
-			_musicXML = Register.PROJECT_XML.content.editor.music;
 
             //_markersV = new Vector.<Shape>();
             _clipsV = new Vector.<StoryboardClip>();
@@ -196,9 +209,9 @@ package project.managers {
 
             if ($repositionAtStart) {
                 _previewScrubber.x = _clipHolder.x;
-
+                _waveform.progressShape.scaleX = 0;
                 TweenMax.to([_previewScrubber,_clipHolder,_timeline,_waveform], _curScrollPct * 0.5, {x:20, ease:Expo.easeInOut, delay:0.2});
-                TweenMax.to(_returnToZero, _curScrollPct * 0.5, {x:0, ease:Expo.easeInOut});
+                TweenMax.to(_returnToZero, _curScrollPct * 0.5, {x:0, ease:Expo.easeInOut, delay:0.2});
                 TweenMax.delayedCall(0.2, _scrollbar.scrollTo, [0, _curScrollPct * 0.5]);
 
                 /*_previewScrubber.x = _clipHolder.x = _timeline.x = _waveform.x = 20;
@@ -225,21 +238,29 @@ package project.managers {
                 if (_curPlaybackPct >= 1) {
                     //_curPlaybackPct = 0;
                     _previewScrubber.x = _clipHolder.x;
+                    curPlaybackTime = 0;
+                    _scrollbar.scrollTo(0, 0.2);
+                    _scrollElementsByPercent(0, 0.2);
                 }
                 _deselectAllClips();
-                var __time:Number = (1 - _curPlaybackPct) * _playbackDuration;
+                var __time:Number = (1 - _curPlaybackPct) * TIMELINE_DURATION;
                 //_progressShape.scaleX = _curPlaybackPct;
                 _waveform.progressShape.scaleX = _curPlaybackPct;
 
-                TweenMax.to(_previewScrubber, __time, {x:_clipHolder.x + widthAtCurZoom, ease:Linear.easeNone, onUpdate:_checkForNewClip, onComplete:_onPlaybackComplete});
-                //TweenMax.to(_progressShape, __time, {scaleX:1, ease:Linear.easeNone});
+                // new approach - tween a property of the StoryboardManager
+                TweenMax.to(this, __time, {curPlaybackTime:TIMELINE_DURATION, ease:Linear.easeNone, onUpdate:_onPlayTimelineUpdate, onComplete:_onPlaybackComplete});
+
+                // old approach - tween properties of specific clips
+                /*
+                TweenMax.to(_previewScrubber, __time, {x:_clipHolder.x + widthAtCurZoom, ease:Linear.easeNone, onUpdate:_onPlayTimelineUpdate, onComplete:_onPlaybackComplete});
                 TweenMax.to(_waveform.progressShape, __time, {scaleX:1, ease:Linear.easeNone});
+                 */
             } else {
                 _previewIsPlaying = false;
-                _lastScrubbedPct = _curPlaybackPct;
+                _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
 
                 //TweenMax.killTweensOf([_previewScrubber, _progressShape]);
-                TweenMax.killTweensOf([_previewScrubber, _waveform.progressShape]);
+                TweenMax.killTweensOf(this);
                 dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curPlayingClip.getFrameUnderObject(_previewScrubber)}));
             }
         }
@@ -271,6 +292,7 @@ package project.managers {
 			_clipHolder = new Sprite();
             TweenMax.to(_clipHolder, 0, {x:20, y:106});
 			this.addChild(_clipHolder);
+            _clipHolder.addEventListener(TransformGestureEvent.GESTURE_PAN , _onPan);
             // ***************
 
 
@@ -546,14 +568,14 @@ package project.managers {
             _scrubberDrag = $b;
             _grabby.grab($b);
             if ($b) {
-                var r:Rectangle = new Rectangle(20, _previewScrubber.y, widthAtCurZoom, 0);
-                _previewScrubber.startDrag(true, r);
-                addEventListener(Event.ENTER_FRAME, _trackScrubber);
+                /*var r:Rectangle = new Rectangle(20, _previewScrubber.y, widthAtCurZoom, 0);
+                _previewScrubber.startDrag(true, r);*/
+                this.addEventListener(Event.ENTER_FRAME, _trackScrubber);
                 TweenMax.to(_previewScrubber, 0, {tint:0xFFFFFF});
             } else {
                 TweenMax.to(_previewScrubber, 0, {tint:null});
                 resetScrubber();
-                removeEventListener(Event.ENTER_FRAME, _trackScrubber);
+                this.removeEventListener(Event.ENTER_FRAME, _trackScrubber);
                 if (!_checkMouseOver(_previewScrubber)) {
                     _grabby.show(false);
                     Mouse.show();
@@ -564,12 +586,12 @@ package project.managers {
         private function _onPlaybackComplete():void {
             log('playbackComplete!!! - scrubber.x: '+_previewScrubber.x+' | clipHolder.x: '+_clipHolder.x+' | widthAtCurZoom: '+widthAtCurZoom);
             _previewIsPlaying = false;
-            _curPlaybackPct;// = 1;
             dispatchEvent(new PreviewEvent(PreviewEvent.COMPLETE));
         }
 
         private function _updatePreviewLockImage():void {
-            _lastScrubbedPct = _curPlaybackPct;
+            _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
+
             for (var i:uint = 0; i < _clipsV.length; i++){
                 if (_clipsV[i].maskShape.hitTestObject(_previewScrubber)){
                     _curScrubClip = _clipsV[i];
@@ -579,7 +601,34 @@ package project.managers {
             }
         }
 
-        private function _checkForNewClip():void {
+        private function _onPlayTimelineUpdate():void {
+            _previewScrubber.x = _clipHolder.x + (widthAtCurZoom * (curPlaybackTime/TIMELINE_DURATION));
+            _waveform.progressShape.scaleX = (curPlaybackTime/TIMELINE_DURATION);
+            /*
+             */
+
+            if (_curZoomLevel > 1){
+                // keep _previewScrubber visible at all times
+                //if (_curPlaybackPct < 0.5)
+
+
+                // needs refining
+                if (_previewScrubber.x > (Register.APP.WIDTH/2) && _curScrollPct < 1 && Register.DATA.centerPlayheadOnScreenDuringPlayback){
+                    //log('_previewScrubber.x: '+_previewScrubber.x);
+                    //log('Register.APP.WIDTH/2: '+(Register.APP.WIDTH/2));
+                    //('_curScrollPct: '+_curScrollPct);
+                    var __newX:Number = _clipHolder.x - (_previewScrubber.x - (Register.APP.WIDTH/2));
+                    //log('__newX: '+__newX);
+                    _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
+                    if (_curScrollPct > 1) _curScrollPct = 1;
+                    if (_curScrollPct < 0) _curScrollPct = 0;
+                    _scrollbar.scrollTo(_curScrollPct);
+                    _scrollElementsByPercent(_curScrollPct);
+                }
+
+            }
+
+            // check for the start of a new clip
             for (var i:uint = 0; i < _clipsV.length; i++) {
                 if (_clipsV[i].maskShape.hitTestObject(_previewScrubber) && _clipsV[i] != _curPlayingClip) {
                     dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curPlayingClip.getFrameUnderObject(_previewScrubber)}));
@@ -589,34 +638,16 @@ package project.managers {
             }
         }
 
-        private function _scrollElementsByPercent($pct:Number, $speed:Number = 0):void {
+        private function _scrollElementsByPercent($pct:Number, $speed:Number = 0, $throwing:Boolean = false):void {
             //log('_scrollElementsByPercent: '+$pct+' | _previewIsPlaying: '+_previewIsPlaying);
             _curScrollPct = $pct;
-            TweenMax.to(_timeline, $speed, {x:20 - ((_timeline.tickWidth - 1240) * _curScrollPct)});//_timeline.x = 20 - ((_timeline.tickWidth - 1240) * _curScrollPct);
-            TweenMax.to(_waveform, $speed, {x:20 - ((_waveform.width - 1238) * _curScrollPct)});//_waveform.x = 20 - ((_waveform.width - 1238) * _curScrollPct);
-            TweenMax.to(_clipHolder, $speed, {x:20 - ((widthAtCurZoom - 1240) * _curScrollPct)});//_clipHolder.x = 20 - (_curScrollPct * (widthAtCurZoom - 1240));
-            TweenMax.to(_returnToZero, $speed, {x:0 - ((widthAtCurZoom - 1240) * _curScrollPct)});
+            TweenMax.to(_timeline, $speed, {x:20 - ((_timeline.tickWidth - 1240) * _curScrollPct), ease:($throwing) ? Expo.easeOut : Expo.easeInOut});//_timeline.x = 20 - ((_timeline.tickWidth - 1240) * _curScrollPct);
+            TweenMax.to(_waveform, $speed, {x:20 - ((_waveform.width - 1238) * _curScrollPct), ease:($throwing) ? Expo.easeOut : Expo.easeInOut});//_waveform.x = 20 - ((_waveform.width - 1238) * _curScrollPct);
+            TweenMax.to(_clipHolder, $speed, {x:20 - ((widthAtCurZoom - 1240) * _curScrollPct), ease:($throwing) ? Expo.easeOut : Expo.easeInOut});//_clipHolder.x = 20 - (_curScrollPct * (widthAtCurZoom - 1240));
+            TweenMax.to(_returnToZero, $speed, {x:0 - ((widthAtCurZoom - 1240) * _curScrollPct), ease:($throwing) ? Expo.easeOut : Expo.easeInOut});
 
-            // problem: _previewScrubber is the only thing that needs to be able to move independently during zoom/scrub
-            if (!_previewIsPlaying) {
-                TweenMax.to(_previewScrubber, $speed, {x:(20 - ((widthAtCurZoom - 1240) * _curScrollPct)) + (widthAtCurZoom * _lastScrubbedPct)});//_previewScrubber.x = _clipHolder.x + (widthAtCurZoom * _lastScrubbedPct);
-            } else {
-                // if the preview is playing and you change the zoom level, the the distance the _previewScrubber has to cover (and subsequently, the speed at which it moves b/c of the fixed timeline length of 30s) changes
-
-                // stop the movement of _previewScrubber & progressShape
-                //TweenMax.killTweensOf([_previewScrubber, _waveform.progressShape]);
-
-                // recalculate the time to complete based on _curPlaybackPct & widthAtCurZoom
-                /*
-                var __remainingDistance:Number = (1-_curPlaybackPct) * widthAtCurZoom;
-                var _remainingTime:Number = (1 - _curPlaybackPct) * _playbackDuration;
-
-                _waveform.progressShape.scaleX = _curPlaybackPct;
-
-                TweenMax.to(_previewScrubber, _remainingTime, {x:(20 - ((widthAtCurZoom - 1240) * _curScrollPct)) + widthAtCurZoom, ease:Linear.easeNone, onUpdate:_checkForNewClip, onComplete:_onPlaybackComplete});
-                TweenMax.to(_waveform.progressShape, _remainingTime, {scaleX:1, ease:Linear.easeNone});
-                */
-
+            if (!_previewIsPlaying && !_scrubberDrag) {
+                TweenMax.to(_previewScrubber, $speed, {x:(20 - ((widthAtCurZoom - 1240) * _curScrollPct)) + (widthAtCurZoom * _lastScrubbedPct), ease:($throwing) ? Expo.easeOut : Expo.easeInOut});//_previewScrubber.x = _clipHolder.x + (widthAtCurZoom * _lastScrubbedPct);
             }
         }
 
@@ -678,6 +709,9 @@ package project.managers {
 
 		private function _onClipAmountChange($e:StoryboardManagerEvent):void {
 			log('_onClipAmountChange');
+            _previewScrubber.x = _clipHolder.x;
+            _waveform.progressShape.scaleX = 0;
+            _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
             var __delay:Number = (_curZoomLevel > 1 && Register.DATA.resetZoomOnClipAddDelete) ? 0.15: 0;
             switch ($e.type) {
 				case StoryboardManagerEvent.FOUR_CLIPS:
@@ -828,7 +862,7 @@ package project.managers {
                                 {
                                     log('lock the VideoPreviewArea');
                                     _previewScrubber.x = mouseX;
-                                    _lastScrubbedPct = _curPlaybackPct;
+                                    _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
 
                                     _waveform.progressShape.scaleX = _curPlaybackPct;
 
@@ -938,8 +972,32 @@ package project.managers {
         private function _trackScrubber($e:Event):void {
             _previewScrubber.alpha = 1;
 
+            var __newX:Number = (mouseX < 20) ? 20 : (mouseX > 1260) ? 1260 : mouseX;
+            _previewScrubber.x = __newX;
+
             _grabby.x = this.mouseX;
             _grabby.y = this.mouseY;
+
+
+            if (_curZoomLevel > 1) {
+
+                if (mouseX > 1260){
+                    //log('@@@@@@@@ scroll everything left!');
+                    _curScrollPct += 0.005;
+                    if (_curScrollPct > 1) _curScrollPct = 1;
+                }
+
+                if (mouseX < 20){
+                    //log('@@@@@@@@ scroll everything right!');
+                    _curScrollPct -= 0.005;
+                    if (_curScrollPct < 0) _curScrollPct = 0;
+                }
+
+                _scrollbar.scrollTo(_curScrollPct);
+                _scrollElementsByPercent(_curScrollPct);
+
+            }
+
 
             //_curPlaybackPct = (_previewScrubber.x - _clipHolder.x)/1082;
             //_progressShape.scaleX = _curPlaybackPct;
@@ -957,11 +1015,12 @@ package project.managers {
 
         private function _handleZoomEvent($e:ZoomEvent):void {
             $e.stopImmediatePropagation();
+            log('_handleZoomEvent: '+$e.type);
             switch ($e.type) {
                 case ZoomEvent.START:
                     _curScrubClipVisibleInViewport = (_curScrubClip.maskShape.getBounds(this).right > 0  && _curScrubClip.maskShape.getBounds(this).left < 1280);
                     if (_previewIsPlaying){
-                        dispatchEvent(new PreviewEvent(PreviewEvent.PAUSE));// pauses playback here and in the preview window
+                        //dispatchEvent(new PreviewEvent(PreviewEvent.PAUSE));// pauses playback here and in the preview window
                         _previewWasPlaying = true;
                     }
                     break;
@@ -969,21 +1028,21 @@ package project.managers {
                 case ZoomEvent.END:
                     if (_previewWasPlaying){
                         _previewWasPlaying = false;
-                        dispatchEvent(new PreviewEvent(PreviewEvent.PLAY));
+                        //dispatchEvent(new PreviewEvent(PreviewEvent.PLAY));
                     }
                     break;
 
                 case ZoomEvent.CHANGE:
-                    //var _curZoomLevel:Number = 1 + ((_zoomMultiplier - 1) * $e.data.pct); // returns a number between 1 and (pct * _zoomMultiplier)
-                    //log('Zooming to: '+__newZoomLevel);
+                    //var _curZoomLevel:Number = 1 + ((ZOOM_MULTIPLIER - 1) * $e.data.pct); // returns a number between 1 and (pct * ZOOM_MULTIPLIER)
 
-                    _curZoomLevel = 1 + ((_zoomMultiplier - 1) * $e.data.pct); // returns a number between 1 and (pct * _zoomMultiplier)
+                    _curZoomLevel = 1 + ((ZOOM_MULTIPLIER - 1) * $e.data.pct); // returns a number between 1 and (pct * ZOOM_MULTIPLIER)
 
                     if (_curZoomLevel == 1) _curScrollPct = 0;
 
                     /*log ('_curZoomLevel: '+_curZoomLevel);
                     log ('_curScrollPct (before): '+_curScrollPct);*/
 
+                    log('Zooming to: '+_curZoomLevel);
                     // zoom the different components
                     _timeline.zoom(_curZoomLevel);
                     _waveform.zoom(_curZoomLevel);
@@ -1027,6 +1086,7 @@ package project.managers {
 
                     // position the different components based on _curScrollPct
                     _scrollbar.scrollTo(_curScrollPct);
+                    log('Scrolling to: '+_curScrollPct);
                     _scrollElementsByPercent(_curScrollPct, __scrollSpeed);
 
                     //log(' ');
@@ -1039,7 +1099,7 @@ package project.managers {
             switch ($e.type) {
                 case ScrollEvent.START:
                     if (_previewIsPlaying){
-                        dispatchEvent(new PreviewEvent(PreviewEvent.PAUSE));// pauses playback here and in the preview window
+                        //dispatchEvent(new PreviewEvent(PreviewEvent.PAUSE));// pauses playback here and in the preview window
                         _previewWasPlaying = true;
                     }
                     break;
@@ -1047,7 +1107,7 @@ package project.managers {
                 case ScrollEvent.END:
                     if (_previewWasPlaying){
                         _previewWasPlaying = false;
-                        dispatchEvent(new PreviewEvent(PreviewEvent.PLAY));
+                        //dispatchEvent(new PreviewEvent(PreviewEvent.PLAY));
                     }
                     break;
 
@@ -1092,6 +1152,38 @@ package project.managers {
             _curDragDirection = _evalDragDirection();
 
             _evalClipCollision();
+        }
+
+        private function _onPan($e:TransformGestureEvent):void {
+            log('_onPan - offsetX: '+$e.offsetX+' | phase: '+$e.phase);
+            if (_curZoomLevel > 1) {
+                var __newX:Number;
+                switch ($e.phase){
+                    case 'update':
+                        _lastPanOffsetX = $e.offsetX;
+                        __newX = _clipHolder.x + ($e.offsetX * 3);
+                        _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
+                        if (_curScrollPct > 1) _curScrollPct = 1;
+                        if (_curScrollPct < 0) _curScrollPct = 0;
+                        _scrollbar.scrollTo(_curScrollPct, 0);
+                        _scrollElementsByPercent(_curScrollPct, 0);
+                        break;
+
+                    case 'end':
+                        __newX = _clipHolder.x + (_lastPanOffsetX * 3);
+                        _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
+                        if (_curScrollPct > 1) _curScrollPct = 1;
+                        if (_curScrollPct < 0) _curScrollPct = 0;
+                        _scrollbar.scrollTo(_curScrollPct, 0.5, true);
+                        _scrollElementsByPercent(_curScrollPct, 0.5, true);
+                        break
+                }
+
+
+                //TweenMax.to(_clipHolder.x, 0.3, {x:__newX})
+
+            }
+
         }
 
 
