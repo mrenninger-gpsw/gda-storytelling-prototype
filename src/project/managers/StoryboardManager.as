@@ -292,7 +292,8 @@ import flash.geom.Point;
 			_clipHolder = new Sprite();
             TweenMax.to(_clipHolder, 0, {x:20, y:106});
 			this.addChild(_clipHolder);
-            _clipHolder.addEventListener(TransformGestureEvent.GESTURE_PAN , _onPan);
+            _clipHolder.addEventListener(TransformGestureEvent.GESTURE_PAN , _onPanGesture);
+            _clipHolder.addEventListener(TransformGestureEvent.GESTURE_ZOOM , _onZoomGesture);
             // ***************
 
 
@@ -586,6 +587,7 @@ import flash.geom.Point;
         private function _onPlaybackComplete():void {
             log('playbackComplete!!! - scrubber.x: '+_previewScrubber.x+' | clipHolder.x: '+_clipHolder.x+' | widthAtCurZoom: '+widthAtCurZoom);
             _previewIsPlaying = false;
+            _lastScrubbedPct = _curScrubPct;
             dispatchEvent(new PreviewEvent(PreviewEvent.COMPLETE));
         }
 
@@ -614,6 +616,7 @@ import flash.geom.Point;
 
                 // needs refining
                 if (_previewScrubber.x > (Register.APP.WIDTH/2) && _curScrollPct < 1 && Register.DATA.centerPlayheadOnScreenDuringPlayback){
+                    _scrollbar.canDrag = false;
                     //log('_previewScrubber.x: '+_previewScrubber.x);
                     //log('Register.APP.WIDTH/2: '+(Register.APP.WIDTH/2));
                     //('_curScrollPct: '+_curScrollPct);
@@ -624,6 +627,8 @@ import flash.geom.Point;
                     if (_curScrollPct < 0) _curScrollPct = 0;
                     _scrollbar.scrollTo(_curScrollPct);
                     _scrollElementsByPercent(_curScrollPct);
+                } else {
+                    _scrollbar.canDrag = true;
                 }
 
             }
@@ -712,7 +717,7 @@ import flash.geom.Point;
             _previewScrubber.x = _clipHolder.x;
             _waveform.progressShape.scaleX = 0;
             _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
-            var __delay:Number = (_curZoomLevel > 1 && Register.DATA.resetZoomOnClipAddDelete) ? 0.15: 0;
+            var __delay:Number = (_curZoomLevel > 1 && (Register.DATA.resetZoomOnClipAddDelete || Register.DATA.autoScrollToEndOnClipAdd)) ? 0.15 : 0;
             switch ($e.type) {
 				case StoryboardManagerEvent.FOUR_CLIPS:
 					//_removeTempMarker();
@@ -722,6 +727,10 @@ import flash.geom.Point;
 
 				case StoryboardManagerEvent.FIVE_CLIPS:
                     if (Register.DATA.resetZoomOnClipAddDelete) _zoomSlider.zoomTo(1, __delay);
+                    if (Register.DATA.autoScrollToEndOnClipAdd) {
+                        _scrollbar.scrollTo(1, __delay);
+                        _scrollElementsByPercent(1, __delay);
+                    }
                     TweenMax.delayedCall(__delay, _repositionClips, [5]);
 					break;
 			}
@@ -1026,6 +1035,7 @@ import flash.geom.Point;
                     break;
 
                 case ZoomEvent.END:
+                    log('_curZoomLevel: '+_curZoomLevel);
                     if (_previewWasPlaying){
                         _previewWasPlaying = false;
                         //dispatchEvent(new PreviewEvent(PreviewEvent.PLAY));
@@ -1033,8 +1043,9 @@ import flash.geom.Point;
                     break;
 
                 case ZoomEvent.CHANGE:
+                    log('$e.data.pct: '+$e.data.pct);
                     //var _curZoomLevel:Number = 1 + ((ZOOM_MULTIPLIER - 1) * $e.data.pct); // returns a number between 1 and (pct * ZOOM_MULTIPLIER)
-
+                    //if ($e.data.pct > ZOOM_MULTIPLIER)
                     _curZoomLevel = 1 + ((ZOOM_MULTIPLIER - 1) * $e.data.pct); // returns a number between 1 and (pct * ZOOM_MULTIPLIER)
 
                     if (_curZoomLevel == 1) _curScrollPct = 0;
@@ -1112,7 +1123,6 @@ import flash.geom.Point;
                     break;
 
                 case ScrollEvent.SCROLL:
-
                     _curScrollPct = $e.data.pct;
                     //log('_curScrollPct: '+_curScrollPct);
 
@@ -1154,36 +1164,47 @@ import flash.geom.Point;
             _evalClipCollision();
         }
 
-        private function _onPan($e:TransformGestureEvent):void {
-            log('_onPan - offsetX: '+$e.offsetX+' | phase: '+$e.phase);
-            if (_curZoomLevel > 1) {
-                var __newX:Number;
-                switch ($e.phase){
-                    case 'update':
-                        _lastPanOffsetX = $e.offsetX;
-                        __newX = _clipHolder.x + ($e.offsetX * 3);
-                        _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
-                        if (_curScrollPct > 1) _curScrollPct = 1;
-                        if (_curScrollPct < 0) _curScrollPct = 0;
-                        _scrollbar.scrollTo(_curScrollPct, 0);
-                        _scrollElementsByPercent(_curScrollPct, 0);
-                        break;
+        private function _onPanGesture($e:TransformGestureEvent):void {
+            if (Register.DATA.enablePanGesture) {
+                log('_onPanGesture - offsetX: ' + $e.offsetX + ' | phase: ' + $e.phase);
+                if (_curZoomLevel > 1) {
+                    var __newX:Number;
+                    switch ($e.phase) {
+                        case 'update':
+                            _lastPanOffsetX = $e.offsetX;
+                            __newX = _clipHolder.x + ($e.offsetX * 3);
+                            _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
+                            if (_curScrollPct > 1) _curScrollPct = 1;
+                            if (_curScrollPct < 0) _curScrollPct = 0;
+                            _scrollbar.scrollTo(_curScrollPct, 0);
+                            _scrollElementsByPercent(_curScrollPct, 0);
+                            break;
 
-                    case 'end':
-                        __newX = _clipHolder.x + (_lastPanOffsetX * 3);
-                        _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
-                        if (_curScrollPct > 1) _curScrollPct = 1;
-                        if (_curScrollPct < 0) _curScrollPct = 0;
-                        _scrollbar.scrollTo(_curScrollPct, 0.5, true);
-                        _scrollElementsByPercent(_curScrollPct, 0.5, true);
-                        break
+                        case 'end':
+                            __newX = _clipHolder.x + (_lastPanOffsetX * 3);
+                            _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
+                            if (_curScrollPct > 1) _curScrollPct = 1;
+                            if (_curScrollPct < 0) _curScrollPct = 0;
+                            _scrollbar.scrollTo(_curScrollPct, 0.5, true);
+                            _scrollElementsByPercent(_curScrollPct, 0.5, true);
+                            break
+                    }
                 }
-
-
-                //TweenMax.to(_clipHolder.x, 0.3, {x:__newX})
-
             }
+        }
 
+        private function _onZoomGesture($e:TransformGestureEvent):void {
+            if (Register.DATA.enableZoomGesture)  {
+                switch ($e.phase) {
+                    case 'update':
+                        var __newZoom:Number = _curZoomLevel * $e.scaleX;
+                        if (__newZoom > ZOOM_MULTIPLIER) __newZoom = ZOOM_MULTIPLIER;
+                        if (__newZoom < 1) __newZoom = 1;
+                        log('_onZoomGesture: '+__newZoom);
+                        _zoomSlider.zoomTo(__newZoom);
+                        break;
+                }
+            }
         }
 
 

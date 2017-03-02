@@ -42,8 +42,9 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
-VERSION 2.02.001 - 03/01/2017
+VERSION 2.02.007 - 03/01/2017
     * Added Pan gesture to scrolling
+    * Added Zoom gesture detection and handling
     * When zoom > 100%, Play marker is centered as long as current scroll % is greater than 0 and less than 1
     * Timeline autoscrolls to the left during playback - increasing scroll % - until scroll % reaches 1
 
@@ -433,6 +434,10 @@ VERSION 0.00.001 - 01/20/2016
                         <location x='806' maskwidth='325'/>
                         <location x='1105' maskwidth='261'/>
                     </positions>
+
+                    <waveform>
+                        <ticks>7,11,9,8,6,7,7,5,8,7,7,7,5,11,13,11,9,7,9,9,7,13</ticks>
+                    </waveform>
 				</storyboard>
 
 			</storybuilder>

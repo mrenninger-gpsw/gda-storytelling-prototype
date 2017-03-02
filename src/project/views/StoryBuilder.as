@@ -187,7 +187,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
 		private function _moveClipToStoryboard($clip:StoryboardClip):void {
 			log('_moveClipToStoryboard');
             var clip5X:Number = Register.PROJECT_XML.content.editor.storybuilder.storyboard.clip[4].location[1].@position;
-            var newClipX:Number = (Register.DATA.resetZoomOnClipAddDelete) ? clip5X : _storyboard.clipHolder.x + (_storyboard.curZoomLevel * clip5X);
+            var newClipX:Number = (Register.DATA.resetZoomOnClipAddDelete || Register.DATA.autoScrollToEndOnClipAdd) ? clip5X : _storyboard.clipHolder.x + (_storyboard.curZoomLevel * clip5X);
 			var totalTime:Number = 0.7;
 			var distance:Number = GeomUtilities.getDistance(new Point($clip.x,$clip.y), new Point((newClipX + 21), 570));
 			var totalDistance:Number = GeomUtilities.getDistance(new Point(0,0), new Point((newClipX + 21), 570));

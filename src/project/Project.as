@@ -113,6 +113,8 @@ package project {
             Register.DATA.autoScrollToStartOnClipAddDelete = true;
             Register.DATA.autoScrollToEndOnClipAdd = false;
             Register.DATA.centerPlayheadOnScreenDuringPlayback = true;
+            Register.DATA.enablePanGesture = true;
+            Register.DATA.enableZoomGesture = true;
             log('DATA')
             for (var i:Object in Register.DATA){
                 log('\t'+i+': '+Register.DATA[i]);

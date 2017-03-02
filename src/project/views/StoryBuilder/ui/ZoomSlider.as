@@ -50,7 +50,7 @@ import flash.display.Bitmap;
         /******************** PUBLIC API *********************/
         public function zoomTo($pct:Number, $speed:Number = 0):void {
             this.dispatchEvent(new ZoomEvent(ZoomEvent.START));
-            var __newX:Number = ((1 - $pct) * 140) + 5;
+            var __newX:Number = (($pct - 1) * 140) + 5;
             TweenMax.to(_nubbin, $speed, {x:__newX, ease:Expo.easeOut, onUpdate:_trackZoomPct, onComplete:_zoomComplete})
         }
 
@@ -139,7 +139,6 @@ import flash.display.Bitmap;
 
         private function _trackZoomPct($e:Event = null):void {
             var __pct:Number = (_nubbin.x - 5)/140;
-
             if (__pct != _pct) {
                 _pct = __pct;
                 this.dispatchEvent(new ZoomEvent(ZoomEvent.CHANGE, true, {pct:_pct}))

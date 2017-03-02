@@ -227,24 +227,42 @@ package project.views {
 
             __cb = new LabelledCheckbox('autoScrollToStartOnClipAddDelete', 'AutoScroll to :00 when adding/deleting Moments');
             __cb.x = 20;
-            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + _checkBoxesV[_checkBoxesV.length - 1].height + 20;
+            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + _checkBoxesV[_checkBoxesV.length - 1].height + 10;
             __cb.selected = Register.DATA[__cb.id];
             _panel.addChild(__cb);
             _checkBoxesV.push(__cb);
+            __cb.addEventListener('select', _checkForExclusions);
 
-            /*__cb = new LabelledCheckbox('autoScrollToEndOnClipAdd', 'AutoScroll to end when adding Moments', true);
-             __cb.x = 20;
-             __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + 20;
-             __cb.selected = Register.DATA[__cb.id];
-             _panel.addChild(__cb);
-             _checkBoxesV.push(__cb);*/
+            __cb = new LabelledCheckbox('autoScrollToEndOnClipAdd', 'AutoScroll to end when adding Moments');
+            __cb.x = 20;
+            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + _checkBoxesV[_checkBoxesV.length - 1].height + 10;
+            __cb.selected = Register.DATA[__cb.id];
+            _panel.addChild(__cb);
+            _checkBoxesV.push(__cb);
+            __cb.addEventListener('select', _checkForExclusions);
 
             __cb = new LabelledCheckbox('centerPlayheadOnScreenDuringPlayback', 'Center playhead on screen during playback');
             __cb.x = 20;
-            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + 20;
+            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + _checkBoxesV[_checkBoxesV.length - 1].height + 10;
             __cb.selected = Register.DATA[__cb.id];
             _panel.addChild(__cb);
             _checkBoxesV.push(__cb);
+
+            __cb = new LabelledCheckbox('enablePanGesture', 'Enable Pan gesture for scrolling');
+            __cb.x = 20;
+            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + _checkBoxesV[_checkBoxesV.length - 1].height + 10;
+            __cb.selected = Register.DATA[__cb.id];
+            _panel.addChild(__cb);
+            _checkBoxesV.push(__cb);
+            __cb.lock();
+
+            __cb = new LabelledCheckbox('enableZoomGesture', 'Enable Pinch/Spread gesture for zooming');
+            __cb.x = 20;
+            __cb.y = _checkBoxesV[_checkBoxesV.length - 1].y + _checkBoxesV[_checkBoxesV.length - 1].height + 10;
+            __cb.selected = Register.DATA[__cb.id];
+            _panel.addChild(__cb);
+            _checkBoxesV.push(__cb);
+            __cb.lock();
 
 			_onResize();
 
@@ -283,7 +301,7 @@ package project.views {
 
 		private function _onHideComplete():void {
 			dispatchEvent(new Event('Hidden'));
-            log('DATA')
+            log('DATA');
             for (var i:Object in Register.DATA){
                 log('\t'+i+': '+Register.DATA[i]);
             }
@@ -381,6 +399,26 @@ package project.views {
 
 			}
 		}
+
+        private function _checkForExclusions($e:Event):void {
+            switch ($e.target.id) {
+                case 'autoScrollToStartOnClipAddDelete':
+                    for (var i:uint = 0; i < _checkBoxesV.length; i++){
+                        if (_checkBoxesV[i].id == 'autoScrollToEndOnClipAdd'){
+                            _checkBoxesV[i].selected = false;
+                        }
+                    }
+                    break;
+
+                case 'autoScrollToEndOnClipAdd':
+                    for (var i:uint = 0; i < _checkBoxesV.length; i++){
+                        if (_checkBoxesV[i].id == 'autoScrollToStartOnClipAddDelete'){
+                            _checkBoxesV[i].selected = false;
+                        }
+                    }
+                    break;
+            }
+        }
 
 
 

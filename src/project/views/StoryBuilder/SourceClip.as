@@ -95,7 +95,7 @@ import project.events.SourceClipManagerEvent;
 		private function _createTimelineThumbs():void {
 			//log('_createTimelineThumbs');
 
-			for (var i:uint = 0; i < 5; i++) {
+			for (var i:uint = 0; i < 2 + Math.random() * 3; i++) {
 
 				var frameNum:Number = (i == 0) ? 1 : i * Math.round((Number(_xml.@length) * 4)/4);
 

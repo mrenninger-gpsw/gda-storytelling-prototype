@@ -24,6 +24,7 @@ package project.views.SettingsOverlay{
 		private var _showing:Boolean = true;
         private var _selected:Boolean = false;
         private var _multiline:Boolean = false;
+        private var _locked:Boolean = false;
 
 		private var _labelText:String;
 
@@ -67,6 +68,20 @@ package project.views.SettingsOverlay{
 			_draw();
 		}
 
+        public function lock($b:Boolean = true):void {
+            if ($b && !_locked) {
+                this.alpha = 0.5;
+                _locked = true;
+                _container.removeEventListener(MouseEvent.MOUSE_DOWN, _mouseHandler);
+            }
+
+            if(!$b && _locked){
+                this.alpha = 1.0;
+                _locked = false;
+                _container.addEventListener(MouseEvent.MOUSE_DOWN, _mouseHandler);
+            }
+        }
+
 
 
 		/******************** PRIVATE API *********************/
@@ -93,6 +108,7 @@ package project.views.SettingsOverlay{
 
 		private function _select($b:Boolean):void {
 			if ($b && !_selected) {
+                dispatchEvent(new Event('select'));
 				_selected = true;
 				_container.addChild(_checkedImg);
 				_container.removeChild(_defaultImg);

@@ -18,12 +18,22 @@ import display.Sprite;
         private var _bar:Sprite;
         private var _barWidth:Number;
         private var _pct:Number = 0;
+        private var _canDrag:Boolean = true;
+        private var _dragging:Boolean = true;
 
 
         /***************** GETTERS & SETTERS ******************/
         public function get pct():Number {
             return _pct;
         }
+
+        public function set canDrag($value:Boolean):void {
+            _canDrag = $value;
+            if (!_canDrag && _dragging) { _dragBar(false); }
+            if (_canDrag && _dragging) { _dragBar(true); }
+        }
+
+        public function get canDrag():Boolean { return _canDrag;}
 
 
         /******************** CONSTRUCTOR *********************/
@@ -67,12 +77,14 @@ import display.Sprite;
 
         private function _dragBar($b:Boolean = true):void {
             if ($b) {
+                TweenMax.to(_bar, 0, {tint:0x454545});
                 _bar.removeEventListener(MouseEvent.MOUSE_DOWN, _handleMouseDown);
                 this.stage.addEventListener(MouseEvent.MOUSE_UP, _handleMouseUp);
                 this.addEventListener(Event.ENTER_FRAME, _trackScrollPct);
                 this.dispatchEvent(new ScrollEvent(ScrollEvent.START));
                 _bar.startDrag(false, new Rectangle(0, 0, _barWidth - _bar.width, 0));
             } else {
+                TweenMax.to(_bar, 0.2, {tint:null});
                 _bar.addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseDown);
                 this.stage.removeEventListener(MouseEvent.MOUSE_UP, _handleMouseUp);
                 this.removeEventListener(Event.ENTER_FRAME, _trackScrollPct);
@@ -89,6 +101,7 @@ import display.Sprite;
         private function _handleMouseDown($e:MouseEvent):void {
             switch ($e.type) {
                 case MouseEvent.MOUSE_DOWN:
+                    _dragging = true;
                     _dragBar();
                     break;
             }
@@ -97,6 +110,7 @@ import display.Sprite;
         private function _handleMouseUp($e:MouseEvent):void {
             switch ($e.type) {
                 case MouseEvent.MOUSE_UP:
+                    _dragging = false;
                     _dragBar(false);
                     break;
             }
