@@ -3,13 +3,11 @@ package project.views.StoryBuilder {
 	// Flash
 	import flash.display.Bitmap;
 	import flash.display.Shape;
-import flash.events.Event;
-import flash.events.MouseEvent;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-import project.events.SourceClipManagerEvent;
-
-// Greensock
+    // Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
@@ -21,6 +19,7 @@ import project.events.SourceClipManagerEvent;
 
 	// Project
 	import project.events.PreviewEvent;
+    import project.events.SourceClipManagerEvent;
 	import project.views.StoryBuilder;
 	import project.views.StoryBuilder.ui.SourceClipHighlight;
 

@@ -4,10 +4,6 @@ package project.views.StoryBuilder.ui {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 
-import project.events.SourceClipManagerEvent;
-
-//import starling.display.Shape;
-
     // Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
@@ -15,6 +11,9 @@ import project.events.SourceClipManagerEvent;
 	// Framework
 	import display.Sprite;
 	import utils.Register;
+
+    // Project
+    import project.events.SourceClipManagerEvent;
 
 
 

@@ -1,26 +1,25 @@
 package project.views.StoryBuilder {
 
 	// Flash
-import com.greensock.loading.LoaderMax;
-import com.greensock.loading.VideoLoader;
-
-import flash.display.Bitmap;
+    import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.events.MouseEvent;
-import flash.media.StageVideo;
-import flash.ui.Keyboard;
+    import flash.events.KeyboardEvent;
+    import flash.events.MouseEvent;
+    import flash.ui.Keyboard;
 
-import project.events.PreviewEvent;
-
-// Greensock
-	import com.greensock.TweenMax;
+    // Greensock
 	import com.greensock.easing.*;
+    import com.greensock.loading.LoaderMax;
+    import com.greensock.loading.VideoLoader;
+	import com.greensock.TweenMax;
 
 	// Framework
 	import display.Sprite;
 	import utils.Register;
+
+    // Project
+    import project.events.PreviewEvent;
 
 
 
@@ -148,24 +147,13 @@ import project.events.PreviewEvent;
             log('\t_video content visible: '+_video.content.visible);
             _videoHolder.addEventListener(Event.ENTER_FRAME, _checkVideoTime);
             _video.gotoVideoTime($startTime);
-
-
-        }
-
-        private function _checkVideoTime($e:Event):void {
-            _video.gotoVideoTime(_startTime);
-            log('_checkVideoTime ('+_clipName+'): _video.videoTime: '+_video.videoTime+' | _startTime: '+_startTime);
-            if (_video.videoTime == _startTime) {
-                _videoHolder.visible = true;
-                _videoHolder.removeEventListener(Event.ENTER_FRAME, _checkVideoTime);
-                _video.volume = 0;
-                _video.playVideo();
-            }
         }
 
         public function pauseVideo():void {
             if (_video) _video.pauseVideo();
         }
+
+
 
 		/******************** PRIVATE API *********************/
 		private function _init():void {
@@ -267,7 +255,20 @@ import project.events.PreviewEvent;
             dispatchEvent(new PreviewEvent(PreviewEvent.PAUSE));
         }
 
+        private function _checkVideoTime($e:Event):void {
+            _video.gotoVideoTime(_startTime);
+            log('_checkVideoTime ('+_clipName+'): _video.videoTime: '+_video.videoTime+' | _startTime: '+_startTime);
+            if (_video.videoTime == _startTime) {
+                _videoHolder.visible = true;
+                _videoHolder.removeEventListener(Event.ENTER_FRAME, _checkVideoTime);
+                _video.volume = 0;
+                _video.playVideo();
+            }
+        }
 
+
+
+        /******************* EVENT HANDLERS *******************/
         private function _onAdded($e:Event):void {
             this.removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
             this.stage.addEventListener(KeyboardEvent.KEY_DOWN, _keyDownHandler);

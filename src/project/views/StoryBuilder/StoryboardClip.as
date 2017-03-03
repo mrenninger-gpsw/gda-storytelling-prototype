@@ -1,27 +1,24 @@
 package project.views.StoryBuilder {
 
 	// Flash
-import components.controls.Label;
-
-import flash.display.Bitmap;
-import flash.display.DisplayObject;
-import flash.display.Shape;
+    import flash.display.Bitmap;
+    import flash.display.DisplayObject;
+    import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-import flash.geom.Point;
+    import flash.geom.Point;
 
-import project.events.PreviewEvent;
-
-// Greensock
+    // Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
 
 	// Framework
-    //import components.controls.Label;
+    import components.controls.Label;
 	import display.Sprite;
 	import utils.Register;
 
 	// Project
+    import project.events.PreviewEvent;
 	import project.events.StoryboardManagerEvent;
 	import project.views.StoryBuilder.ui.StoryboardClipMarker;
 	import project.views.StoryBuilder.ui.SourceClipHighlight;

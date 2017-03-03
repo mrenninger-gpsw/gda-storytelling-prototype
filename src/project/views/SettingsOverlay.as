@@ -33,13 +33,8 @@ package project.views {
 		private var _saveBtn:Sprite;
 		private var _closeIcon:Sprite;
 
-		private var _resetZoomCB:LabelledCheckbox;
-		private var _zoomPersistCB:LabelledCheckbox;
-
 		private var _diagonalStepper:NumericStepper;
 		private var _deltaStepper:NumericStepper;
-
-		private var _curZoomTF:TextField;
 
 		private var _view:Project;
 

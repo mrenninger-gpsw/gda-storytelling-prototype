@@ -2,16 +2,23 @@
  * Created by mrenninger on 2/15/17.
  */
 package project.views.StoryBuilder.ui {
-import com.greensock.TweenMax;
-import com.greensock.easing.Expo;
 
-import display.Sprite;
-
+    // Flash
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.geom.Rectangle
 
+    // GreenSock
+    import com.greensock.TweenMax;
+    import com.greensock.easing.Expo;
+
+    // Framework
+    import display.Sprite;
+
+    // Project
     import project.events.ScrollEvent;
+
+
 
     public class StoryboardScroller extends Sprite {
 
@@ -22,10 +29,9 @@ import display.Sprite;
         private var _dragging:Boolean = true;
 
 
+
         /***************** GETTERS & SETTERS ******************/
-        public function get pct():Number {
-            return _pct;
-        }
+        public function get pct():Number { return _pct; }
 
         public function set canDrag($value:Boolean):void {
             _canDrag = $value;
@@ -34,6 +40,7 @@ import display.Sprite;
         }
 
         public function get canDrag():Boolean { return _canDrag;}
+
 
 
         /******************** CONSTRUCTOR *********************/
@@ -46,6 +53,8 @@ import display.Sprite;
         }
 
 
+
+        /********************* PUBLIC API *********************/
         public function zoom($increment:Number):void {
             TweenMax.to(_bar, 0.2, {autoAlpha:($increment > 1)?1:0});
             _bar.scaleX = 1 / $increment;
@@ -63,6 +72,8 @@ import display.Sprite;
         }
 
 
+
+        /********************* PRIVATE API *********************/
         private function _init():void {
             _bar = new Sprite();
             _bar.graphics.beginFill(0x353535);
@@ -94,6 +105,8 @@ import display.Sprite;
         }
 
 
+
+        /******************* EVENT HANDLERS *******************/
         private function _onAdded($e:Event):void {
             removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
         }
@@ -126,6 +139,9 @@ import display.Sprite;
             }
         }
 
+
+
+        /*********************** HELPERS **********************/
         private function _restrictDigits($num:Number, $restrict:Number):Number {
             return Math.round($num * Math.pow(10,$restrict))/Math.pow(10,$restrict);;
         }

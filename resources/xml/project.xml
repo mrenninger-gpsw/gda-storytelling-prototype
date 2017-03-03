@@ -42,6 +42,10 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 2.02.011 - 03/03/2017
+    * Added Pan and Zoom gesture detection to entire Storyboard Area
+    * Further Refinements to animations during Moment delete
+
 VERSION 2.02.010 - 03/02/2017
     * Added Pan gesture to scrolling
     * Added Zoom gesture detection and handling

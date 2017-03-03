@@ -2,19 +2,25 @@
  * Created by mrenninger on 2/15/17.
  */
 package project.views.StoryBuilder.ui {
+
+    // Flash
+    import flash.display.Bitmap;
+    import flash.display.Shape;
+    import flash.geom.Rectangle
+    import flash.events.Event;
+
+    // Greensock
     import com.greensock.TweenMax;
 
+    // Framework
     import display.Sprite;
-
-    import flash.display.Bitmap;
-import flash.display.Shape;
-import flash.geom.Rectangle
-
-import flash.events.Event;
     import utils.Register;
+
+
 
     public class AudioWaveformDisplay extends Sprite {
 
+        /******************** PRIVATE VARS ********************/
         private var _waveform:Bitmap;
         private var _markerHolderMask:Bitmap;
         private var _markerHolder:Sprite;
@@ -22,6 +28,7 @@ import flash.events.Event;
         private var _markersV:Vector.<Shape>;
         private var _initBounds:Rectangle;
 
+        /***************** GETTERS & SETTERS ******************/
         public function get markers():Vector.<Shape> { return _markersV; }
         public function get progressShape():Shape { return _progressShape; }
         public function get initBounds():Rectangle { return _initBounds; }
@@ -29,6 +36,7 @@ import flash.events.Event;
 
 
 
+        /******************** CONSTRUCTOR *********************/
         public function AudioWaveformDisplay() {
             super();
             verbose = true;
@@ -38,6 +46,7 @@ import flash.events.Event;
 
 
 
+        /********************* PUBLIC API *********************/
         public function zoom($increment:Number):void {
             this.scaleX = $increment;
         }
@@ -54,6 +63,7 @@ import flash.events.Event;
 
 
 
+        /******************** PRIVATE API *********************/
         private function _init():void {
             _markersV = new <Shape>[];
 
@@ -81,6 +91,7 @@ import flash.events.Event;
 
 
 
+        /******************* EVENT HANDLERS *******************/
         private function _onAdded($e:Event):void {
             removeEventListener(Event.ADDED_TO_STAGE, _onAdded);
             _initBounds = this.getBounds(this.parent);

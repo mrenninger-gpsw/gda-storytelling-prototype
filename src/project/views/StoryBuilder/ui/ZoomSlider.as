@@ -4,14 +4,15 @@
 package project.views.StoryBuilder.ui {
 
     // Flash
-import com.greensock.TweenMax;
-import com.greensock.easing.Expo;
-
-import flash.display.Bitmap;
+    import flash.display.Bitmap;
     import flash.display.Shape;
     import flash.geom.Rectangle
     import flash.events.Event;
     import flash.events.MouseEvent;
+
+    // Greensock
+    import com.greensock.TweenMax;
+    import com.greensock.easing.Expo;
 
     // Framework
     import display.Sprite;

@@ -1,29 +1,29 @@
 package project.views {
 
-	// Flash
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Circ;
-	import com.greensock.easing.Cubic;
-
+    // Flash
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.geom.Point;
 
+    // Greensock
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Circ;
+	import com.greensock.easing.Cubic;
+
+    // Framework
 	import display.Sprite;
+	import utils.GeomUtilities;
+	import utils.Register;
 
-import project.events.PreviewEvent;
-
-import project.events.SourceClipManagerEvent;
+    // Project
+    import project.events.PreviewEvent;
+    import project.events.SourceClipManagerEvent;
 	import project.events.StoryboardManagerEvent;
 	import project.managers.SourceClipManager;
 	import project.managers.StoryboardManager;
-	import project.views.StoryBuilder.CustomStoryboardClip;
-import project.views.StoryBuilder.StoryboardClip;
-import project.views.StoryBuilder.VideoPreviewArea;
+    import project.views.StoryBuilder.StoryboardClip;
+    import project.views.StoryBuilder.VideoPreviewArea;
 	import project.views.StoryBuilder.ui.StoryboardClipMarker;
-
-	import utils.GeomUtilities;
-	import utils.Register;
 
 
 
@@ -103,8 +103,6 @@ import project.views.StoryBuilder.VideoPreviewArea;
 
 		/******************** PRIVATE API *********************/
 		private function _init():void {
-			// ********* SourceClipManager & Mask ***********
-			// ************************************************
             addEventListener(SourceClipManagerEvent.CREATE_INITIAL_CLIP, _handleInitialClipCreation);
 
             _bgShape = new Shape();
@@ -112,16 +110,6 @@ import project.views.StoryBuilder.VideoPreviewArea;
             _bgShape.graphics.drawRect(0,66,Register.APP.WIDTH, 399);
             _bgShape.graphics.endFill();
             this.addChild(_bgShape);
-
-            /*var s:Shape = new Shape();
-			s.graphics.beginFill(0x1e1e1e);
-			s.graphics.drawRect(0,0,Register.APP.WIDTH, 454);
-			s.graphics.endFill();
-			s.y = 66;
-			this.addChild(s);
-			_sourceClipMgr.mask = s;*/
-			// ************************************************
-			// ************************************************
 
 
 			// ************* VideoPreviewArea *****************
@@ -136,9 +124,7 @@ import project.views.StoryBuilder.VideoPreviewArea;
             _previewArea.addEventListener('hideComplete', _handleTransitionCompleteEvent);
             _previewArea.addEventListener(PreviewEvent.PLAY, _handlePreviewEvent);
             _previewArea.addEventListener(PreviewEvent.PAUSE, _handlePreviewEvent);
-
-            //_sourceClipMgr.previewArea = _previewArea;
-			// ************************************************
+            // ************************************************
 			// ************************************************
 
 
@@ -169,7 +155,6 @@ import project.views.StoryBuilder.VideoPreviewArea;
             _storyboard.addEventListener(PreviewEvent.CHANGE_VIDEO, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.PAUSE, _handlePreviewEvent);
             _storyboard.addEventListener(PreviewEvent.PLAY, _handlePreviewEvent);
-
             // ************************************************
 			// ************************************************
 
@@ -200,9 +185,6 @@ import project.views.StoryBuilder.VideoPreviewArea;
 			TweenMax.to($clip, (0.4 * normalizedTime), {scaleX:$clip.scaleX * 2, scaleY:$clip.scaleY * 2, ease:Cubic.easeIn});
 			TweenMax.to($clip, (0.6 * normalizedTime), {scaleX:0, scaleY:0, ease:Cubic.easeOut, delay:(0.4 * normalizedTime)});
 			TweenMax.to($clip, normalizedTime, {x:newClipX + 21, y: 570, ease:Cubic.easeInOut, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});
-
-			/*TweenMax.to($clip, 0.3, {width:160, height:90, x:210, y: 590, ease:Cubic.easeOut, delay:0.2});
-			TweenMax.to($clip, 0.2, {width:176, height:99, ease:Cubic.easeOut, delay:0.4, onComplete:_onClipMoveComplete, onCompleteParams:[$clip]});*/
 		}
 
 		private function _onClipMoveComplete($clip:StoryboardClip):void {
