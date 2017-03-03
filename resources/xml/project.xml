@@ -42,11 +42,12 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
-VERSION 2.02.007 - 03/01/2017
+VERSION 2.02.010 - 03/02/2017
     * Added Pan gesture to scrolling
     * Added Zoom gesture detection and handling
     * When zoom > 100%, Play marker is centered as long as current scroll % is greater than 0 and less than 1
     * Timeline autoscrolls to the left during playback - increasing scroll % - until scroll % reaches 1
+    * Refinements to animations during Moment add/delete
 
 VERSION 2.01.003 - 02/27/2017
     * Refinements to Storyboard Zooming/Scrolling

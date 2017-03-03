@@ -717,13 +717,40 @@ import flash.geom.Point;
             _previewScrubber.x = _clipHolder.x;
             _waveform.progressShape.scaleX = 0;
             _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
+
+            for (var i:uint = 0; i < _clipsV.length; i++){
+                var tClip:StoryboardClip = _clipsV[i];
+                if (tClip.maskShape.hitTestObject(_previewScrubber)){
+                    //log('\tintersected clip'+i);
+                    _curScrubClip = tClip;
+                    if (!_previewIsPlaying) _selectClip(_curScrubClip);
+                    dispatchEvent(new PreviewEvent(PreviewEvent.LOCK, true, {filename:_curScrubClip.getFrameUnderObject(_previewScrubber)}));
+                }
+            }
+
             var __delay:Number = (_curZoomLevel > 1 && (Register.DATA.resetZoomOnClipAddDelete || Register.DATA.autoScrollToEndOnClipAdd)) ? 0.15 : 0;
             switch ($e.type) {
-				case StoryboardManagerEvent.FOUR_CLIPS:
+                case StoryboardManagerEvent.FOUR_CLIPS:
 					//_removeTempMarker();
-                    if (Register.DATA.resetZoomOnClipAddDelete) _zoomSlider.zoomTo(1, __delay);
-                    TweenMax.delayedCall(__delay, _repositionClips, [4]);
-					break;
+                    if (Register.DATA.resetZoomOnClipAddDelete && _curZoomLevel > 1){
+                        _zoomSlider.zoomTo(1, __delay);
+                        for (var i:uint = 0; i < 4; i++) {
+                            var tMarker:Shape = _waveform.markers[i];
+                            var newX:Number = Number(_clipsXML[_clipsV[i].index].location[0].@position);
+                            var __complete:Function = (i == 3) ? resetScrubber : null;
+                            var _params:Array = (i == 3) ? [(Register.DATA.autoScrollToStartOnClipAddDelete) ? true : false] : null;
+                            TweenMax.to(tMarker, __delay, {
+                                x: newX,
+                                ease: Expo.easeInOut,
+                                onComplete: __complete,
+                                onCompleteParams: _params
+                            });
+                        }
+                    } else {
+                        TweenMax.delayedCall(__delay, _repositionClips, [4]);
+                    }
+
+                    break;
 
 				case StoryboardManagerEvent.FIVE_CLIPS:
                     if (Register.DATA.resetZoomOnClipAddDelete) _zoomSlider.zoomTo(1, __delay);
@@ -767,6 +794,7 @@ import flash.geom.Point;
                             }
                             //log ('\t\t\tclip index after: '+tClip.index);
                             _clipsV.push(tClip);
+                            tClip.maskXML = _clipsXML[tClip.index].location[0].mask;
                         }
 
                         this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FOUR_CLIPS));

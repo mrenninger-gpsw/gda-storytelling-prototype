@@ -401,9 +401,10 @@ package project.views {
 		}
 
         private function _checkForExclusions($e:Event):void {
+            var i:uint;
             switch ($e.target.id) {
                 case 'autoScrollToStartOnClipAddDelete':
-                    for (var i:uint = 0; i < _checkBoxesV.length; i++){
+                    for (i = 0; i < _checkBoxesV.length; i++){
                         if (_checkBoxesV[i].id == 'autoScrollToEndOnClipAdd'){
                             _checkBoxesV[i].selected = false;
                         }
@@ -411,7 +412,7 @@ package project.views {
                     break;
 
                 case 'autoScrollToEndOnClipAdd':
-                    for (var i:uint = 0; i < _checkBoxesV.length; i++){
+                    for (i = 0; i < _checkBoxesV.length; i++){
                         if (_checkBoxesV[i].id == 'autoScrollToStartOnClipAddDelete'){
                             _checkBoxesV[i].selected = false;
                         }
