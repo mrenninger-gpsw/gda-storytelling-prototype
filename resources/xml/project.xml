@@ -42,6 +42,9 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 2.02.016 - 03/06/2017
+    * Refinements to Moment creation animations
+
 VERSION 2.02.011 - 03/03/2017
     * Added Pan and Zoom gesture detection to entire Storyboard Area
     * Further Refinements to animations during Moment delete

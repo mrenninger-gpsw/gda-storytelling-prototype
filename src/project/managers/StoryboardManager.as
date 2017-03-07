@@ -53,6 +53,7 @@ package project.managers {
         private var _previewIsPlaying:Boolean = false;
         private var _previewWasPlaying:Boolean = false;
         private var _scrubberDrag:Boolean = false;
+        private var _adding5thClip:Boolean = false;
 
         private var _collidedClipIndex:uint;
 
@@ -158,10 +159,12 @@ package project.managers {
             log('\tlocationIndex: '+locationIndex);
             $clip.x = _curZoomLevel * Number(_clipsXML[_clipHolder.numChildren].location[locationIndex].@position);
 			$clip.y = 0;
+            /*
             $clip.index = _clipHolder.numChildren;
             $clip.maskXML = _clipsXML[_clipHolder.numChildren].location[locationIndex].mask;
             $clip.curZoomLevel = _curZoomLevel;
 			_clipsV.push($clip);
+			*/
             _clipHolder.addChild($clip);
 			$clip.showMarker(true);
 
@@ -212,7 +215,7 @@ package project.managers {
             log('ƒ resetScrubber');
             _scrubberDrag = false;
             _previewScrubber.stopDrag();
-
+            if (_adding5thClip) _adding5thClip = false;
             if (_curScrubClip) _curScrubClip.showScrubber(false, false);
 
             if ($repositionAtStart) {
@@ -330,8 +333,8 @@ package project.managers {
             _waveform.addEventListener(TransformGestureEvent.GESTURE_ZOOM , _onZoomGesture);
             // ***************
 
+
             // clip length time indicator
-			//_timeline = Register.ASSETS.getBitmap('Storyboard-TimelineNoBumper');
             _timeline = new Timeline();
             TweenMax.to(_timeline, 0, {x:20, y:260});
 			this.addChild(_timeline);
@@ -387,7 +390,7 @@ package project.managers {
                 tClip.maskXML = _clipsXML[tClip.index].location[($i == 4) ? 0 : 1].mask;
 
                 var newX:Number = Number(_clipsXML[tClip.index].location[($i == 4) ? 0 : 1].@position);
-
+                //log('\tnewX['+tClip.index+']: '+newX);
                 var __complete:Function = (i == 3) ? resetScrubber : null;
                 var _params:Array = (i == 3) ? [(Register.DATA.autoScrollToStartOnClipAddDelete) ? true : false] : null;
                 TweenMax.to(tClip, 0.4, {x:(_curZoomLevel * newX), ease:Expo.easeInOut, onComplete: __complete, onCompleteParams:_params});
@@ -396,7 +399,7 @@ package project.managers {
                 tClip.showAdditionalImages(0.4);
 
                 if (tClip.index == 0){
-                    log('_repositionClips calling _selectClip');
+                    log('\t_repositionClips calling _selectClip');
                     _selectClip(tClip);
                 }
 			}
@@ -671,9 +674,11 @@ package project.managers {
             _previewScrubber.x = _clipHolder.x;
             _waveform.progressShape.scaleX = 0;
             _lastScrubbedPct = _curScrubPct;//_curPlaybackPct;
-            var i:uint
+            var i:uint;
+            var tClip:StoryboardClip;
+
             for (i = 0; i < _clipsV.length; i++){
-                var tClip:StoryboardClip = _clipsV[i];
+                tClip = _clipsV[i];
                 if (tClip.maskShape.hitTestObject(_previewScrubber)){
                     //log('\tintersected clip'+i);
                     _curScrubClip = tClip;
@@ -682,7 +687,7 @@ package project.managers {
                 }
             }
 
-            var __delay:Number = (_curZoomLevel > 1 && (Register.DATA.resetZoomOnClipAddDelete || Register.DATA.autoScrollToEndOnClipAdd)) ? 0.2 : 0;
+            var __delay:Number = (_curZoomLevel > 1 && (Register.DATA.resetZoomOnClipAddDelete || Register.DATA.autoScrollToEndOnClipAdd)) ? 0.3 : 0;
             switch ($e.type) {
                 case StoryboardManagerEvent.FOUR_CLIPS:
 					//_removeTempMarker();
@@ -704,13 +709,27 @@ package project.managers {
                     break;
 
 				case StoryboardManagerEvent.FIVE_CLIPS:
-                    if (Register.DATA.resetZoomOnClipAddDelete) _zoomSlider.zoomTo(1, __delay);
-                    if (Register.DATA.autoScrollToEndOnClipAdd) {
-                        _scrollbar.scrollTo(1, __delay);
-                        _scrollElementsByPercent(1, __delay);
+                    log('FIVE_CLIPS detected');
+
+                    _adding5thClip = true;
+
+                    var __clip:StoryboardClip = $e.data.clip as StoryboardClip;
+                    __clip.index = _clipHolder.numChildren;
+                    __clip.maskXML = _clipsXML[_clipHolder.numChildren].location[1].mask;
+                    __clip.curZoomLevel = (Register.DATA.resetZoomOnClipAddDelete) ? 1 : _curZoomLevel;
+                    _clipsV.push(__clip);
+
+                    if (Register.DATA.resetZoomOnClipAddDelete && _curZoomLevel > 1){
+                        for (i = 0; i < _clipHolder.numChildren; i++) {
+                            tClip = _clipHolder.getChildAt(i) as StoryboardClip;
+                            tClip.maskXML = _clipsXML[tClip.index].location[1].mask;
+                        }
+                        _zoomSlider.zoomTo(1, __delay);
+                    } else {
+                        TweenMax.delayedCall(0, _repositionClips, [5]);
                     }
-                    TweenMax.delayedCall(__delay, _repositionClips, [5]);
-					break;
+
+                    break;
 			}
 		}
 
@@ -720,7 +739,7 @@ package project.managers {
             switch ($e.type){
                 case StoryboardManagerEvent.ADD_CLIP:
                     //log('\tADD_CLIP');
-                    if (_clipHolder.numChildren == 5) { this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS)); }
+                    //if (_clipHolder.numChildren == 5) { this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS)); }
                     break;
 
                 case StoryboardManagerEvent.DELETE_CLIP:
@@ -974,6 +993,9 @@ package project.managers {
                     if (_previewWasPlaying){
                         _previewWasPlaying = false;
                     }
+                    if (_adding5thClip) {
+                        _adding5thClip = false;
+                    }
                     break;
 
                 case ZoomEvent.CHANGE:
@@ -990,7 +1012,9 @@ package project.managers {
                     _scrollbar.zoom(_curZoomLevel);
 
                     // zoom all of the clips in the _clipHolder
-                    for (var i:uint = 0; i < _clipsV.length; i++){
+                    log('_clipsV.length: '+_clipsV.length);
+                    var __limit:uint = (_adding5thClip) ? 4 : _clipsV.length;
+                    for (var i:uint = 0; i < __limit; i++){
                         var tClip:StoryboardClip = _clipsV[i];
                         tClip.x = _curZoomLevel * Number(_clipsXML[tClip.index].location[(_clipsV.length == 4) ? 0 : 1].@position);
                         tClip.zoom(_curZoomLevel);

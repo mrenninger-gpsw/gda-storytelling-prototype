@@ -10,8 +10,11 @@ package project.events {
         public static const DELETE_CLIP:String = 'deleteClip';
         public static const EDIT_CLIP:String = 'editClip';
 
-		public function StoryboardManagerEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false) {
-			super(type, bubbles, cancelable);
+        public var data:Object = {};
+
+        public function StoryboardManagerEvent($type:String, $bubbles:Boolean = false, $data:Object = null) {
+            data = $data;
+            super($type, $bubbles, false);
 		}
 	}
 }

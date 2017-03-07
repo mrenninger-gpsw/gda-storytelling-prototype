@@ -68,7 +68,7 @@ package project.views {
 			// check to see if a 5th clip can be added
 			if (_storyboard.canAddClips) {
 				this.addChild($clip);
-                this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS));
+                this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS,false,{clip:$clip}));
 				// on add of this custom clip to the stage, stage dispatches a FIVE_CLIPS StoryboardManagerEvent which is listened for here and in the storyboard
 				// here, the caught event adds the clipMarker to the storyboard
 				// in storyboard, the caught event causes the existing soryboard clips to reposition
