@@ -42,6 +42,10 @@
 	]]></about>
 
 	<about title='CHANGE LOG'><![CDATA[CHANGE LOG
+VERSION 2.02.019 - 03/09/2017
+    * Refinements to AutoZoom handling during moment creation/deletion
+    * Added tweened AutoZoom when clicking on ZoomSlider track
+
 VERSION 2.02.016 - 03/06/2017
     * Refinements to Moment creation animations
 

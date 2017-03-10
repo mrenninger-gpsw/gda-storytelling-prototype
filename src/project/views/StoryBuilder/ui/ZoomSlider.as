@@ -120,8 +120,11 @@ package project.views.StoryBuilder.ui {
                         _dragNubbin();
                     }
                     if ($e.target == _bg) {
-                        _nubbin.x = this.mouseX;
-                        _trackZoomPct();
+                        this.dispatchEvent(new ZoomEvent(ZoomEvent.AUTO));
+                        /*_nubbin.x = this.mouseX;
+                        _trackZoomPct();*/
+
+                        zoomTo(1+((this.mouseX - 5)/140), 0.3);
                     }
                     break;
             }

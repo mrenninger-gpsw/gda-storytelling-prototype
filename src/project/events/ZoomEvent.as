@@ -9,6 +9,7 @@ package project.events {
         public static const START:String = 'zoomStart';
         public static const END:String = 'zoomEnd';
         public static const CHANGE:String = 'zoomChange';
+        public static const AUTO:String = 'zoomAuto';
 
         public var data:Object = {};
 

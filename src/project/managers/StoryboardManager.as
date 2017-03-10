@@ -54,6 +54,7 @@ package project.managers {
         private var _previewWasPlaying:Boolean = false;
         private var _scrubberDrag:Boolean = false;
         private var _adding5thClip:Boolean = false;
+        private var _autoZooming:Boolean = false;
 
         private var _collidedClipIndex:uint;
 
@@ -62,6 +63,7 @@ package project.managers {
         private var _lastScrubbedPct:Number;
         private var _curScrollPct:Number = 0;
         private var _lastPanOffsetX:Number;
+        private var _scrollSpeed:Number;
 
         private var _curDragDirection:String;
 
@@ -287,6 +289,7 @@ package project.managers {
             _zoomSlider.x = 1010;
             _zoomSlider.y = 28;
             this.addChild(_zoomSlider);
+            _zoomSlider.addEventListener(ZoomEvent.AUTO, _handleZoomEvent);
             _zoomSlider.addEventListener(ZoomEvent.START, _handleZoomEvent);
             _zoomSlider.addEventListener(ZoomEvent.END, _handleZoomEvent);
             _zoomSlider.addEventListener(ZoomEvent.CHANGE, _handleZoomEvent);
@@ -688,6 +691,8 @@ package project.managers {
             }
 
             var __delay:Number = (_curZoomLevel > 1 && (Register.DATA.resetZoomOnClipAddDelete || Register.DATA.autoScrollToEndOnClipAdd)) ? 0.3 : 0;
+            _autoZooming = true;
+
             switch ($e.type) {
                 case StoryboardManagerEvent.FOUR_CLIPS:
 					//_removeTempMarker();
@@ -739,7 +744,7 @@ package project.managers {
             switch ($e.type){
                 case StoryboardManagerEvent.ADD_CLIP:
                     //log('\tADD_CLIP');
-                    //if (_clipHolder.numChildren == 5) { this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS)); }
+                    if (_clipHolder.numChildren == 5) { this.stage.dispatchEvent(new StoryboardManagerEvent(StoryboardManagerEvent.FIVE_CLIPS)); }
                     break;
 
                 case StoryboardManagerEvent.DELETE_CLIP:
@@ -981,11 +986,16 @@ package project.managers {
             $e.stopImmediatePropagation();
             log('_handleZoomEvent: '+$e.type);
             switch ($e.type) {
+                case ZoomEvent.AUTO:
+                    _autoZooming = true;
+                    break;
+
                 case ZoomEvent.START:
                     _curScrubClipVisibleInViewport = (_curScrubClip.maskShape.getBounds(this).right > 0  && _curScrubClip.maskShape.getBounds(this).left < 1280);
                     if (_previewIsPlaying){
                         _previewWasPlaying = true;
                     }
+                    log('\tScrolling to: '+_curScrollPct);
                     break;
 
                 case ZoomEvent.END:
@@ -996,23 +1006,25 @@ package project.managers {
                     if (_adding5thClip) {
                         _adding5thClip = false;
                     }
+
+                    _autoZooming = false;
                     break;
 
                 case ZoomEvent.CHANGE:
-                    log('$e.data.pct: '+$e.data.pct);
+                    //log('$e.data.pct: '+$e.data.pct);
 
                     _curZoomLevel = 1 + ((ZOOM_MULTIPLIER - 1) * $e.data.pct); // returns a number between 1 and (pct * ZOOM_MULTIPLIER)
 
                     if (_curZoomLevel == 1) _curScrollPct = 0;
 
-                    log('Zooming to: '+_curZoomLevel);
+                    log('\tZooming to: '+_curZoomLevel);
                     // zoom the different components
                     _timeline.zoom(_curZoomLevel);
                     _waveform.zoom(_curZoomLevel);
                     _scrollbar.zoom(_curZoomLevel);
 
                     // zoom all of the clips in the _clipHolder
-                    log('_clipsV.length: '+_clipsV.length);
+                    //log('_clipsV.length: '+_clipsV.length);
                     var __limit:uint = (_adding5thClip) ? 4 : _clipsV.length;
                     for (var i:uint = 0; i < __limit; i++){
                         var tClip:StoryboardClip = _clipsV[i];
@@ -1025,30 +1037,32 @@ package project.managers {
 
                     // when paused - ensure that _curScrubClip is visible on the timeline and update _curScrollPct accordingly
                     if (!_previewIsPlaying){
-                        if (_curScrubClipVisibleInViewport && (_curScrubClip.maskShape.getBounds(this).right > 1280 || _curScrubClip.maskShape.getBounds(this).left < 0)) {
+                        if (!_autoZooming && _curScrubClipVisibleInViewport && widthAtCurZoom > 1240 && (_curScrubClip.maskShape.getBounds(this).right > 1260 || _curScrubClip.maskShape.getBounds(this).left < 20)) {
                             if (_curScrubClip.maskShape.getBounds(this).right > 1260) {
-                                //log ('#### _curScrubClip is beyond right limit ####');
+                                log ('#### _curScrubClip is beyond right limit ####');
                                 __deltaX = _curScrubClip.maskShape.getBounds(this).right - 1260;
                             } else {
-                                //log ('#### _curScrubClip is beyond left limit ####');
+                                log ('#### _curScrubClip is beyond left limit ####');
                                 __deltaX = _curScrubClip.maskShape.getBounds(this).left - 20;
                             }
 
                             __newX = _clipHolder.x - __deltaX;
-                            _curScrollPct = (20 - __newX) / (widthAtCurZoom - 1240);
+                            var __newScrollPct:Number = (20 - __newX) / (widthAtCurZoom - 1240);
+                            log('\t__newX: '+__newX);
+                            log('\t__newScrollPct: '+__newScrollPct);
+                            _curScrollPct = (__newScrollPct > 1) ? 1 : (__newScrollPct < 0) ? 0 : __newScrollPct;
                         }
 
                     }
-
-                    if (_curScrollPct > 1) _curScrollPct = 1;
-                    if (_curScrollPct < 0) _curScrollPct = 0;//log ('_curScrollPct (after): '+_curScrollPct);
-
-                    var __scrollSpeed:Number = (Math.abs(__deltaX) > 0) ? 0.2 : 0;
+                    _scrollSpeed = 0;//(Math.abs(__deltaX) > 0) ? 0.1 : 0;
+                    log('\tScrolling to: '+_curScrollPct);
+                    //if (__newScrollPct > 1) _curScrollPct = 1;
+                    //if (__newScrollPct < 0) _curScrollPct = 0;//log ('_curScrollPct (after): '+_curScrollPct);
 
                     // position the different components based on _curScrollPct
                     _scrollbar.scrollTo(_curScrollPct);
-                    log('Scrolling to: '+_curScrollPct);
-                    _scrollElementsByPercent(_curScrollPct, __scrollSpeed);
+                    trace('\t ');
+                    _scrollElementsByPercent(_curScrollPct, _scrollSpeed);
 
                     break;
             }
@@ -1115,7 +1129,7 @@ package project.managers {
                             if (_curScrollPct > 1) _curScrollPct = 1;
                             if (_curScrollPct < 0) _curScrollPct = 0;
                             _scrollbar.scrollTo(_curScrollPct, 0);
-                            _scrollElementsByPercent(_curScrollPct, 0);
+                            _scrollElementsByPercent(_curScrollPct);
                             break;
 
                         case 'end':
