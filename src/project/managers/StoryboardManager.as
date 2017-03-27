@@ -695,9 +695,10 @@ package project.managers {
 
             switch ($e.type) {
                 case StoryboardManagerEvent.FOUR_CLIPS:
-					//_removeTempMarker();
+
                     if (Register.DATA.resetZoomOnClipAddDelete && _curZoomLevel > 1){
                         _zoomSlider.zoomTo(1, 0.4);
+                        // move the markers, zoomTo takes care of moving everything else
                         for (i = 0; i < 4; i++) {
                             var tMarker:Shape = _waveform.markers[i];
                             var newX:Number = Number(_clipsXML[_clipsV[i].index].location[0].@position);
@@ -710,7 +711,9 @@ package project.managers {
                                 onCompleteParams: _params
                             });
                         }
-                    } else { TweenMax.delayedCall(__delay, _repositionClips, [4]); }
+                    } else {
+                        TweenMax.delayedCall(__delay, _repositionClips, [4]);
+                    }
                     break;
 
 				case StoryboardManagerEvent.FIVE_CLIPS:
@@ -1024,7 +1027,6 @@ package project.managers {
                     _scrollbar.zoom(_curZoomLevel);
 
                     // zoom all of the clips in the _clipHolder
-                    //log('_clipsV.length: '+_clipsV.length);
                     var __limit:uint = (_adding5thClip) ? 4 : _clipsV.length;
                     for (var i:uint = 0; i < __limit; i++){
                         var tClip:StoryboardClip = _clipsV[i];
@@ -1056,8 +1058,6 @@ package project.managers {
                     }
                     _scrollSpeed = 0;//(Math.abs(__deltaX) > 0) ? 0.1 : 0;
                     log('\tScrolling to: '+_curScrollPct);
-                    //if (__newScrollPct > 1) _curScrollPct = 1;
-                    //if (__newScrollPct < 0) _curScrollPct = 0;//log ('_curScrollPct (after): '+_curScrollPct);
 
                     // position the different components based on _curScrollPct
                     _scrollbar.scrollTo(_curScrollPct);
